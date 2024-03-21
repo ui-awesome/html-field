@@ -47,7 +47,7 @@ trait HasHint
     /**
      * Returns a new instance with the hint text.
      *
-     * @param string|RenderInterface ...$values The hint text.
+     * @param RenderInterface|string ...$values The hint text.
      */
     public function hintContent(string|RenderInterface ...$values): static
     {

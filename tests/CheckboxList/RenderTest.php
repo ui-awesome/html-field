@@ -224,7 +224,6 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function testId(): void
     {
         Assert::equalsWithoutLE(
@@ -997,7 +996,6 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->render()
         );
     }
-
 
     public function testValueWithFormModel(): void
     {

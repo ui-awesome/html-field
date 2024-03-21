@@ -898,7 +898,6 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function testValueWithFormModel(): void
     {
         $formModel = new BasicForm();

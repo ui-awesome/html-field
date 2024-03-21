@@ -173,7 +173,6 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();

@@ -138,7 +138,6 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();

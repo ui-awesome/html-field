@@ -144,9 +144,8 @@ abstract class AbstractField extends Element
     /**
      * Renders the field.
      *
-     * @return string The rendered field.
-     *
      * @throws LogicException If the widget is not set.
+     * @return string The rendered field.
      */
     protected function run(): string
     {
@@ -214,9 +213,7 @@ abstract class AbstractField extends Element
         $widget = $this->applyToAttributes($widget);
         $widget = $this->applyToPlaceholder($widget);
         $widget = $this->applyToValue($widget);
-        $widget = $this->handleErrorAndValidation($widget);
-
-        return $widget;
+        return $this->handleErrorAndValidation($widget);
     }
 
     private function getPropertyError(bool $showAllErrors): string
@@ -293,7 +290,7 @@ abstract class AbstractField extends Element
             $this->inputTemplate,
             [
                 '{input}' => $widget->render(),
-                '{label}' => $label
+                '{label}' => $label,
             ],
         );
 

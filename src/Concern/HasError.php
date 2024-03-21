@@ -47,7 +47,7 @@ trait HasError
     /**
      * Returns a new instance with the error text.
      *
-     * @param string|RenderInterface ...$values The error text.
+     * @param RenderInterface|string ...$values The error text.
      */
     public function errorContent(string|RenderInterface ...$values): static
     {
