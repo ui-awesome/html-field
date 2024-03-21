@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UIAwesome\Html\field\Exception;
+namespace UIAwesome\Html\Field\Exception;
 
 use InvalidArgumentException;
 
