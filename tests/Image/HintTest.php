@@ -10,7 +10,7 @@ use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Inpu
 /**
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class HintTest extends  \PHPUnit\Framework\TestCase
+final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
     {

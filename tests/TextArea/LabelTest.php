@@ -23,7 +23,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             Field::widget(new BasicForm(), 'label')->disableLabel()->input(TextArea::widget())->render()
         );
     }
-    
+
     public function testEnclosedByLabel(): void
     {
         Assert::equalsWithoutLE(
