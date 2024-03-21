@@ -145,6 +145,7 @@ abstract class AbstractField extends Element
      * Renders the field.
      *
      * @throws LogicException If the widget is not set.
+     * 
      * @return string The rendered field.
      */
     protected function run(): string
