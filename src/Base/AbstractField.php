@@ -44,7 +44,6 @@ use UIAwesome\{
     Html\Tag
 };
 
-use function array_merge;
 use function is_string;
 use function preg_replace;
 use function implode;
@@ -88,7 +87,7 @@ abstract class AbstractField extends Element
         if ($this->formModel->hasProperty($this->property) === false) {
             throw new AttributeNotSet();
         }
-        
+
         $definitions += $this->formModel->getWidgetConfig();
 
         parent::__construct($definitions);
@@ -101,7 +100,6 @@ abstract class AbstractField extends Element
      * @param bool $override If `true` the value will be overridden.
      *
      * @return static A new instance of the current class with the specified class value.
-     *
      *
      * @link https://html.spec.whatwg.org/#classes
      */
