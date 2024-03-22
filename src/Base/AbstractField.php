@@ -88,6 +88,7 @@ abstract class AbstractField extends Element
             throw new AttributeNotSet();
         }
 
+        /** @psalm-var array<string, mixed> $definitions */
         $definitions += $this->formModel->getWidgetConfig();
 
         parent::__construct($definitions);
@@ -129,8 +130,11 @@ abstract class AbstractField extends Element
 
     public function input(InputInterface $widget): self
     {
+        /** @psalm-var array<string, mixed> $definitionProperty */
+        $definitionProperty = $this->formModel->getWidgetConfigByProperty($this->property);
+
         /** @var InputInterface $widget */
-        $widget = SimpleFactory::configure($widget, $this->formModel->getWidgetConfigByProperty($this->property));
+        $widget = SimpleFactory::configure($widget, $definitionProperty);
 
         $new = clone $this;
         $new->widget = $widget;
