@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace UIAwesome\Html\Field\Tests\Date;
 
 use PHPForge\Support\Assert;
-use UIAwesome\{Html\Field\Field, Html\Field\Tests\Support\BasicForm, Html\FormControl\Input\Date};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Date};
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor
