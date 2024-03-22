@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Range;
 
-use UIAwesome\{Html\Field\Field, Html\Field\Tests\Support\BasicForm, Html\FormControl\Input\Range};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Range};
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor

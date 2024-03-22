@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use UIAwesome\{Html\Field\Field, Html\Field\Tests\Support\BasicForm, Html\FormControl\Select, Support\Assert};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Select};
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\DatetimeLocal;
 
-use UIAwesome\{Html\Field\Field, Html\Field\Tests\Support\BasicForm, Html\FormControl\Input\DatetimeLocal};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\DatetimeLocal};
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Date;
 
-use UIAwesome\{Html\Field\Field, Html\Field\Tests\Support\BasicForm, Html\FormControl\Input\Date};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Date};
 use PHPUnit\Framework\TestCase;
 
 /**
