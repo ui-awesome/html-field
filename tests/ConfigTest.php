@@ -25,4 +25,17 @@ final class ConfigTest extends \PHPUnit\Framework\TestCase
             Field::widget(new ConfigForm(), 'name')->render()
         );
     }
+
+    public function testRenderWithDefinitions(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="custom-id">Name</label>
+            <input class="custom-class form-control" id="custom-id" name="ConfigForm[name]" type="text">
+            </div>
+            HTML,
+            Field::widget(new ConfigForm(), 'name', ['id()' => ['custom-id']])->render()
+        );
+    }
 }

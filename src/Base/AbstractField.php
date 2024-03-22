@@ -18,6 +18,8 @@ use UIAwesome\{
     Html\Concern\HasPrefixCollection,
     Html\Concern\HasSuffixCollection,
     Html\Concern\HasTemplate,
+    Html\Field\Concern\CanBeEnclosedByLabel,
+    Html\Field\Concern\HasClass,
     Html\Field\Concern\HasError,
     Html\Field\Concern\HasHint,
     Html\Field\Concern\HasInputContainer,
@@ -55,7 +57,9 @@ use function implode;
  */
 abstract class AbstractField extends Element
 {
+    use CanBeEnclosedByLabel;
     use HasAttributes;
+    use HasClass;
     use HasContainerCollection;
     use HasError;
     use HasHint;
@@ -71,9 +75,6 @@ abstract class AbstractField extends Element
     use HasValue;
 
     protected array $attributes = [];
-    protected string $class = '';
-    protected bool $classOverride = false;
-    protected bool $enclosedByLabel = false;
     private InputInterface $widget;
 
     /**
@@ -92,40 +93,6 @@ abstract class AbstractField extends Element
         $definitions += $this->formModel->getWidgetConfig();
 
         parent::__construct($definitions);
-    }
-
-    /**
-     * Set the `CSS` `HTML` field class attribute.
-     *
-     * @param string $value The `CSS` attribute of the widget.
-     * @param bool $override If `true` the value will be overridden.
-     *
-     * @return static A new instance of the current class with the specified class value.
-     *
-     * @link https://html.spec.whatwg.org/#classes
-     */
-    public function class(string $value, bool $override = false): static
-    {
-        $new = clone $this;
-        $new->class = $value;
-        $new->classOverride = $override;
-
-        return $new;
-    }
-
-    /**
-     * Set the current instance as being enclosed by a label.
-     *
-     * @param bool $value The value to set.
-     *
-     * @return self A new instance of of the current class with the specified enclosed by label property.
-     */
-    public function enclosedByLabel(bool $value): self
-    {
-        $new = clone $this;
-        $new->enclosedByLabel = $value;
-
-        return $new;
     }
 
     public function input(InputInterface $widget): self
@@ -306,7 +273,7 @@ abstract class AbstractField extends Element
         );
     }
 
-    public function renderHintTag(): string
+    private function renderHintTag(): string
     {
         return $this->renderTag($this->hintAttributes, $this->hintContent, $this->hintTag, $this->hintId);
     }
