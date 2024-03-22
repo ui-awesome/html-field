@@ -24,8 +24,6 @@ final class BasicForm extends AbstractFormModel
     private null|string $monthOfBirth = '';
     private null|string $url = '';
     private string|null $username = '';
-    private string $server = '';
-    private string $textArea = '';
     private null|string $timeOfBirth = '';
     private null|string $weekOfBirth = '';
 

@@ -6,9 +6,9 @@ namespace UIAwesome\Html\Field\Base;
 
 use LogicException;
 use PHPForge\Widget\Element;
+use PHPForge\Widget\Factory\SimpleFactory;
 use UIAwesome\{
     FormModel\FormModelInterface,
-    Html\Attribute\HasClass,
     Html\Attribute\HasId,
     Html\Attribute\HasName,
     Html\Attribute\HasValue,
@@ -18,6 +18,8 @@ use UIAwesome\{
     Html\Concern\HasPrefixCollection,
     Html\Concern\HasSuffixCollection,
     Html\Concern\HasTemplate,
+    Html\Field\Concern\CanBeEnclosedByLabel,
+    Html\Field\Concern\HasClass,
     Html\Field\Concern\HasError,
     Html\Field\Concern\HasHint,
     Html\Field\Concern\HasInputContainer,
@@ -55,6 +57,7 @@ use function implode;
  */
 abstract class AbstractField extends Element
 {
+    use CanBeEnclosedByLabel;
     use HasAttributes;
     use HasClass;
     use HasContainerCollection;
@@ -72,8 +75,6 @@ abstract class AbstractField extends Element
     use HasValue;
 
     protected array $attributes = [];
-    protected string $class = '';
-    protected bool $enclosedByLabel = false;
     private InputInterface $widget;
 
     /**
@@ -88,26 +89,20 @@ abstract class AbstractField extends Element
             throw new AttributeNotSet();
         }
 
+        /** @psalm-var array<string, mixed> $definitions */
+        $definitions += $this->formModel->getWidgetConfig();
+
         parent::__construct($definitions);
-    }
-
-    /**
-     * Set the current instance as being enclosed by a label.
-     *
-     * @param bool $value The value to set.
-     *
-     * @return self A new instance of of the current class with the specified enclosed by label property.
-     */
-    public function enclosedByLabel(bool $value): self
-    {
-        $new = clone $this;
-        $new->enclosedByLabel = $value;
-
-        return $new;
     }
 
     public function input(InputInterface $widget): self
     {
+        /** @psalm-var array<string, mixed> $definitionProperty */
+        $definitionProperty = $this->formModel->getWidgetConfigByProperty($this->property);
+
+        /** @var InputInterface $widget */
+        $widget = SimpleFactory::configure($widget, $definitionProperty);
+
         $new = clone $this;
         $new->widget = $widget;
 
@@ -166,7 +161,7 @@ abstract class AbstractField extends Element
 
         $widget = $this->formModel->applyToHtmlRulesByProperty($widget, $this->property);
 
-        return $widget->attributes($this->attributes);
+        return $widget->attributes($this->attributes)->class($this->class, $this->classOverride);
     }
 
     private function applyToPlaceholder(InputInterface $widget): InputInterface
@@ -214,6 +209,7 @@ abstract class AbstractField extends Element
         $widget = $this->applyToAttributes($widget);
         $widget = $this->applyToPlaceholder($widget);
         $widget = $this->applyToValue($widget);
+
         return $this->handleErrorAndValidation($widget);
     }
 
@@ -277,7 +273,7 @@ abstract class AbstractField extends Element
         );
     }
 
-    public function renderHintTag(): string
+    private function renderHintTag(): string
     {
         return $this->renderTag($this->hintAttributes, $this->hintContent, $this->hintTag, $this->hintId);
     }
