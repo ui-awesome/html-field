@@ -22,9 +22,9 @@
     <a href="https://shepherd.dev/github/ui-awesome/html-field" target="_blank">
         <img src="https://shepherd.dev/github/ui-awesome/html-field/coverage.svg" alt="Psalm Coverage">
     </a>
-    <a href="https://github.styleci.io/repos/773914929?branch=initial-commit">
-        <img src="https://github.styleci.io/repos/773914929/shield?branch=initial-commit" alt="Style ci">
-    </a>          
+    <a href="https://github.styleci.io/repos/773914929?branch=main">
+        <img src="https://github.styleci.io/repos/773914929/shield?branch=main" alt="Style ci">
+    </a>         
 </p>
 
 This library provides a way to generate `HTML` code for various types of form fields, including `text`, `text area`,

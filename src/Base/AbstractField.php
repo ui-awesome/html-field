@@ -6,9 +6,9 @@ namespace UIAwesome\Html\Field\Base;
 
 use LogicException;
 use PHPForge\Widget\Element;
+use PHPForge\Widget\Factory\SimpleFactory;
 use UIAwesome\{
     FormModel\FormModelInterface,
-    Html\Attribute\HasClass,
     Html\Attribute\HasId,
     Html\Attribute\HasName,
     Html\Attribute\HasValue,
@@ -44,6 +44,7 @@ use UIAwesome\{
     Html\Tag
 };
 
+use function array_merge;
 use function is_string;
 use function preg_replace;
 use function implode;
@@ -56,7 +57,6 @@ use function implode;
 abstract class AbstractField extends Element
 {
     use HasAttributes;
-    use HasClass;
     use HasContainerCollection;
     use HasError;
     use HasHint;
@@ -73,6 +73,7 @@ abstract class AbstractField extends Element
 
     protected array $attributes = [];
     protected string $class = '';
+    protected bool $classOverride = false;
     protected bool $enclosedByLabel = false;
     private InputInterface $widget;
 
@@ -87,8 +88,30 @@ abstract class AbstractField extends Element
         if ($this->formModel->hasProperty($this->property) === false) {
             throw new AttributeNotSet();
         }
+        
+        $definitions += $this->formModel->getWidgetConfig();
 
         parent::__construct($definitions);
+    }
+
+    /**
+     * Set the `CSS` `HTML` field class attribute.
+     *
+     * @param string $value The `CSS` attribute of the widget.
+     * @param bool $override If `true` the value will be overridden.
+     *
+     * @return static A new instance of the current class with the specified class value.
+     *
+     *
+     * @link https://html.spec.whatwg.org/#classes
+     */
+    public function class(string $value, bool $override = false): static
+    {
+        $new = clone $this;
+        $new->class = $value;
+        $new->classOverride = $override;
+
+        return $new;
     }
 
     /**
@@ -108,6 +131,9 @@ abstract class AbstractField extends Element
 
     public function input(InputInterface $widget): self
     {
+        /** @var InputInterface $widget */
+        $widget = SimpleFactory::configure($widget, $this->formModel->getWidgetConfigByProperty($this->property));
+
         $new = clone $this;
         $new->widget = $widget;
 
@@ -166,7 +192,7 @@ abstract class AbstractField extends Element
 
         $widget = $this->formModel->applyToHtmlRulesByProperty($widget, $this->property);
 
-        return $widget->attributes($this->attributes);
+        return $widget->attributes($this->attributes)->class($this->class, $this->classOverride);
     }
 
     private function applyToPlaceholder(InputInterface $widget): InputInterface
@@ -214,6 +240,7 @@ abstract class AbstractField extends Element
         $widget = $this->applyToAttributes($widget);
         $widget = $this->applyToPlaceholder($widget);
         $widget = $this->applyToValue($widget);
+
         return $this->handleErrorAndValidation($widget);
     }
 
