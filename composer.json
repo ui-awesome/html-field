@@ -15,7 +15,7 @@
         "php-forge/awesome-widget": "^0.1",
         "php-forge/helpers": "^0.1",
         "ui-awesome/form-model": "^0.1",
-        "ui-awesome/html": "^0.1",
+        "ui-awesome/html": "^0.2",
         "ui-awesome/html-attribute": "^0.1",
         "ui-awesome/html-concern": "^0.1",
         "ui-awesome/html-helper":"^0.1",
