@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use PHPForge\Support\Assert;
 use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class PlaceholderTest extends \PHPUnit\Framework\TestCase
 {
     public function testPlaceholder(): void
@@ -21,7 +18,7 @@ final class PlaceholderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-placeholder" name="BasicForm[placeholder]" type="text" placeholder="This is a placeholder.">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'placeholder')->render()
+            Field::tag()->formModel(new BasicForm())->property('placeholder')->render()
         );
     }
 }

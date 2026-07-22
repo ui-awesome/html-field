@@ -4,37 +4,34 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Support;
 
-use UIAwesome\Html\Interop\InputInterface;
+use UIAwesome\Html\Attribute\Global\HasClass;
+use UIAwesome\Html\Contracts\Form\FormControlInterface;
+use UIAwesome\Html\Core\Base\BaseTag;
+use UIAwesome\Html\Helper\Attributes;
+use UIAwesome\Html\Mixin\HasAttributes;
 
-final class InputWidget implements InputInterface
+final class InputWidget extends BaseTag implements FormControlInterface
 {
-    public function __toString(): string
+    use HasAttributes;
+    use HasClass;
+
+    public function enclosedByLabel(): static
     {
-        return $this->render();
+        return clone $this;
     }
 
-    public function attributes(array $attributes): static
+    public function src(string $value): static
     {
-        return $this;
+        return $this->addAttribute('src', $value);
     }
 
-    public function class(string $value, bool $override = false): static
+    public function value(mixed $value): static
     {
-        return $this;
+        return $this->addAttribute('value', $value);
     }
 
-    public function fieldAttributes(string $formModel, string $property): static
+    protected function run(): string
     {
-        return $this;
-    }
-
-    public function id(string|null $value): static
-    {
-        return $this;
-    }
-
-    public function render(): string
-    {
-        return '';
+        return '<control' . Attributes::render($this->getAttributes()) . '>';
     }
 }

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Select};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\SelectControl};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -24,9 +23,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->attributes(['class' => 'value'])
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -43,9 +42,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->class('value')
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -62,9 +61,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -81,9 +80,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->containerClass('value')
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -100,9 +99,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->containerTag()
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->containerTag(Block::DIV)
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -117,9 +116,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <option value="1">Apple</option>
             </select>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->containerTag(false)
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -136,9 +135,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->containerTag('article')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->containerTag(Block::ARTICLE)
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -155,9 +154,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->id('value')
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -176,10 +175,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -198,10 +197,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -220,9 +219,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -239,8 +238,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerTag(false)
                 ->render()
         );
@@ -260,9 +259,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->inputContainerTag('article')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->inputContainerTag(Block::ARTICLE)
                 ->render()
         );
     }
@@ -281,8 +280,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -300,8 +299,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->name('value')
                 ->render()
         );
@@ -320,8 +319,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->render()
         );
@@ -342,11 +341,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -366,11 +365,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -390,10 +389,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -411,8 +410,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -434,10 +433,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
-                ->prefixTag('article')
+                ->prefixTag(Block::ARTICLE)
                 ->render()
         );
     }
@@ -454,7 +453,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel(new BasicForm())->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
     }
 
@@ -471,8 +470,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->render()
         );
@@ -493,11 +492,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -517,11 +516,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -541,10 +540,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -562,8 +561,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -583,10 +582,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -605,8 +604,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -624,7 +623,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')->input(Select::widget()->items([1 => 'Apple']))->value(1)->render()
+            Field::tag()->formModel(new BasicForm())->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->value(1)->render()
         );
     }
 
@@ -633,7 +632,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // int value
-        $formModel->setPropertyValue('fruits', 1);
+        $formModel->setValue('fruits', 1);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -645,11 +644,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
 
         // string value
-        $formModel->setPropertyValue('fruits', '1');
+        $formModel->setValue('fruits', '1');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -661,11 +660,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
 
         // array value
-        $formModel->setPropertyValue('fruits', [2, 3]);
+        $formModel->setValue('fruits', [2, 3]);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -680,9 +679,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    Select::widget()
+                    SelectControl::tag()
                         ->items(
                             [
                                 1 => 'Apple',
@@ -696,7 +695,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         );
 
         // value not in items
-        $formModel->setPropertyValue('fruits', 5);
+        $formModel->setValue('fruits', 5);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -708,11 +707,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
 
         // null value.
-        $formModel->setPropertyValue('fruits', null);
+        $formModel->setValue('fruits', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -724,7 +723,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
     }
 
@@ -740,8 +739,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->value(null)
                 ->render()
         );
@@ -759,7 +758,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')->id(null)->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel(new BasicForm())->property('fruits')->id(null)->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
     }
 
@@ -775,8 +774,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->name(null)
                 ->render()
         );

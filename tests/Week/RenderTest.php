@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Week;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Week};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputWeek};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,9 +19,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
                 ->attributes(['class' => 'value'])
-                ->input(Week::widget())
+                ->input(InputWeek::tag())
                 ->render()
         );
     }
@@ -37,7 +35,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->class('value')->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->class('value')->input(InputWeek::tag())->render()
         );
     }
 
@@ -50,9 +48,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Week::widget())
+                ->input(InputWeek::tag())
                 ->render()
         );
     }
@@ -66,7 +64,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->containerClass('value')->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerClass('value')->input(InputWeek::tag())->render()
         );
     }
 
@@ -79,7 +77,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->containerTag()->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerTag(Block::DIV)->input(InputWeek::tag())->render()
         );
     }
 
@@ -90,7 +88,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-weekofbirth">Week Of Birth</label>
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->containerTag(false)->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerTag(false)->input(InputWeek::tag())->render()
         );
     }
 
@@ -103,7 +101,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->containerTag('article')->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerTag(Block::ARTICLE)->input(InputWeek::tag())->render()
         );
     }
 
@@ -116,7 +114,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->id('value')->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->id('value')->input(InputWeek::tag())->render()
         );
     }
 
@@ -131,10 +129,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -150,10 +148,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -169,7 +167,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->inputContainerTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->inputContainerTag(Block::DIV)->render()
         );
     }
 
@@ -182,7 +180,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -197,7 +195,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->inputContainerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->inputContainerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -212,8 +210,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -228,7 +226,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="value" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->name('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->name('value')->render()
         );
     }
 
@@ -242,7 +240,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -258,11 +256,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -279,11 +277,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -300,10 +298,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -317,7 +315,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->render()
         );
     }
 
@@ -331,7 +329,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->suffix('suffix')->render()
         );
     }
 
@@ -347,11 +345,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -368,11 +366,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -389,10 +387,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -408,8 +406,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')
-                ->input(Week::widget())
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+                ->input(InputWeek::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -424,7 +422,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week" value="20">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->value('20')->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->value('20')->render()
         );
     }
 
@@ -433,7 +431,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('weekOfBirth', '20');
+        $formModel->setValue('weekOfBirth', '20');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -442,11 +440,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week" value="20">
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->input(Week::widget())->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->input(InputWeek::tag())->render()
         );
 
         // null value
-        $formModel->setPropertyValue('weekOfBirth', null);
+        $formModel->setValue('weekOfBirth', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -455,7 +453,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->input(Week::widget())->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->input(InputWeek::tag())->render()
         );
     }
 
@@ -468,7 +466,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->value(null)->render()
         );
     }
 
@@ -481,7 +479,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->id(null)->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->id(null)->input(InputWeek::tag())->render()
         );
     }
 
@@ -494,7 +492,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" type="week">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->input(Week::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->name(null)->render()
         );
     }
 }

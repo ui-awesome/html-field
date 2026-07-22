@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\TextArea;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\TextArea};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\TextArea};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -17,10 +14,10 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <textarea id="basicform-label" name="BasicForm[label]"></textarea>
+            <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(TextArea::tag())->render()
         );
     }
 
@@ -29,23 +26,10 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <label for="basicform-label"><textarea id="basicform-label" name="BasicForm[label]"></textarea></label>
+            <label for="basicform-label"><textarea id="basicform-label" name="BasicForm[label]">\n</textarea></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->enclosedByLabel(true)->input(TextArea::widget())->render()
-        );
-    }
-
-    public function testLabelContent(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label for="basicform-label">Label</label>
-            <textarea id="basicform-label" name="BasicForm[label]"></textarea>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'label')->input(TextArea::widget())->label('Label')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->enclosedByLabel(true)->input(TextArea::tag())->render()
         );
     }
 
@@ -55,11 +39,11 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label class="class" for="basicform-label">This is a label.</label>
-            <textarea id="basicform-label" name="BasicForm[label]"></textarea>
+            <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(TextArea::tag())
                 ->labelAttributes(['class' => 'class'])
                 ->render()
         );
@@ -71,10 +55,23 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label class="class" for="basicform-label">This is a label.</label>
-            <textarea id="basicform-label" name="BasicForm[label]"></textarea>
+            <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(TextArea::widget())->labelClass('class')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(TextArea::tag())->labelClass('class')->render()
+        );
+    }
+
+    public function testLabelContent(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-label">Label</label>
+            <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
+            </div>
+            HTML,
+            Field::tag()->formModel(new BasicForm())->property('label')->input(TextArea::tag())->label('Label')->render()
         );
     }
 
@@ -84,10 +81,10 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="value">This is a label.</label>
-            <textarea id="basicform-label" name="BasicForm[label]"></textarea>
+            <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(TextArea::widget())->labelFor('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(TextArea::tag())->labelFor('value')->render()
         );
     }
 }

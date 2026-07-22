@@ -4,28 +4,35 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Concern;
 
-use UIAwesome\Html\{Helper\CssClass, Helper\Sanitize, Interop\RenderInterface};
+use Stringable;
+use UIAwesome\Html\Contracts\RenderableInterface;
+use UIAwesome\Html\Helper\{AttributeBag, CSSClass, Encode};
+use UIAwesome\Html\Interop\Block;
+use UnitEnum;
 
 /**
  * Provides methods for a configuring field hint.
  */
 trait HasHint
 {
+    /**
+     * @phpstan-var mixed[]
+     */
     private array $hintAttributes = [];
     private string $hintClass = '';
     private string $hintContent = '';
     private string $hintId = '';
-    private false|string $hintTag = 'div';
+    private false|UnitEnum $hintTag = Block::DIV;
 
     /**
      * Returns a new instance with the hint attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param mixed[] $values Attribute values indexed by attribute names.
      */
     public function hintAttributes(array $values): static
     {
         $new = clone $this;
-        $new->hintAttributes = $values;
+        AttributeBag::setMany($new->hintAttributes, $values);
 
         return $new;
     }
@@ -36,10 +43,10 @@ trait HasHint
      * @param string $value The hint class.
      * @param bool $override Whether to override the existing class.
      */
-    public function hintClass(string $value, bool $override = false): static
+    public function hintClass(string|Stringable|UnitEnum|null $value, bool $override = false): static
     {
         $new = clone $this;
-        CssClass::add($new->hintAttributes, $value, $override);
+        CSSClass::add($new->hintAttributes, $value, $override);
 
         return $new;
     }
@@ -47,12 +54,16 @@ trait HasHint
     /**
      * Returns a new instance with the hint text.
      *
-     * @param RenderInterface|string ...$values The hint text.
+     * @param RenderableInterface|string ...$values The hint text.
      */
-    public function hintContent(string|RenderInterface ...$values): static
+    public function hintContent(string|RenderableInterface ...$values): static
     {
         $new = clone $this;
-        $new->hintContent = Sanitize::html(...$values);
+        $new->hintContent = '';
+
+        foreach ($values as $value) {
+            $new->hintContent .= $value instanceof RenderableInterface ? $value->render() : Encode::content($value);
+        }
 
         return $new;
     }
@@ -75,20 +86,14 @@ trait HasHint
     /**
      * Set the hint tag.
      *
-     * @param false|string $value The tag name for the hint tag.
+     * @param false|UnitEnum $value The tag for the hint.
      * If `false` the hint tag will be disabled.
-     *
-     * @throws \InvalidArgumentException If the tag name is an empty string.
      *
      * @return static A new instance of the current class with the specified hint tag.
      * If `false` the hint tag will be disabled.
      */
-    public function hintTag(false|string $value = 'div'): static
+    public function hintTag(false|UnitEnum $value): static
     {
-        if ($value === '') {
-            throw new \InvalidArgumentException('The hint tag must be a non-empty string.');
-        }
-
         $new = clone $this;
         $new->hintTag = $value;
 

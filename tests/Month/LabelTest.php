@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Month;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Month};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputMonth};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -20,7 +17,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(InputMonth::tag())->render()
         );
     }
 
@@ -32,7 +29,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="month"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Month::widget())->enclosedByLabel(true)->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputMonth::tag())->enclosedByLabel(true)->render()
         );
     }
 
@@ -45,7 +42,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Month::widget())->label('Label')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputMonth::tag())->label('Label')->render()
         );
     }
 
@@ -58,8 +55,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(InputMonth::tag())
                 ->labelAttributes(['class' => 'value'])
                 ->render()
         );
@@ -74,7 +71,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Month::widget())->labelClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputMonth::tag())->labelClass('value')->render()
         );
     }
 
@@ -87,7 +84,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Month::widget())->labelFor('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputMonth::tag())->labelFor('value')->render()
         );
     }
 }

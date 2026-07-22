@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Password;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Password};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputPassword};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
@@ -24,7 +23,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->input(InputPassword::tag())->render()
         );
     }
 
@@ -40,9 +39,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(Password::widget())
+                ->input(InputPassword::tag())
                 ->render()
         );
     }
@@ -59,7 +58,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintClass('value')->input(InputPassword::tag())->render()
         );
     }
 
@@ -75,7 +74,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'password')->hintContent('Hint')->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('password')->hintContent('Hint')->input(InputPassword::tag())->render()
         );
     }
 
@@ -91,7 +90,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag()->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Block::DIV)->input(InputPassword::tag())->render()
         );
     }
 
@@ -105,7 +104,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag(false)->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(false)->input(InputPassword::tag())->render()
         );
     }
 
@@ -119,7 +118,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Inline::SPAN)->input(InputPassword::tag())->render()
         );
     }
 }

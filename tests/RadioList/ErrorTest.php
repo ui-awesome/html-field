@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio, FormControl\Input\RadioList};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\ChoiceItem, Field\Tests\Support\ChoiceList};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -32,12 +31,12 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -47,7 +46,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -64,13 +63,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->errorAttributes(['class' => 'value'])
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -80,7 +79,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -97,13 +96,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->errorClass('value')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -127,13 +126,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->errorContent('Error')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -143,7 +142,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -160,13 +159,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->errorTag()
+            Field::tag()->formModel($formModel)->property('agree')
+                ->errorTag(Block::DIV)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -176,7 +175,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -191,13 +190,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->errorTag(false)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -207,7 +206,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -222,13 +221,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->errorTag('span')
+            Field::tag()->formModel($formModel)->property('agree')
+                ->errorTag(Inline::SPAN)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -238,8 +237,8 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error - 1');
-        $formModel->addPropertyError('agree', 'Error - 2');
+        $formModel->addError('agree', 'Error - 1');
+        $formModel->addError('agree', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -257,12 +256,12 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->showAllErrors()

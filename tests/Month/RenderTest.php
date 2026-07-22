@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Month;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Month};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputMonth};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,9 +20,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
                 ->attributes(['class' => 'value'])
-                ->input(Month::widget())
+                ->input(InputMonth::tag())
                 ->render()
         );
     }
@@ -37,7 +36,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->class('value')->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->class('value')->input(InputMonth::tag())->render()
         );
     }
 
@@ -50,9 +49,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Month::widget())
+                ->input(InputMonth::tag())
                 ->render()
         );
     }
@@ -66,7 +65,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerClass('value')->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerClass('value')->input(InputMonth::tag())->render()
         );
     }
 
@@ -79,7 +78,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerTag()->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerTag(Block::DIV)->input(InputMonth::tag())->render()
         );
     }
 
@@ -90,7 +89,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-monthofbirth">Month Of Birth</label>
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerTag(false)->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerTag(false)->input(InputMonth::tag())->render()
         );
     }
 
@@ -103,7 +102,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerTag('article')->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerTag(Block::ARTICLE)->input(InputMonth::tag())->render()
         );
     }
 
@@ -116,7 +115,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->id('value')->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->id('value')->input(InputMonth::tag())->render()
         );
     }
 
@@ -131,10 +130,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -150,10 +149,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -169,10 +168,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
-                ->inputContainerTag('article')
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -186,7 +185,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -201,9 +200,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
-                ->inputContainerTag('article')
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->inputContainerTag(Block::ARTICLE)
                 ->render()
         );
     }
@@ -219,8 +218,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -235,7 +234,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="value" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->name('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->name('value')->render()
         );
     }
 
@@ -249,7 +248,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -265,11 +264,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -286,11 +285,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -307,10 +306,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -325,8 +324,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -343,10 +342,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -360,7 +359,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->render()
         );
     }
 
@@ -374,7 +373,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->suffix('suffix')->render()
         );
     }
 
@@ -390,11 +389,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -411,11 +410,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -432,10 +431,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -450,8 +449,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -468,10 +467,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -487,8 +486,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Month::widget())
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+                ->input(InputMonth::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -503,7 +502,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month" value="11">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->value('11')->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->value('11')->render()
         );
     }
 
@@ -512,7 +511,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('monthOfBirth', '11');
+        $formModel->setValue('monthOfBirth', '11');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -521,11 +520,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month" value="11">
             </div>
             HTML,
-            Field::widget($formModel, 'monthOfBirth')->input(Month::widget())->render()
+            Field::tag()->formModel($formModel)->property('monthOfBirth')->input(InputMonth::tag())->render()
         );
 
         // null value
-        $formModel->setPropertyValue('monthOfBirth', null);
+        $formModel->setValue('monthOfBirth', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -534,7 +533,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget($formModel, 'monthOfBirth')->input(Month::widget())->render()
+            Field::tag()->formModel($formModel)->property('monthOfBirth')->input(InputMonth::tag())->render()
         );
     }
 
@@ -547,7 +546,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->value(null)->render()
         );
     }
 
@@ -560,7 +559,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->id(null)->input(Month::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->id(null)->input(InputMonth::tag())->render()
         );
     }
 
@@ -573,7 +572,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" type="month">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Month::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->name(null)->render()
         );
     }
 }

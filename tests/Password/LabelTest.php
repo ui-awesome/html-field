@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Password;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Password};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputPassword};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -20,7 +17,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="password">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(InputPassword::tag())->render()
         );
     }
 
@@ -32,7 +29,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="password"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Password::widget())->enclosedByLabel(true)->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputPassword::tag())->enclosedByLabel(true)->render()
         );
     }
 
@@ -45,7 +42,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="password">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Password::widget())->label('Label')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputPassword::tag())->label('Label')->render()
         );
     }
 
@@ -58,8 +55,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="password">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Password::widget())
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(InputPassword::tag())
                 ->labelAttributes(['class' => 'value'])
                 ->render()
         );
@@ -74,7 +71,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="password">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Password::widget())->labelClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputPassword::tag())->labelClass('value')->render()
         );
     }
 
@@ -87,7 +84,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="password">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Password::widget())->labelFor('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputPassword::tag())->labelFor('value')->render()
         );
     }
 }

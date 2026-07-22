@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\DatetimeLocal;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\DatetimeLocal};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputDateTimeLocal};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
@@ -24,7 +23,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->input(DatetimeLocal::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->input(InputDateTimeLocal::tag())->render()
         );
     }
 
@@ -40,9 +39,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(DatetimeLocal::widget())
+                ->input(InputDateTimeLocal::tag())
                 ->render()
         );
     }
@@ -59,7 +58,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->input(DatetimeLocal::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintClass('value')->input(InputDateTimeLocal::tag())->render()
         );
     }
 
@@ -75,7 +74,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->hintContent('Hint')->input(DatetimeLocal::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->hintContent('Hint')->input(InputDateTimeLocal::tag())->render()
         );
     }
 
@@ -91,7 +90,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag()->input(DatetimeLocal::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Block::DIV)->input(InputDateTimeLocal::tag())->render()
         );
     }
 
@@ -105,7 +104,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag(false)->input(DatetimeLocal::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(false)->input(InputDateTimeLocal::tag())->render()
         );
     }
 
@@ -119,7 +118,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->input(DatetimeLocal::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Inline::SPAN)->input(InputDateTimeLocal::tag())->render()
         );
     }
 }

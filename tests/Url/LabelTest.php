@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Url;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Url};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputUrl};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -20,7 +17,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(InputUrl::tag())->render()
         );
     }
 
@@ -32,7 +29,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="url"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->enclosedByLabel(true)->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->enclosedByLabel(true)->input(InputUrl::tag())->render()
         );
     }
 
@@ -45,7 +42,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Url::widget())->label('Label')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputUrl::tag())->label('Label')->render()
         );
     }
 
@@ -58,8 +55,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(InputUrl::tag())
                 ->labelAttributes(['class' => 'class'])
                 ->render()
         );
@@ -74,7 +71,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Url::widget())->labelClass('class')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputUrl::tag())->labelClass('class')->render()
         );
     }
 
@@ -87,7 +84,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Url::widget())->labelFor('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputUrl::tag())->labelFor('value')->render()
         );
     }
 }

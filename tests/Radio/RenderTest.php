@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Radio;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputRadio};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,9 +20,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->attributes(['class' => 'value'])
-                ->input(Radio::widget())
+                ->input(InputRadio::tag())
                 ->render()
         );
     }
@@ -37,7 +36,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->class('value')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->class('value')->input(InputRadio::tag())->render()
         );
     }
 
@@ -50,9 +49,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Radio::widget())
+                ->input(InputRadio::tag())
                 ->render()
         );
     }
@@ -66,7 +65,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->containerClass('value')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->containerClass('value')->input(InputRadio::tag())->render()
         );
     }
 
@@ -79,7 +78,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->containerTag()->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(Block::DIV)->input(InputRadio::tag())->render()
         );
     }
 
@@ -90,7 +89,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-agree" name="BasicForm[agree]" type="radio">
             <label for="basicform-agree">Agree</label>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->containerTag(false)->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(false)->input(InputRadio::tag())->render()
         );
     }
 
@@ -103,7 +102,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->containerTag('article')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(Block::ARTICLE)->input(InputRadio::tag())->render()
         );
     }
 
@@ -116,7 +115,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="value">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->id('value')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->id('value')->input(InputRadio::tag())->render()
         );
     }
 
@@ -131,10 +130,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -150,10 +149,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -169,20 +168,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->inputContainerTag()->render()
-        );
-    }
-
-    public function testInputContainerWithFalseValue(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <input id="basicform-agree" name="BasicForm[agree]" type="radio">
-            <label for="basicform-agree">Agree</label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->inputContainerTag(Block::DIV)->render()
         );
     }
 
@@ -197,7 +183,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->inputContainerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->inputContainerTag(Block::ARTICLE)->render()
+        );
+    }
+
+    public function testInputContainerWithFalseValue(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <input id="basicform-agree" name="BasicForm[agree]" type="radio">
+            <label for="basicform-agree">Agree</label>
+            </div>
+            HTML,
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -212,8 +211,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->inputTemplate('<div>\n{label}\n{input}\n</div>')
                 ->render()
         );
@@ -228,7 +227,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->name('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->name('value')->render()
         );
     }
 
@@ -242,7 +241,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -258,11 +257,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -279,11 +278,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -300,25 +299,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->prefix('prefix')->prefixTag()->render()
-        );
-    }
-
-    public function testPrefixWithFalseValue(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            prefix
-            <input id="basicform-agree" name="BasicForm[agree]" type="radio">
-            <label for="basicform-agree">Agree</label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
-                ->prefix('prefix')
-                ->prefixTag(false)
-                ->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->prefix('prefix')->prefixTag(Block::DIV)->render()
         );
     }
 
@@ -332,10 +313,28 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
+                ->render()
+        );
+    }
+
+    public function testPrefixWithFalseValue(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            prefix
+            <input id="basicform-agree" name="BasicForm[agree]" type="radio">
+            <label for="basicform-agree">Agree</label>
+            </div>
+            HTML,
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
+                ->prefix('prefix')
+                ->prefixTag(false)
                 ->render()
         );
     }
@@ -349,7 +348,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->render()
         );
     }
 
@@ -363,7 +362,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->suffix('suffix')->render()
         );
     }
 
@@ -379,11 +378,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -400,11 +399,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -421,25 +420,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->suffix('suffix')->suffixTag()->render()
-        );
-    }
-
-    public function testSuffixWithFalseValue(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <input id="basicform-agree" name="BasicForm[agree]" type="radio">
-            <label for="basicform-agree">Agree</label>
-            suffix
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
-                ->suffix('suffix')
-                ->suffixTag(false)
-                ->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->suffix('suffix')->suffixTag(Block::DIV)->render()
         );
     }
 
@@ -453,10 +434,28 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
+                ->render()
+        );
+    }
+
+    public function testSuffixWithFalseValue(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <input id="basicform-agree" name="BasicForm[agree]" type="radio">
+            <label for="basicform-agree">Agree</label>
+            suffix
+            </div>
+            HTML,
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
+                ->suffix('suffix')
+                ->suffixTag(false)
                 ->render()
         );
     }
@@ -472,24 +471,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Radio::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputRadio::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
-        );
-    }
-
-    public function testUnCheckededValue(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <input name="BasicForm[agree]" type="hidden" value="0">
-            <input id="basicform-agree" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree">Agree</label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget()->unCheckedValue('0')->value(1))->render()
         );
     }
 
@@ -502,7 +487,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget()->value('ok'))->value('ok')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag()->value('ok'))->value('ok')->render()
         );
     }
 
@@ -511,7 +496,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // bool value
-        $formModel->setPropertyValue('agree', false);
+        $formModel->setValue('agree', false);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -520,10 +505,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Radio::widget()->value(true))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(true))->render()
         );
 
-        $formModel->setPropertyValue('agree', true);
+        $formModel->setValue('agree', true);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -532,11 +517,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Radio::widget()->value(true))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(true))->render()
         );
 
         // int value
-        $formModel->setPropertyValue('agree', 0);
+        $formModel->setValue('agree', 0);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -545,10 +530,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Radio::widget()->value(1))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(1))->render()
         );
 
-        $formModel->setPropertyValue('agree', 1);
+        $formModel->setValue('agree', 1);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -557,11 +542,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Radio::widget()->value(1))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(1))->render()
         );
 
         // string value
-        $formModel->setPropertyValue('agree', '');
+        $formModel->setValue('agree', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -570,10 +555,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Radio::widget()->value('ok'))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value('ok'))->render()
         );
 
-        $formModel->setPropertyValue('agree', 'ok');
+        $formModel->setValue('agree', 'ok');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -582,11 +567,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Radio::widget()->value('ok'))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value('ok'))->render()
         );
 
         // null value
-        $formModel->setPropertyValue('agree', null);
+        $formModel->setValue('agree', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -595,7 +580,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Radio::widget()->value('ok'))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value('ok'))->render()
         );
     }
 
@@ -608,7 +593,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->value(null)->render()
+        );
+    }
+
+    public function testValueWithoutUncheckedCompanion(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <input id="basicform-agree" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree">Agree</label>
+            </div>
+            HTML,
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag()->value(1))->render()
         );
     }
 
@@ -621,7 +619,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label>Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->id(null)->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->id(null)->input(InputRadio::tag())->render()
         );
     }
 
@@ -634,7 +632,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Radio::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->name(null)->render()
         );
     }
 }

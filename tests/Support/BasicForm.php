@@ -4,33 +4,53 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Support;
 
-use UIAwesome\FormModel\AbstractFormModel;
+use UIAwesome\FormModel\BaseFormModel;
 
-final class BasicForm extends AbstractFormModel
+final class BasicForm extends BaseFormModel
 {
-    private string|bool|int|null $agree = '';
-    private null|int|string $amount = '';
-    private null|string|array $attachment = '';
-    private null|string $color = '';
-    private null|string $content = '';
-    private null|string $dateOfBirth = '';
-    private null|string $email = '';
-    private array|int|string|null $fruits = [];
-    private null|string $image = '';
-    private array|string|null $label = null;
-    private array|string|null $hint = null;
-    private null|string $password = '';
-    private string $placeholder = '';
-    private null|string $monthOfBirth = '';
-    private null|string $url = '';
-    private string|null $username = '';
-    private null|string $timeOfBirth = '';
-    private null|string $weekOfBirth = '';
+    public mixed $agree = '';
+    public mixed $amount = '';
+    public mixed $attachment = '';
+    public mixed $color = '';
+    public mixed $content = '';
+    public mixed $dateOfBirth = '';
+    public mixed $email = '';
+    public mixed $fruits = [];
+    public mixed $hint = null;
+    public mixed $image = '';
+    public mixed $label = null;
+    public mixed $monthOfBirth = '';
+    public mixed $password = '';
+    public mixed $placeholder = '';
+    public mixed $timeOfBirth = '';
+    public mixed $url = '';
+    public mixed $username = '';
+    public mixed $weekOfBirth = '';
 
-    public function getLabels(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
     {
         return [
-            'label' => 'This is a label.',
+            'agree' => $this->agree,
+            'amount' => $this->amount,
+            'attachment' => $this->attachment,
+            'color' => $this->color,
+            'content' => $this->content,
+            'dateOfBirth' => $this->dateOfBirth,
+            'email' => $this->email,
+            'fruits' => $this->fruits,
+            'hint' => $this->hint,
+            'image' => $this->image,
+            'label' => $this->label,
+            'monthOfBirth' => $this->monthOfBirth,
+            'password' => $this->password,
+            'placeholder' => $this->placeholder,
+            'timeOfBirth' => $this->timeOfBirth,
+            'url' => $this->url,
+            'username' => $this->username,
+            'weekOfBirth' => $this->weekOfBirth,
         ];
     }
 
@@ -38,6 +58,13 @@ final class BasicForm extends AbstractFormModel
     {
         return [
             'hint' => 'This is a hint.',
+        ];
+    }
+
+    public function getLabels(): array
+    {
+        return [
+            'label' => 'This is a label.',
         ];
     }
 

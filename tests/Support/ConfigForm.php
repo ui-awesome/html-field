@@ -4,24 +4,30 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Support;
 
-use UIAwesome\FormModel\AbstractFormModel;
+use UIAwesome\FormModel\BaseFormModel;
 
-final class ConfigForm extends AbstractFormModel
+final class ConfigForm extends BaseFormModel
 {
-    private string $name = '';
+    public string $name = '';
 
-    public function getWidgetConfig(): array
+    /**
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
     {
-        return [
-            'class()' => ['form-control'],
-        ];
+        return ['name' => $this->name];
     }
 
-    public function getWidgetConfigByProperties(): array
+    /**
+     * @return array<string, array<int|string, mixed>>
+     */
+    public function getFieldConfigs(): array
     {
         return [
             'name' => [
-                'class()' => ['custom-class'],
+                0 => null,
+                'class' => ['custom-class form-control'],
+                'maxlength' => 10,
             ],
         ];
     }

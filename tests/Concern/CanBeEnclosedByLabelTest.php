@@ -10,10 +10,18 @@ final class CanBeEnclosedByLabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testImmutability(): void
     {
-        $instance = new class () {
+        $instance = new class {
             use CanBeEnclosedByLabel;
+
+            public function isEnclosedByLabel(): bool
+            {
+                return $this->enclosedByLabel;
+            }
         };
 
-        $this->assertNotSame($instance, $instance->enclosedByLabel());
+        $configured = $instance->enclosedByLabel();
+
+        self::assertNotSame($instance, $configured);
+        self::assertTrue($configured->isEnclosedByLabel());
     }
 }

@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
-use PHPForge\Support\Assert;
 use UIAwesome\Html\{
     Field\Field,
     Field\Tests\Support\BasicForm,
-    FormControl\Input\Checkbox,
-    FormControl\Input\CheckboxList
+    Field\Tests\Support\ChoiceItem,
+    Field\Tests\Support\ChoiceList
 };
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -32,14 +29,14 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->disableLabel()
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->notLabel()
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -59,13 +56,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->enclosedByLabel(true)
@@ -89,13 +86,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->label('Label')
@@ -119,13 +116,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->labelAttributes(['class' => 'value'])
@@ -149,13 +146,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->labelClass('value')
@@ -179,13 +176,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->labelClass('value')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->labelClass('value')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->label('Label')

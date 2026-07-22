@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use PHPForge\Support\Assert;
 use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,7 +20,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->attributes(['class' => 'value'])->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->attributes(['class' => 'value'])->render()
         );
     }
 
@@ -34,7 +33,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->class('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->class('value')->render()
         );
     }
 
@@ -47,7 +46,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerAttributes(['class' => 'value'])->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerAttributes(['class' => 'value'])->render()
         );
     }
 
@@ -60,7 +59,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerClass('value')->render()
         );
     }
 
@@ -73,7 +72,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->render()
         );
     }
 
@@ -84,7 +83,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="text">
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(false)->render()
         );
     }
 
@@ -97,7 +96,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -110,7 +109,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->id('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->id('value')->render()
         );
     }
 
@@ -125,9 +124,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')
+            Field::tag()->formModel(new BasicForm())->property('username')
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -143,7 +142,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->inputContainerClass('value')->inputContainerTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerClass('value')->inputContainerTag(Block::DIV)->render()
         );
     }
 
@@ -158,7 +157,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->inputContainerTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerTag(Block::DIV)->render()
         );
     }
 
@@ -171,7 +170,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerTag(false)->render()
         );
     }
 
@@ -186,7 +185,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->inputContainerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -201,7 +200,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->inputTemplate('<div>\n{input}\n{label}\n</div>')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->inputTemplate('<div>\n{input}\n{label}\n</div>')->render()
         );
     }
 
@@ -209,7 +208,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
     {
         $fieldModel = new BasicForm();
 
-        $fieldModel->addPropertyError('username', 'error');
+        $fieldModel->addError('username', 'error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -221,7 +220,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($fieldModel, 'username')->invalidClass('value')->render()
+            Field::tag()->formModel($fieldModel)->property('username')->invalidClass('value')->render()
         );
     }
 
@@ -234,7 +233,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="name" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->name('name')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->name('name')->render()
         );
     }
 
@@ -248,7 +247,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->prefix('Prefix')->render()
         );
     }
 
@@ -264,10 +263,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')
+            Field::tag()->formModel(new BasicForm())->property('username')
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -284,7 +283,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->prefix('prefix')->prefixClass('value')->prefixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixClass('value')->prefixTag(Block::DIV)->render()
         );
     }
 
@@ -300,7 +299,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->prefix('prefix')->prefixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixTag(Block::DIV)->render()
         );
     }
 
@@ -314,7 +313,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->prefix('prefix')->prefixTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixTag(false)->render()
         );
     }
 
@@ -328,7 +327,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->prefix('prefix')->prefixTag('span')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixTag(Inline::SPAN)->render()
         );
     }
 
@@ -341,7 +340,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->render()
         );
     }
 
@@ -355,7 +354,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->suffix('suffix')->render()
         );
     }
 
@@ -371,10 +370,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')
+            Field::tag()->formModel(new BasicForm())->property('username')
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -391,7 +390,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->suffix('suffix')->suffixClass('value')->suffixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->suffix('suffix')->suffixClass('value')->suffixTag(Block::DIV)->render()
         );
     }
 
@@ -407,7 +406,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->suffix('suffix')->suffixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->suffix('suffix')->suffixTag(Block::DIV)->render()
         );
     }
 
@@ -422,7 +421,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->template('<div>\n{field}\n</div>')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->template('<div>\n{field}\n</div>')->render()
         );
     }
 
@@ -439,7 +438,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget($fieldModel, 'username')->validClass('value')->render()
+            Field::tag()->formModel($fieldModel)->property('username')->validClass('value')->render()
         );
     }
 
@@ -452,7 +451,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->validClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->validClass('value')->render()
         );
     }
 
@@ -465,7 +464,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text" value="value">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->value('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->value('value')->render()
         );
     }
 
@@ -474,7 +473,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value.
-        $formModel->setPropertyValue('username', '');
+        $formModel->setValue('username', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -483,10 +482,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget($formModel, 'username')->render()
+            Field::tag()->formModel($formModel)->property('username')->render()
         );
 
-        $formModel->setPropertyValue('username', 'samdark');
+        $formModel->setValue('username', 'samdark');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -495,11 +494,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text" value="samdark">
             </div>
             HTML,
-            Field::widget($formModel, 'username')->render()
+            Field::tag()->formModel($formModel)->property('username')->render()
         );
 
         // null value.
-        $formModel->setPropertyValue('username', null);
+        $formModel->setValue('username', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -508,7 +507,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget($formModel, 'username')->render()
+            Field::tag()->formModel($formModel)->property('username')->render()
         );
     }
 
@@ -521,7 +520,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->value(null)->render()
         );
     }
 
@@ -534,7 +533,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->id(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->id(null)->render()
         );
     }
 
@@ -547,7 +546,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" type="text">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->name(null)->render()
         );
     }
 }

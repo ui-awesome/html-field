@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Number;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Number};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputNumber};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,9 +20,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
+            Field::tag()->formModel(new BasicForm())->property('amount')
                 ->attributes(['class' => 'value'])
-                ->input(Number::widget())
+                ->input(InputNumber::tag())
                 ->render()
         );
     }
@@ -37,7 +36,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->class('value')->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->class('value')->input(InputNumber::tag())->render()
         );
     }
 
@@ -50,9 +49,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
+            Field::tag()->formModel(new BasicForm())->property('amount')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Number::widget())
+                ->input(InputNumber::tag())
                 ->render()
         );
     }
@@ -66,7 +65,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerClass('value')->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->containerClass('value')->input(InputNumber::tag())->render()
         );
     }
 
@@ -79,7 +78,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerTag()->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->containerTag(Block::DIV)->input(InputNumber::tag())->render()
         );
     }
 
@@ -90,7 +89,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-amount">Amount</label>
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerTag(false)->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->containerTag(false)->input(InputNumber::tag())->render()
         );
     }
 
@@ -103,7 +102,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerTag('article')->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->containerTag(Block::ARTICLE)->input(InputNumber::tag())->render()
         );
     }
 
@@ -116,7 +115,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->id('value')->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->id('value')->input(InputNumber::tag())->render()
         );
     }
 
@@ -131,10 +130,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -150,10 +149,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -169,9 +168,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -185,7 +184,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -200,8 +199,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -216,7 +215,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="value" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->name('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->name('value')->render()
         );
     }
 
@@ -230,7 +229,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -246,11 +245,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -267,11 +266,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -288,7 +287,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->prefix('prefix')->prefixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->prefix('prefix')->prefixTag(Block::DIV)->render()
         );
     }
 
@@ -302,8 +301,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -320,10 +319,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -337,7 +336,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->render()
         );
     }
 
@@ -351,7 +350,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->suffix('suffix')->render()
         );
     }
 
@@ -367,11 +366,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -388,11 +387,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -409,10 +408,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -427,8 +426,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -445,10 +444,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -464,8 +463,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()->formModel(new BasicForm())->property('amount')
+                ->input(InputNumber::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -480,7 +479,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number" value="20">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->value('20')->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->value('20')->render()
         );
     }
 
@@ -489,7 +488,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('amount', '20');
+        $formModel->setValue('amount', '20');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -498,11 +497,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number" value="20">
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->input(Number::widget())->render()
+            Field::tag()->formModel($formModel)->property('amount')->input(InputNumber::tag())->render()
         );
 
         // null value
-        $formModel->setPropertyValue('amount', null);
+        $formModel->setValue('amount', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -511,7 +510,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->input(Number::widget())->render()
+            Field::tag()->formModel($formModel)->property('amount')->input(InputNumber::tag())->render()
         );
     }
 
@@ -524,7 +523,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->value(null)->render()
         );
     }
 
@@ -537,7 +536,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->id(null)->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->id(null)->input(InputNumber::tag())->render()
         );
     }
 
@@ -550,7 +549,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->name(null)->render()
         );
     }
 }

@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Number;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Number};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputNumber};
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testValue(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value must be a numeric or null value. The value is: array.');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Argument #1 ($value) must be of type');
 
-        Field::widget(new BasicForm(), 'amount')->input(Number::widget())->value([])->render();
+        Field::tag()->formModel(new BasicForm())->property('amount')->input(InputNumber::tag())->value([])->render();
     }
 }

@@ -10,10 +10,10 @@ final class HasInputTemplateTest extends \PHPUnit\Framework\TestCase
 {
     public function testImmutability(): void
     {
-        $instance = new class () {
+        $instance = new class {
             use HasInputTemplate;
         };
 
-        $this->assertNotSame($instance, $instance->inputTemplate(''));
+        self::assertNotSame($instance, $instance->inputTemplate(''));
     }
 }

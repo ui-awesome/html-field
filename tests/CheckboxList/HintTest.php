@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
-use PHPForge\Support\Assert;
 use UIAwesome\Html\{
     Field\Field,
     Field\Tests\Support\BasicForm,
-    FormControl\Input\Checkbox,
-    FormControl\Input\CheckboxList,
+    Field\Tests\Support\ChoiceItem,
+    Field\Tests\Support\ChoiceList,
 };
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
@@ -36,13 +35,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -68,14 +67,14 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintAttributes(['class' => 'value'])
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -101,14 +100,14 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintClass('value')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -134,14 +133,14 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->hintContent('Hint')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -167,14 +166,14 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
-                ->hintTag()
+            Field::tag()->formModel(new BasicForm())->property('hint')
+                ->hintTag(Block::DIV)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -198,14 +197,14 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintTag(false)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -229,14 +228,14 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
-                ->hintTag('span')
+            Field::tag()->formModel(new BasicForm())->property('hint')
+                ->hintTag(Inline::SPAN)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()

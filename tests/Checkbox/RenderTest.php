@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Checkbox;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Checkbox};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputCheckbox};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,9 +20,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->attributes(['class' => 'value'])
-                ->input(Checkbox::widget())
+                ->input(InputCheckbox::tag())
                 ->render()
         );
     }
@@ -37,7 +36,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->class('value')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->class('value')->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -50,9 +49,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Checkbox::widget())
+                ->input(InputCheckbox::tag())
                 ->render()
         );
     }
@@ -66,7 +65,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->containerClass('value')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->containerClass('value')->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -79,7 +78,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->containerTag('article')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(Block::ARTICLE)->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -90,7 +89,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-agree" name="BasicForm[agree]" type="checkbox">
             <label for="basicform-agree">Agree</label>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->containerTag(false)->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(false)->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -103,7 +102,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="value">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->id('value')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->id('value')->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -118,10 +117,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -137,10 +136,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -156,7 +155,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->inputContainerTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->inputContainerTag(Block::DIV)->render()
         );
     }
 
@@ -169,7 +168,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -184,7 +183,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->inputContainerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->inputContainerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -199,9 +198,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
+                ->inputContainerTag(Block::DIV)
                 ->inputTemplate('{label}\n{input}')
                 ->render()
         );
@@ -217,7 +216,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -233,11 +232,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -254,10 +253,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -274,7 +273,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->prefix('prefix')->prefixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->prefix('prefix')->prefixTag(Block::DIV)->render()
         );
     }
 
@@ -288,8 +287,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -308,10 +307,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->prefix('prefix')
-                ->prefixTag('article')
+                ->prefixTag(Block::ARTICLE)
                 ->render()
         );
     }
@@ -325,7 +324,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -339,7 +338,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->suffix('suffix')->render()
         );
     }
 
@@ -355,11 +354,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -376,11 +375,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -397,10 +396,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -415,8 +414,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -433,10 +432,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -450,26 +449,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(Checkbox::widget())
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(InputCheckbox::tag())
                 ->prefix('prefix')
                 ->suffix('suffix')
                 ->template('{field}')
                 ->render()
-        );
-    }
-
-    public function testUncheckedValue(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <input name="BasicForm[agree]" type="hidden" value="0">
-            <input id="basicform-agree" name="BasicForm[agree]" type="checkbox" value="1">
-            <label for="basicform-agree">Agree</label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget()->uncheckedValue('0')->value(1))->render()
         );
     }
 
@@ -482,7 +467,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget()->value('ok'))->value('ok')->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag()->value('ok'))->value('ok')->render()
         );
     }
 
@@ -491,7 +476,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // bool value
-        $formModel->setPropertyValue('agree', false);
+        $formModel->setValue('agree', false);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -500,10 +485,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Checkbox::widget()->value(true))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputCheckbox::tag()->value(true))->render()
         );
 
-        $formModel->setPropertyValue('agree', true);
+        $formModel->setValue('agree', true);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -512,11 +497,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Checkbox::widget()->value(true))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputCheckbox::tag()->value(true))->render()
         );
 
         // int value
-        $formModel->setPropertyValue('agree', 0);
+        $formModel->setValue('agree', 0);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -525,10 +510,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Checkbox::widget()->value(1))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputCheckbox::tag()->value(1))->render()
         );
 
-        $formModel->setPropertyValue('agree', 1);
+        $formModel->setValue('agree', 1);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -537,11 +522,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Checkbox::widget()->value(1))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputCheckbox::tag()->value(1))->render()
         );
 
         // string value
-        $formModel->setPropertyValue('agree', '');
+        $formModel->setValue('agree', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -550,10 +535,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Checkbox::widget()->value('ok'))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputCheckbox::tag()->value('ok'))->render()
         );
 
-        $formModel->setPropertyValue('agree', 'ok');
+        $formModel->setValue('agree', 'ok');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -562,11 +547,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Checkbox::widget()->value('ok'))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputCheckbox::tag()->value('ok'))->render()
         );
 
         // null value
-        $formModel->setPropertyValue('agree', null);
+        $formModel->setValue('agree', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -575,7 +560,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')->input(Checkbox::widget()->value('ok'))->render()
+            Field::tag()->formModel($formModel)->property('agree')->input(InputCheckbox::tag()->value('ok'))->render()
         );
     }
 
@@ -588,7 +573,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->input(Checkbox::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag())->value(null)->render()
+        );
+    }
+
+    public function testValueWithoutUncheckedCompanion(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <input id="basicform-agree" name="BasicForm[agree]" type="checkbox" value="1">
+            <label for="basicform-agree">Agree</label>
+            </div>
+            HTML,
+            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputCheckbox::tag()->value(1))->render()
         );
     }
 
@@ -601,7 +599,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label>Email</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Checkbox::widget())->id(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('email')->input(InputCheckbox::tag())->id(null)->render()
         );
     }
 
@@ -614,7 +612,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-email">Email</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Checkbox::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('email')->input(InputCheckbox::tag())->name(null)->render()
         );
     }
 }

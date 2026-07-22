@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Checkbox;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Checkbox};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputCheckbox};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
@@ -24,7 +22,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -40,9 +38,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(Checkbox::widget())
+                ->input(InputCheckbox::tag())
                 ->render()
         );
     }
@@ -59,7 +57,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintClass('value')->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -75,7 +73,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->hintContent('Hint')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->hintContent('Hint')->input(InputCheckbox::tag())->render()
         );
     }
 
@@ -89,7 +87,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->input(Checkbox::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Inline::SPAN)->input(InputCheckbox::tag())->render()
         );
     }
 }

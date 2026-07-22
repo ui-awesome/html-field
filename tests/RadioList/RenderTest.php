@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio, FormControl\Input\RadioList};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\ChoiceItem, Field\Tests\Support\ChoiceList};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -26,13 +25,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->attributes(['class' => 'value'])
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -53,13 +52,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->class('value')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -80,13 +79,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->containerAttributes(['class' => 'value'])
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -107,13 +106,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->containerClass('value')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -134,13 +133,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->containerTag()
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->containerTag(Block::DIV)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -159,13 +158,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree-w1">Yes</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->containerTag(false)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -186,13 +185,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->containerTag('article')
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->containerTag(Block::ARTICLE)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -213,13 +212,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->id('value')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->value(0)->label('No'),
-                            Radio::widget()->value(1)->label('Yes'),
+                            ChoiceItem::radio()->value(0)->label('No'),
+                            ChoiceItem::radio()->value(1)->label('Yes'),
                         )
                 )
                 ->render()
@@ -242,16 +241,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -272,16 +271,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -302,15 +301,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -329,13 +328,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->inputContainerTag(false)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -358,13 +357,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->inputContainerTag('article')
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->inputContainerTag(Block::ARTICLE)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -387,12 +386,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
@@ -414,12 +413,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->value(0)->label('No'),
-                            Radio::widget()->value(1)->label('Yes'),
+                            ChoiceItem::radio()->value(0)->label('No'),
+                            ChoiceItem::radio()->value(1)->label('Yes'),
                         )
                 )
                 ->name('value')
@@ -442,12 +441,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->prefix('Prefix')
@@ -472,17 +471,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -504,17 +503,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -536,16 +535,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -565,12 +564,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->prefix('prefix')
@@ -594,16 +593,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -622,42 +621,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
-        );
-    }
-
-    public function testSuffix(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
-            </div>
-            suffix
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->suffix('suffix')->render()
         );
     }
 
@@ -678,18 +650,45 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
+        );
+    }
+
+    public function testSuffix(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label>Agree</label>
+            <div>
+            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-w0">No</label>
+            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-w1">Yes</label>
+            </div>
+            suffix
+            </div>
+            HTML,
+            Field::tag()->formModel(new BasicForm())->property('agree')
+                ->input(
+                    ChoiceList::radio()
+                        ->items(
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
+                        )
+                )
+                ->suffix('suffix')->render()
         );
     }
 
@@ -710,17 +709,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -742,16 +741,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -771,12 +770,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->suffix('suffix')
@@ -800,16 +799,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -830,12 +829,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->template('<div>\n{field}\n</div>')
@@ -858,12 +857,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                         ->uncheckedValue('none')
                 )
@@ -885,12 +884,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->value(1)
@@ -903,7 +902,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // int values
-        $formModel->setPropertyValue('agree', 0);
+        $formModel->setValue('agree', 0);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -917,19 +916,19 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
         );
 
         // string values
-        $formModel->setPropertyValue('agree', '1');
+        $formModel->setValue('agree', '1');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -943,19 +942,19 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
         );
 
         // value not in list
-        $formModel->setPropertyValue('agree', 7);
+        $formModel->setValue('agree', 7);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -969,19 +968,19 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()->formModel($formModel)->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
         );
 
         // null value
-        $formModel->setPropertyValue('fruits', null);
+        $formModel->setValue('fruits', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -995,12 +994,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -1021,12 +1020,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->value(null)
@@ -1048,13 +1047,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->id(null)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -1075,12 +1074,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->name(null)

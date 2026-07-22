@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Select};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\SelectControl};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -30,14 +29,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -52,9 +51,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->errorAttributes(['class' => 'value'])
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -62,7 +61,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -77,9 +76,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->errorClass('value')
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -99,9 +98,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->errorContent('Error')
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -109,7 +108,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -124,14 +123,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->errorTag()->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()->formModel($formModel)->property('fruits')->errorTag(Block::DIV)->input(SelectControl::tag()->items([1 => 'Apple']))->render()
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -144,9 +143,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->errorTag(false)
-                ->input(Select::widget()->items([1 => 'Apple']))
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -154,7 +153,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -167,9 +166,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
-                ->errorTag('span')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel($formModel)->property('fruits')
+                ->errorTag(Inline::SPAN)
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->render()
         );
     }
@@ -177,8 +176,8 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error - 1');
-        $formModel->addPropertyError('fruits', 'Error - 2');
+        $formModel->addError('fruits', 'Error - 1');
+        $formModel->addError('fruits', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -194,8 +193,8 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel($formModel)->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->showAllErrors()
                 ->render()
         );

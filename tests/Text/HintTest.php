@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use PHPForge\Support\Assert;
 use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
@@ -24,7 +23,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->render()
         );
     }
 
@@ -40,7 +39,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintAttributes(['class' => 'value'])->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintAttributes(['class' => 'value'])->render()
         );
     }
 
@@ -56,7 +55,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintClass('value')->render()
         );
     }
 
@@ -72,7 +71,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->hintContent('Hint')->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->hintContent('Hint')->render()
         );
     }
 
@@ -88,7 +87,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Block::DIV)->render()
         );
     }
 
@@ -102,7 +101,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(false)->render()
         );
     }
 
@@ -116,7 +115,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Inline::SPAN)->render()
         );
     }
 }

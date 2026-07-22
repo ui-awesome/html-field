@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Url;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Url};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputUrl};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('url', 'Error');
+        $formModel->addError('url', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +26,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->input(InputUrl::tag())->render()
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('url', 'Error');
+        $formModel->addError('url', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,9 +45,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'url')
+            Field::tag()->formModel($formModel)->property('url')
                 ->errorAttributes(['class' => 'value'])
-                ->input(Url::widget())
+                ->input(InputUrl::tag())
                 ->render()
         );
     }
@@ -56,7 +55,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('url', 'Error');
+        $formModel->addError('url', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -68,7 +67,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'url')->errorClass('value')->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->errorClass('value')->input(InputUrl::tag())->render()
         );
     }
 
@@ -84,14 +83,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->errorContent('Error')->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->errorContent('Error')->input(InputUrl::tag())->render()
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('url', 'Error');
+        $formModel->addError('url', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -103,14 +102,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'url')->errorTag()->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->errorTag(Block::DIV)->input(InputUrl::tag())->render()
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('url', 'Error');
+        $formModel->addError('url', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -120,14 +119,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'url')->errorTag(false)->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->errorTag(false)->input(InputUrl::tag())->render()
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('url', 'Error');
+        $formModel->addError('url', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -137,15 +136,15 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'url')->errorTag('span')->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->errorTag(Inline::SPAN)->input(InputUrl::tag())->render()
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('url', 'Error - 1');
-        $formModel->addPropertyError('url', 'Error - 2');
+        $formModel->addError('url', 'Error - 1');
+        $formModel->addError('url', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -158,7 +157,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->showAllErrors()->render()
+            Field::tag()->formModel($formModel)->property('url')->input(InputUrl::tag())->showAllErrors()->render()
         );
     }
 }

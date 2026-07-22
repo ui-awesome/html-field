@@ -6,16 +6,13 @@ namespace UIAwesome\Html\Field\Tests\Text;
 
 use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ExceptionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testValue(): void
+    public function testIntegerValue(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value must be a string or null value. The value is: integer.');
-
-        Field::widget(new BasicForm(), 'username')->value(1)->render();
+        self::assertStringContainsString(
+            'value="1"',
+            Field::tag()->formModel(new BasicForm())->property('username')->value(1)->render(),
+        );
     }
 }

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\File;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\File};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputFile};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,9 +20,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
+            Field::tag()->formModel(new BasicForm())->property('attachment')
                 ->attributes(['class' => 'value'])
-                ->input(File::widget())
+                ->input(InputFile::tag())
                 ->render()
         );
     }
@@ -37,7 +36,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->class('value')->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->class('value')->input(InputFile::tag())->render()
         );
     }
 
@@ -50,9 +49,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
+            Field::tag()->formModel(new BasicForm())->property('attachment')
                 ->containerAttributes(['class' => 'value'])
-                ->input(File::widget())
+                ->input(InputFile::tag())
                 ->render()
         );
     }
@@ -66,7 +65,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->containerClass('value')->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->containerClass('value')->input(InputFile::tag())->render()
         );
     }
 
@@ -79,7 +78,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag()->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->input(InputFile::tag())->render()
         );
     }
 
@@ -90,7 +89,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="file">
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag(false)->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(false)->input(InputFile::tag())->render()
         );
     }
 
@@ -103,7 +102,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="file">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('article')->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::ARTICLE)->input(InputFile::tag())->render()
         );
     }
 
@@ -116,7 +115,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="id" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->id('id')->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->id('id')->input(InputFile::tag())->render()
         );
     }
 
@@ -131,10 +130,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -150,10 +149,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -169,9 +168,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -187,8 +186,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -203,7 +202,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment][]" type="file" multiple>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->input(File::widget()->multiple())->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag()->multiple(true))->render()
         );
     }
 
@@ -216,7 +215,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="name" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->name('name')->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->name('name')->input(InputFile::tag())->render()
         );
     }
 
@@ -230,7 +229,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->input(File::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -246,11 +245,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -267,11 +266,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -288,10 +287,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -306,8 +305,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -324,10 +323,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -341,7 +340,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->input(File::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->render()
         );
     }
 
@@ -355,7 +354,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->input(File::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->suffix('suffix')->render()
         );
     }
 
@@ -371,11 +370,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -392,11 +391,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -413,10 +412,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -431,8 +430,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -449,10 +448,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -468,8 +467,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')
-                ->input(File::widget())
+            Field::tag()->formModel(new BasicForm())->property('attachment')
+                ->input(InputFile::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -484,7 +483,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->input(File::widget())->value('my-file.jpg')->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->value('my-file.jpg')->render()
         );
     }
 
@@ -493,7 +492,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('attachment', 'my-file.jpg');
+        $formModel->setValue('attachment', 'my-file.jpg');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -502,11 +501,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget($formModel, 'attachment')->input(File::widget())->render()
+            Field::tag()->formModel($formModel)->property('attachment')->input(InputFile::tag())->render()
         );
 
         // null value
-        $formModel->setPropertyValue('attachment', null);
+        $formModel->setValue('attachment', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -515,7 +514,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget($formModel, 'attachment')->input(File::widget())->render()
+            Field::tag()->formModel($formModel)->property('attachment')->input(InputFile::tag())->render()
         );
     }
 
@@ -528,7 +527,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(File::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputFile::tag())->value(null)->render()
         );
     }
 
@@ -541,7 +540,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->input(File::widget())->id(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->id(null)->render()
         );
     }
 
@@ -554,7 +553,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" type="file">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'attachment')->input(File::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->name(null)->render()
         );
     }
 }

@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Color;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Color};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputColor};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
-    public function testDisableLabel()
+    public function testDisableLabel(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
@@ -20,7 +17,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(InputColor::tag())->render()
         );
     }
 
@@ -32,7 +29,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="color"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->enclosedByLabel(true)->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputColor::tag())->enclosedByLabel(true)->render()
         );
     }
 
@@ -45,7 +42,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->label('Label')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputColor::tag())->label('Label')->render()
         );
     }
 
@@ -58,8 +55,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(InputColor::tag())
                 ->labelAttributes(['class' => 'value'])
                 ->render()
         );
@@ -74,7 +71,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->labelClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputColor::tag())->labelClass('value')->render()
         );
     }
 
@@ -87,7 +84,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->labelFor('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputColor::tag())->labelFor('value')->render()
         );
     }
 }

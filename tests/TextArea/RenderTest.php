@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\TextArea;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\TextArea};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\TextArea};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -18,12 +17,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea class="value" id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea class="value" id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
+            Field::tag()->formModel(new BasicForm())->property('content')
                 ->attributes(['class' => 'value'])
-                ->input(TextArea::widget())
+                ->input(TextArea::tag())
                 ->render()
         );
     }
@@ -34,10 +33,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea class="value" id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea class="value" id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->class('value')->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->class('value')->input(TextArea::tag())->render()
         );
     }
 
@@ -47,12 +46,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div class="value">
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
+            Field::tag()->formModel(new BasicForm())->property('content')
                 ->containerAttributes(['class' => 'value'])
-                ->input(TextArea::widget())
+                ->input(TextArea::tag())
                 ->render()
         );
     }
@@ -63,10 +62,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div class="value">
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->containerClass('value')->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->containerClass('value')->input(TextArea::tag())->render()
         );
     }
 
@@ -76,10 +75,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->containerTag()->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->containerTag(Block::DIV)->input(TextArea::tag())->render()
         );
     }
 
@@ -88,9 +87,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             HTML,
-            Field::widget(new BasicForm(), 'content')->containerTag(false)->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->containerTag(false)->input(TextArea::tag())->render()
         );
     }
 
@@ -100,10 +99,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <article>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'content')->containerTag('article')->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->containerTag(Block::ARTICLE)->input(TextArea::tag())->render()
         );
     }
 
@@ -113,10 +112,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="value">Content</label>
-            <textarea id="value" name="BasicForm[content]"></textarea>
+            <textarea id="value" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->id('value')->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->id('value')->input(TextArea::tag())->render()
         );
     }
 
@@ -127,14 +126,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div class="value">
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -146,14 +145,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div class="value">
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -165,11 +164,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->inputContainerTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->inputContainerTag(Block::DIV)->render()
         );
     }
 
@@ -179,10 +178,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -193,11 +192,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <article>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->inputContainerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->inputContainerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -207,13 +206,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <div>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             <label for="basicform-content">Content</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -225,10 +224,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="value"></textarea>
+            <textarea id="basicform-content" name="value">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->name('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->name('value')->render()
         );
     }
 
@@ -239,10 +238,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             Prefix
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -255,14 +254,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             Prefix
             </div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->prefix('Prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -276,14 +275,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             Prefix
             </div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->prefix('Prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -297,13 +296,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             Prefix
             </div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->prefix('Prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -314,10 +313,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->render()
         );
     }
 
@@ -327,11 +326,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->suffix('suffix')->render()
         );
     }
 
@@ -341,17 +340,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -362,17 +361,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -383,16 +382,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             <div>
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -403,12 +402,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -421,14 +420,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -440,12 +439,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')
-                ->input(TextArea::widget())
+            Field::tag()->formModel(new BasicForm())->property('content')
+                ->input(TextArea::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -457,10 +456,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]" value="content">content</textarea>
+            <textarea id="basicform-content" name="BasicForm[content]" value="content">\ncontent\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->value('content')->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->value('content')->render()
         );
     }
 
@@ -469,29 +468,29 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value.
-        $formModel->setPropertyValue('content', 'xxxxxxxxxx');
+        $formModel->setValue('content', 'xxxxxxxxxx');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]">xxxxxxxxxx</textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\nxxxxxxxxxx\n</textarea>
             </div>
             HTML,
-            Field::widget($formModel, 'content')->input(TextArea::widget())->render()
+            Field::tag()->formModel($formModel)->property('content')->input(TextArea::tag())->render()
         );
 
         // null value.
-        $formModel->setPropertyValue('content', null);
+        $formModel->setValue('content', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget($formModel, 'content')->input(TextArea::widget())->render()
+            Field::tag()->formModel($formModel)->property('content')->input(TextArea::tag())->render()
         );
     }
 
@@ -501,10 +500,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]"></textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->value(null)->render()
         );
     }
 
@@ -514,10 +513,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Content</label>
-            <textarea name="BasicForm[content]"></textarea>
+            <textarea name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->id(null)->input(TextArea::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->id(null)->input(TextArea::tag())->render()
         );
     }
 
@@ -527,10 +526,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content"></textarea>
+            <textarea id="basicform-content">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'content')->input(TextArea::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->name(null)->render()
         );
     }
 }

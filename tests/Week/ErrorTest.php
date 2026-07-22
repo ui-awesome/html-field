@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Week;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Week};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputWeek};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('weekOfBirth', 'Error');
+        $formModel->addError('weekOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +26,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->input(Week::widget())->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->input(InputWeek::tag())->render()
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('weekOfBirth', 'Error');
+        $formModel->addError('weekOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,9 +45,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')
+            Field::tag()->formModel($formModel)->property('weekOfBirth')
                 ->errorAttributes(['class' => 'value'])
-                ->input(Week::widget())
+                ->input(InputWeek::tag())
                 ->render()
         );
     }
@@ -56,7 +55,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('weekOfBirth', 'Error');
+        $formModel->addError('weekOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -68,7 +67,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->errorClass('value')->input(Week::widget())->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->errorClass('value')->input(InputWeek::tag())->render()
         );
     }
 
@@ -84,14 +83,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'weekOfBirth')->errorContent('Error')->input(Week::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->errorContent('Error')->input(InputWeek::tag())->render()
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('weekOfBirth', 'Error');
+        $formModel->addError('weekOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -103,14 +102,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->errorTag()->input(Week::widget())->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->errorTag(Block::DIV)->input(InputWeek::tag())->render()
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('weekOfBirth', 'Error');
+        $formModel->addError('weekOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -120,14 +119,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->errorTag(false)->input(Week::widget())->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->errorTag(false)->input(InputWeek::tag())->render()
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('weekOfBirth', 'Error');
+        $formModel->addError('weekOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -137,15 +136,15 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->errorTag('span')->input(Week::widget())->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->errorTag(Inline::SPAN)->input(InputWeek::tag())->render()
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('weekOfBirth', 'Error - 1');
-        $formModel->addPropertyError('weekOfBirth', 'Error - 2');
+        $formModel->addError('weekOfBirth', 'Error - 1');
+        $formModel->addError('weekOfBirth', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -158,7 +157,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'weekOfBirth')->input(Week::widget())->showAllErrors()->render()
+            Field::tag()->formModel($formModel)->property('weekOfBirth')->input(InputWeek::tag())->showAllErrors()->render()
         );
     }
 }

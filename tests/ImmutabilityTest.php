@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests;
 
-use UIAwesome\{Html\Field\Field, Html\Field\Tests\Support\BasicForm, Html\FormControl\Input\Text};
+use UIAwesome\{Html\Field\Field, Html\Field\Tests\Support\BasicForm, Html\Form\InputText};
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ImmutabilityTest extends \PHPUnit\Framework\TestCase
 {
     public function testInmutability(): void
     {
-        $field = Field::widget(new BasicForm(), 'amount');
+        $model = new BasicForm();
+        $field = Field::tag();
 
-        $this->assertNotSame($field, $field->input(Text::widget()));
+        self::assertNotSame($field, $field->formModel($model));
+
+        $field = $field->formModel($model);
+
+        $configured = $field->property('amount');
+
+        self::assertNotSame($field, $configured);
+        self::assertSame('', $field->getProperty());
+        self::assertSame('amount', $configured->getProperty());
+
+        self::assertNotSame($configured, $configured->input(InputText::tag()));
     }
 }

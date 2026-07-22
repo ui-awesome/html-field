@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Image;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Image};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputImage};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -20,7 +17,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(InputImage::tag())->render()
         );
     }
 
@@ -32,7 +29,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="image"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Image::widget())->enclosedByLabel(true)->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputImage::tag())->enclosedByLabel(true)->render()
         );
     }
 
@@ -45,7 +42,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Image::widget())->label('Label')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputImage::tag())->label('Label')->render()
         );
     }
 
@@ -58,8 +55,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(InputImage::tag())
                 ->labelAttributes(['class' => 'value'])
                 ->render()
         );
@@ -74,7 +71,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Image::widget())->labelClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputImage::tag())->labelClass('value')->render()
         );
     }
 
@@ -87,7 +84,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Image::widget())->labelFor('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputImage::tag())->labelFor('value')->render()
         );
     }
 }

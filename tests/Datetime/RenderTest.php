@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Datetime;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Datetime};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputText};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,9 +20,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
                 ->attributes(['class' => 'value'])
-                ->input(Datetime::widget())
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->render()
         );
     }
@@ -37,7 +36,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->class('value')->input(Datetime::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->class('value')->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -50,9 +49,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Datetime::widget())
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->render()
         );
     }
@@ -66,7 +65,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->containerClass('value')->input(Datetime::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->containerClass('value')->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -79,7 +78,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->containerTag()->input(Datetime::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->containerTag(Block::DIV)->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -90,7 +89,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-dateofbirth">Date Of Birth</label>
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->containerTag(false)->input(Datetime::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->containerTag(false)->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -103,7 +102,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->containerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->containerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -116,7 +115,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->id('value')->input(Datetime::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->id('value')->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -131,10 +130,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -150,10 +149,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -169,9 +168,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -185,7 +184,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->inputContainerTag(false)->render()
         );
     }
 
@@ -200,9 +199,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
-                ->inputContainerTag('article')
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
+                ->inputContainerTag(Block::ARTICLE)
                 ->render()
         );
     }
@@ -218,8 +217,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -234,7 +233,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="value" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->name('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->name('value')->render()
         );
     }
 
@@ -248,7 +247,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->prefix('Prefix')->render()
         );
     }
 
@@ -264,11 +263,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -285,11 +284,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -306,10 +305,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -324,8 +323,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -342,10 +341,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -359,7 +358,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -373,7 +372,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->suffix('suffix')->render()
         );
     }
 
@@ -389,11 +388,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -410,11 +409,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -431,10 +430,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -450,8 +449,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -466,8 +465,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime" value="1996-12-19T16:39:57-08:00">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
-                ->input(Datetime::widget())
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+                ->input(InputText::tag()->addAttribute('type', 'datetime'))
                 ->value('1996-12-19T16:39:57-08:00')
                 ->render()
         );
@@ -478,7 +477,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('dateOfBirth', '1996-12-19T16:39:57-08:00');
+        $formModel->setValue('dateOfBirth', '1996-12-19T16:39:57-08:00');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -487,11 +486,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime" value="1996-12-19T16:39:57-08:00">
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->input(Datetime::widget())->render()
+            Field::tag()->formModel($formModel)->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
 
         // null value
-        $formModel->setPropertyValue('dateOfBirth', null);
+        $formModel->setValue('dateOfBirth', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -500,7 +499,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->input(Datetime::widget())->render()
+            Field::tag()->formModel($formModel)->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -513,7 +512,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->value(null)->render()
         );
     }
 
@@ -526,7 +525,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[dateOfBirth]" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->id(null)->input(Datetime::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->id(null)->input(InputText::tag()->addAttribute('type', 'datetime'))->render()
         );
     }
 
@@ -539,7 +538,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" type="datetime">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Datetime::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputText::tag()->addAttribute('type', 'datetime'))->name(null)->render()
         );
     }
 }

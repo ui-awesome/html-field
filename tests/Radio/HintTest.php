@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Radio;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputRadio};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
@@ -24,7 +22,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->input(InputRadio::tag())->render()
         );
     }
 
@@ -40,9 +38,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(Radio::widget())
+                ->input(InputRadio::tag())
                 ->render()
         );
     }
@@ -59,7 +57,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintClass('value')->input(InputRadio::tag())->render()
         );
     }
 
@@ -75,7 +73,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->hintContent('Hint')->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('agree')->hintContent('Hint')->input(InputRadio::tag())->render()
         );
     }
 
@@ -91,7 +89,7 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag()->input(Radio::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Block::DIV)->input(InputRadio::tag())->render()
         );
     }
 }

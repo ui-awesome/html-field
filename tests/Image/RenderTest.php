@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Image;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Image};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputImage};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,7 +20,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->attributes(['class' => 'value'])->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->attributes(['class' => 'value'])->input(InputImage::tag())->render()
         );
     }
 
@@ -34,7 +33,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->class('value')->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->class('value')->input(InputImage::tag())->render()
         );
     }
 
@@ -47,9 +46,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
+            Field::tag()->formModel(new BasicForm())->property('image')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Image::widget())
+                ->input(InputImage::tag())
                 ->render()
         );
     }
@@ -63,7 +62,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->containerClass('value')->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->containerClass('value')->input(InputImage::tag())->render()
         );
     }
 
@@ -76,7 +75,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('div')->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->input(InputImage::tag())->render()
         );
     }
 
@@ -87,7 +86,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="image">
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag(false)->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(false)->input(InputImage::tag())->render()
         );
     }
 
@@ -100,7 +99,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="image">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('article')->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::ARTICLE)->input(InputImage::tag())->render()
         );
     }
 
@@ -113,7 +112,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="id" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->id('id')->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->id('id')->input(InputImage::tag())->render()
         );
     }
 
@@ -128,10 +127,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -147,10 +146,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -166,9 +165,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -182,7 +181,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -197,7 +196,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->inputContainerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->inputContainerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -212,8 +211,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -228,7 +227,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="name" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->name('name')->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->name('name')->input(InputImage::tag())->render()
         );
     }
 
@@ -242,7 +241,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -258,11 +257,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -279,11 +278,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -300,10 +299,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -318,8 +317,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -336,10 +335,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -353,7 +352,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->render()
         );
     }
 
@@ -367,7 +366,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->suffix('suffix')->render()
         );
     }
 
@@ -383,11 +382,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -404,11 +403,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -425,10 +424,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -443,8 +442,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -461,10 +460,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -480,8 +479,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()->formModel(new BasicForm())->property('image')
+                ->input(InputImage::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -496,7 +495,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image" src="my-file.jpg">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->value('my-file.jpg')->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->value('my-file.jpg')->render()
         );
     }
 
@@ -505,7 +504,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('image', 'my-file.jpg');
+        $formModel->setValue('image', 'my-file.jpg');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -514,11 +513,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image" src="my-file.jpg">
             </div>
             HTML,
-            Field::widget($formModel, 'image')->input(Image::widget())->render()
+            Field::tag()->formModel($formModel)->property('image')->input(InputImage::tag())->render()
         );
 
         // empty string value
-        $formModel->setPropertyValue('image', '');
+        $formModel->setValue('image', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -527,11 +526,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget($formModel, 'image')->input(Image::widget())->render()
+            Field::tag()->formModel($formModel)->property('image')->input(InputImage::tag())->render()
         );
 
         // null value
-        $formModel->setPropertyValue('image', null);
+        $formModel->setValue('image', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -540,7 +539,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget($formModel, 'image')->input(Image::widget())->render()
+            Field::tag()->formModel($formModel)->property('image')->input(InputImage::tag())->render()
         );
     }
 
@@ -553,7 +552,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Image::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputImage::tag())->value(null)->render()
         );
     }
 
@@ -566,7 +565,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->id(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->id(null)->render()
         );
     }
 
@@ -579,7 +578,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('image')->input(InputImage::tag())->name(null)->render()
         );
     }
 }

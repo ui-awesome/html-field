@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Color;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Color};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputColor};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,7 +20,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->attributes(['class' => 'value'])->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->attributes(['class' => 'value'])->input(InputColor::tag())->render()
         );
     }
 
@@ -34,7 +33,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->class('value')->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->class('value')->input(InputColor::tag())->render()
         );
     }
 
@@ -47,9 +46,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
+            Field::tag()->formModel(new BasicForm())->property('color')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Color::widget())
+                ->input(InputColor::tag())
                 ->render()
         );
     }
@@ -63,7 +62,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->containerClass('value')->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->containerClass('value')->input(InputColor::tag())->render()
         );
     }
 
@@ -76,7 +75,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag()->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->input(InputColor::tag())->render()
         );
     }
 
@@ -87,7 +86,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="color">
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag(false)->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(false)->input(InputColor::tag())->render()
         );
     }
 
@@ -100,7 +99,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="color">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('article')->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::ARTICLE)->input(InputColor::tag())->render()
         );
     }
 
@@ -113,7 +112,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->id('value')->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->id('value')->input(InputColor::tag())->render()
         );
     }
 
@@ -128,10 +127,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -147,10 +146,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -166,9 +165,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
-                ->inputContainerTag()
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -182,8 +181,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->inputContainerTag(false)
                 ->render()
         );
@@ -200,9 +199,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
-                ->inputContainerTag('article')
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
+                ->inputContainerTag(Block::ARTICLE)
                 ->render()
         );
     }
@@ -218,8 +217,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -234,7 +233,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="value" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->name('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->input(InputColor::tag())->name('value')->render()
         );
     }
 
@@ -248,7 +247,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->input(InputColor::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -264,11 +263,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -285,11 +284,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -306,10 +305,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -324,8 +323,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render()
@@ -342,10 +341,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -359,7 +358,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->input(InputColor::tag())->render()
         );
     }
 
@@ -373,7 +372,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->input(InputColor::tag())->suffix('suffix')->render()
         );
     }
 
@@ -389,11 +388,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -410,11 +409,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -431,10 +430,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -449,8 +448,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render()
@@ -467,10 +466,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -486,8 +485,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()->formModel(new BasicForm())->property('color')
+                ->input(InputColor::tag())
                 ->template('<div>\n{field}\n</div>')
                 ->render()
         );
@@ -502,7 +501,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color" value="#000000">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->value('#000000')->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->input(InputColor::tag())->value('#000000')->render()
         );
     }
 
@@ -511,7 +510,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('color', '');
+        $formModel->setValue('color', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -520,10 +519,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->render()
+            Field::tag()->formModel($formModel)->property('color')->input(InputColor::tag())->render()
         );
 
-        $formModel->setPropertyValue('color', '#000000');
+        $formModel->setValue('color', '#000000');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -532,11 +531,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color" value="#000000">
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->render()
+            Field::tag()->formModel($formModel)->property('color')->input(InputColor::tag())->render()
         );
 
         // null value
-        $formModel->setPropertyValue('color', null);
+        $formModel->setValue('color', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -545,7 +544,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->render()
+            Field::tag()->formModel($formModel)->property('color')->input(InputColor::tag())->render()
         );
     }
 
@@ -558,7 +557,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Color::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputColor::tag())->value(null)->render()
         );
     }
 
@@ -571,7 +570,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->id(null)->input(Color::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->id(null)->input(InputColor::tag())->render()
         );
     }
 
@@ -584,7 +583,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('color')->input(InputColor::tag())->name(null)->render()
         );
     }
 }

@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Range;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Range};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputRange};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -20,7 +17,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Range::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(InputRange::tag())->render()
         );
     }
 
@@ -32,7 +29,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="range"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Range::widget())->enclosedByLabel(true)->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->enclosedByLabel(true)->render()
         );
     }
 
@@ -45,7 +42,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Range::widget())->label('Label')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->label('Label')->render()
         );
     }
 
@@ -58,8 +55,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Range::widget())
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(InputRange::tag())
                 ->labelAttributes(['class' => 'value'])
                 ->render()
         );
@@ -74,7 +71,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Range::widget())->labelClass('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->labelClass('value')->render()
         );
     }
 
@@ -87,7 +84,7 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Range::widget())->labelFor('value')->render()
+            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->labelFor('value')->render()
         );
     }
 }

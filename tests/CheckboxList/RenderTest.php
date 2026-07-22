@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
-use PHPForge\Support\Assert;
 use UIAwesome\{
     Html\Field\Field,
     Html\Field\Tests\Support\BasicForm,
-    Html\FormControl\Input\Checkbox,
-    Html\FormControl\Input\CheckboxList
+    Html\Field\Tests\Support\ChoiceItem,
+    Html\Field\Tests\Support\ChoiceList
 };
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -33,14 +32,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->attributes(['class' => 'value'])
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -63,13 +62,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -92,14 +91,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->containerAttributes(['class' => 'value'])
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -122,14 +121,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->containerClass('value')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -152,14 +151,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->containerTag()
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->containerTag(Block::DIV)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -180,14 +179,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-fruits-w2">Orange</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->containerTag(false)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -210,14 +209,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->containerTag('article')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
+                ->containerTag(Block::ARTICLE)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -240,14 +239,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->id('value')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -272,17 +271,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -305,17 +304,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -338,16 +337,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -368,13 +367,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->inputContainerTag(false)
@@ -400,16 +399,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->inputContainerTag('article')
+                ->inputContainerTag(Block::ARTICLE)
                 ->render()
         );
     }
@@ -432,16 +431,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->inputTemplate("{input}\n{label}")
                 ->render()
         );
@@ -463,13 +462,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->name('value')
@@ -494,13 +493,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->prefix('Prefix')
@@ -527,18 +526,18 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -562,18 +561,18 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -597,17 +596,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->prefix('prefix')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -629,13 +628,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->prefix('prefix')
@@ -661,17 +660,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->prefix('prefix')
-                ->prefixTag('span')
+                ->prefixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -692,13 +691,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -722,13 +721,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->suffix('suffix')
@@ -755,18 +754,18 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -790,18 +789,18 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -825,17 +824,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->suffix('suffix')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -857,13 +856,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->suffix('suffix')
@@ -889,17 +888,17 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->suffix('suffix')
-                ->suffixTag('span')
+                ->suffixTag(Inline::SPAN)
                 ->render()
         );
     }
@@ -922,13 +921,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->template('<article>\n{field}\n</article>')
@@ -953,13 +952,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->value(1)->label('Apple'),
-                            Checkbox::widget()->value(2)->label('Banana'),
-                            Checkbox::widget()->value(3)->label('Orange'),
+                            ChoiceItem::checkbox()->value(1)->label('Apple'),
+                            ChoiceItem::checkbox()->value(2)->label('Banana'),
+                            ChoiceItem::checkbox()->value(3)->label('Orange'),
                         )
                         ->uncheckedValue('0')
                 )
@@ -983,13 +982,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->value([1, 3])
@@ -1002,7 +1001,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // array with int values
-        $formModel->setPropertyValue('fruits', [2]);
+        $formModel->setValue('fruits', [2]);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -1018,20 +1017,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
         );
 
         // array with string values
-        $formModel->setPropertyValue('fruits', ['2', '3']);
+        $formModel->setValue('fruits', ['2', '3']);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -1047,20 +1046,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
         );
 
         // value not in array
-        $formModel->setPropertyValue('fruits', [7]);
+        $formModel->setValue('fruits', [7]);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -1076,20 +1075,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
         );
 
         // empty array value
-        $formModel->setPropertyValue('fruits', []);
+        $formModel->setValue('fruits', []);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -1105,20 +1104,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
         );
 
         // null value
-        $formModel->setPropertyValue('fruits', null);
+        $formModel->setValue('fruits', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -1134,13 +1133,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -1163,13 +1162,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->value(null)
@@ -1193,14 +1192,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->id(null)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -1223,13 +1222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->name(null)

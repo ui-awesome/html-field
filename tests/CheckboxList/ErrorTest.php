@@ -4,23 +4,22 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
-use PHPForge\Support\Assert;
 use UIAwesome\Html\{
     Field\Field,
     Field\Tests\Support\BasicForm,
-    FormControl\Input\Checkbox,
-    FormControl\Input\CheckboxList,
+    Field\Tests\Support\ChoiceItem,
+    Field\Tests\Support\ChoiceList,
 };
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -39,13 +38,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -55,7 +54,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -74,14 +73,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->errorAttributes(['class' => 'value'])
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -91,7 +90,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -110,14 +109,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->errorClass('value')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -143,14 +142,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()->formModel(new BasicForm())->property('fruits')
                 ->errorContent('Error')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -160,7 +159,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -179,14 +178,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
-                ->errorTag()
+            Field::tag()->formModel($formModel)->property('fruits')
+                ->errorTag(Block::DIV)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -196,7 +195,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -213,14 +212,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->errorTag(false)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -230,7 +229,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error');
+        $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -247,14 +246,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
-                ->errorTag('span')
+            Field::tag()->formModel($formModel)->property('fruits')
+                ->errorTag(Inline::SPAN)
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->render()
@@ -264,8 +263,8 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('fruits', 'Error - 1');
-        $formModel->addPropertyError('fruits', 'Error - 2');
+        $formModel->addError('fruits', 'Error - 1');
+        $formModel->addError('fruits', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -285,13 +284,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()->formModel($formModel)->property('fruits')
                 ->input(
-                    CheckboxList::widget()
+                    ChoiceList::checkbox()
                         ->items(
-                            Checkbox::widget()->label('Apple')->value(1),
-                            Checkbox::widget()->label('Banana')->value(2),
-                            Checkbox::widget()->label('Orange')->value(3),
+                            ChoiceItem::checkbox()->label('Apple')->value(1),
+                            ChoiceItem::checkbox()->label('Banana')->value(2),
+                            ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
                 ->showAllErrors()

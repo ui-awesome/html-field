@@ -10,52 +10,53 @@ final class HasErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testClass(): void
     {
-        $instance = new class () {
+        $instance = new class {
             use HasError;
 
             public function getErrorClass(): string
             {
-                return $this->errorAttributes['class'] ?? '';
+                $class = $this->errorAttributes['class'] ?? '';
+
+                return is_string($class) ? $class : '';
             }
         };
 
-        $this->assertEmpty($instance->getErrorClass());
+        self::assertEmpty($instance->getErrorClass());
 
         $instance = $instance->errorClass('class');
 
-        $this->assertSame('class', $instance->getErrorClass());
+        self::assertSame('class', $instance->getErrorClass());
 
         $instance = $instance->errorClass('class-1');
 
-        $this->assertSame('class class-1', $instance->getErrorClass());
+        self::assertSame('class class-1', $instance->getErrorClass());
 
         $instance = $instance->errorClass('override-class', true);
 
-        $this->assertSame('override-class', $instance->getErrorClass());
-    }
-
-    public function testException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The error tag must be a non-empty string.');
-
-        $instance = new class () {
-            use HasError;
-        };
-
-        $instance->errorTag('');
+        self::assertSame('override-class', $instance->getErrorClass());
     }
 
     public function testImmutability(): void
     {
-        $instance = new class () {
+        $instance = new class {
             use HasError;
         };
 
-        $this->assertNotSame($instance, $instance->errorAttributes([]));
-        $this->assertNotSame($instance, $instance->errorClass(''));
-        $this->assertNotSame($instance, $instance->errorContent(''));
-        $this->assertNotSame($instance, $instance->errorTag(false));
-        $this->assertNotSame($instance, $instance->showAllErrors());
+        self::assertNotSame($instance, $instance->errorAttributes([]));
+        self::assertNotSame($instance, $instance->errorClass(''));
+        self::assertNotSame($instance, $instance->errorContent(''));
+        self::assertNotSame($instance, $instance->errorTag(false));
+        self::assertNotSame($instance, $instance->showAllErrors());
+    }
+
+    public function testRejectsStringTag(): void
+    {
+        $this->expectException(\TypeError::class);
+
+        $instance = new class {
+            use HasError;
+        };
+
+        (new \ReflectionMethod($instance, 'errorTag'))->invoke($instance, 'div');
     }
 }

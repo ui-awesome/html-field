@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Url;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Url};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputUrl};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class RenderTest extends \PHPUnit\Framework\TestCase
 {
     public function testAttributes(): void
@@ -21,7 +20,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->attributes(['class' => 'value'])->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->attributes(['class' => 'value'])->input(InputUrl::tag())->render()
         );
     }
 
@@ -34,7 +33,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->class('value')->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->class('value')->input(InputUrl::tag())->render()
         );
     }
 
@@ -47,9 +46,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
+            Field::tag()->formModel(new BasicForm())->property('url')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Url::widget())
+                ->input(InputUrl::tag())
                 ->render()
         );
     }
@@ -63,7 +62,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerClass('value')->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->containerClass('value')->input(InputUrl::tag())->render()
         );
     }
 
@@ -76,7 +75,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerTag()->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->containerTag(Block::DIV)->input(InputUrl::tag())->render()
         );
     }
 
@@ -87,7 +86,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-url">Url</label>
             <input id="basicform-url" name="BasicForm[url]" type="url">
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerTag(false)->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->containerTag(false)->input(InputUrl::tag())->render()
         );
     }
 
@@ -100,7 +99,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerTag('article')->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->containerTag(Block::ARTICLE)->input(InputUrl::tag())->render()
         );
     }
 
@@ -113,7 +112,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->id('value')->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->id('value')->input(InputUrl::tag())->render()
         );
     }
 
@@ -128,10 +127,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('url')
+                ->input(InputUrl::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -147,10 +146,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('url')
+                ->input(InputUrl::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
+                ->inputContainerTag(Block::DIV)
                 ->render()
         );
     }
@@ -166,7 +165,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->inputContainerTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->inputContainerTag(Block::DIV)->render()
         );
     }
 
@@ -179,7 +178,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->inputContainerTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->inputContainerTag(false)->render()
         );
     }
 
@@ -194,7 +193,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->inputContainerTag('article')->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->inputContainerTag(Block::ARTICLE)->render()
         );
     }
 
@@ -209,8 +208,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('url')
+                ->input(InputUrl::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render()
         );
@@ -225,7 +224,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="value" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->name('value')->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->name('value')->input(InputUrl::tag())->render()
         );
     }
 
@@ -239,7 +238,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('Prefix')->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->prefix('Prefix')->render()
         );
     }
 
@@ -255,11 +254,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('url')
+                ->input(InputUrl::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -276,11 +275,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('url')
+                ->input(InputUrl::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
+                ->prefixTag(Block::DIV)
                 ->render()
         );
     }
@@ -297,7 +296,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('prefix')->prefixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->prefix('prefix')->prefixTag(Block::DIV)->render()
         );
     }
 
@@ -311,7 +310,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('prefix')->prefixTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->prefix('prefix')->prefixTag(false)->render()
         );
     }
 
@@ -325,7 +324,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('prefix')->prefixTag('span')->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->prefix('prefix')->prefixTag(Inline::SPAN)->render()
         );
     }
 
@@ -338,7 +337,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->render()
         );
     }
 
@@ -352,7 +351,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->suffix('suffix')->render()
         );
     }
 
@@ -368,11 +367,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('url')
+                ->input(InputUrl::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -389,11 +388,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()->formModel(new BasicForm())->property('url')
+                ->input(InputUrl::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
+                ->suffixTag(Block::DIV)
                 ->render()
         );
     }
@@ -410,7 +409,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->suffixTag()->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->suffix('suffix')->suffixTag(Block::DIV)->render()
         );
     }
 
@@ -424,7 +423,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->suffixTag(false)->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->suffix('suffix')->suffixTag(false)->render()
         );
     }
 
@@ -438,7 +437,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->suffixTag('span')->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->suffix('suffix')->suffixTag(Inline::SPAN)->render()
         );
     }
 
@@ -453,7 +452,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->template('<div>\n{field}\n</div>')->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->template('<div>\n{field}\n</div>')->render()
         );
     }
 
@@ -466,7 +465,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url" value="#000000">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->value('#000000')->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->value('#000000')->render()
         );
     }
 
@@ -475,7 +474,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('url', '');
+        $formModel->setValue('url', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -484,10 +483,10 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->input(InputUrl::tag())->render()
         );
 
-        $formModel->setPropertyValue('url', '#000000');
+        $formModel->setValue('url', '#000000');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -496,11 +495,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url" value="#000000">
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->input(InputUrl::tag())->render()
         );
 
         // null value
-        $formModel->setPropertyValue('url', null);
+        $formModel->setValue('url', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -509,7 +508,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->render()
+            Field::tag()->formModel($formModel)->property('url')->input(InputUrl::tag())->render()
         );
     }
 
@@ -522,7 +521,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->value(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->value(null)->render()
         );
     }
 
@@ -535,7 +534,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->id(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->id(null)->render()
         );
     }
 
@@ -548,7 +547,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->name(null)->render()
+            Field::tag()->formModel(new BasicForm())->property('url')->input(InputUrl::tag())->name(null)->render()
         );
     }
 }

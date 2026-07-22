@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio, FormControl\Input\RadioList};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\ChoiceItem, Field\Tests\Support\ChoiceList};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -25,13 +22,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->disableLabel()
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->notLabel()
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -50,12 +47,12 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->enclosedByLabel(true)
@@ -77,12 +74,12 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->label('Label')
@@ -104,12 +101,12 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->labelAttributes(['class' => 'value'])
@@ -131,12 +128,12 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->labelClass('value')
@@ -158,12 +155,12 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()->formModel(new BasicForm())->property('label')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->labelClass('value')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->labelClass('value')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()

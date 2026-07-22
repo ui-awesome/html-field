@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Number;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Number};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputNumber};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('amount', 'Error');
+        $formModel->addError('amount', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +26,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->input(Number::widget())->render()
+            Field::tag()->formModel($formModel)->property('amount')->input(InputNumber::tag())->render()
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('amount', 'Error');
+        $formModel->addError('amount', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,9 +45,9 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'amount')
+            Field::tag()->formModel($formModel)->property('amount')
                 ->errorAttributes(['class' => 'value'])
-                ->input(Number::widget())
+                ->input(InputNumber::tag())
                 ->render()
         );
     }
@@ -56,7 +55,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('amount', 'Error');
+        $formModel->addError('amount', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -68,7 +67,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->errorClass('value')->input(Number::widget())->render()
+            Field::tag()->formModel($formModel)->property('amount')->errorClass('value')->input(InputNumber::tag())->render()
         );
     }
 
@@ -84,14 +83,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->errorContent('Error')->input(Number::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('amount')->errorContent('Error')->input(InputNumber::tag())->render()
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('amount', 'Error');
+        $formModel->addError('amount', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -103,14 +102,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->errorTag()->input(Number::widget())->render()
+            Field::tag()->formModel($formModel)->property('amount')->errorTag(Block::DIV)->input(InputNumber::tag())->render()
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('amount', 'Error');
+        $formModel->addError('amount', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -120,14 +119,14 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->errorTag(false)->input(Number::widget())->render()
+            Field::tag()->formModel($formModel)->property('amount')->errorTag(false)->input(InputNumber::tag())->render()
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('amount', 'Error');
+        $formModel->addError('amount', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -137,15 +136,15 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->errorTag('span')->input(Number::widget())->render()
+            Field::tag()->formModel($formModel)->property('amount')->errorTag(Inline::SPAN)->input(InputNumber::tag())->render()
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('amount', 'Error - 1');
-        $formModel->addPropertyError('amount', 'Error - 2');
+        $formModel->addError('amount', 'Error - 1');
+        $formModel->addError('amount', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -158,7 +157,7 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->input(Number::widget())->showAllErrors()->render()
+            Field::tag()->formModel($formModel)->property('amount')->input(InputNumber::tag())->showAllErrors()->render()
         );
     }
 }

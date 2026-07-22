@@ -10,50 +10,51 @@ final class HasInputContainerTest extends \PHPUnit\Framework\TestCase
 {
     public function testClass(): void
     {
-        $instance = new class () {
+        $instance = new class {
             use HasInputContainer;
 
             public function getInputContainerClass(): string
             {
-                return $this->inputContainerAttributes['class'] ?? '';
+                $class = $this->inputContainerAttributes['class'] ?? '';
+
+                return is_string($class) ? $class : '';
             }
         };
 
-        $this->assertEmpty($instance->getInputContainerClass());
+        self::assertEmpty($instance->getInputContainerClass());
 
         $instance = $instance->inputContainerClass('class');
 
-        $this->assertSame('class', $instance->getInputContainerClass());
+        self::assertSame('class', $instance->getInputContainerClass());
 
         $instance = $instance->inputContainerClass('class-1');
 
-        $this->assertSame('class class-1', $instance->getInputContainerClass());
+        self::assertSame('class class-1', $instance->getInputContainerClass());
 
         $instance = $instance->inputContainerClass('override-class', true);
 
-        $this->assertSame('override-class', $instance->getInputContainerClass());
-    }
-
-    public function testException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The input container tag must be a non-empty string.');
-
-        $instance = new class () {
-            use HasInputContainer;
-        };
-
-        $instance->inputContainerTag('');
+        self::assertSame('override-class', $instance->getInputContainerClass());
     }
 
     public function testImmutability(): void
     {
-        $instance = new class () {
+        $instance = new class {
             use HasInputContainer;
         };
 
-        $this->assertNotSame($instance, $instance->inputContainerAttributes());
-        $this->assertNotSame($instance, $instance->inputContainerClass(''));
-        $this->assertNotSame($instance, $instance->inputContainerTag(false));
+        self::assertNotSame($instance, $instance->inputContainerAttributes());
+        self::assertNotSame($instance, $instance->inputContainerClass(''));
+        self::assertNotSame($instance, $instance->inputContainerTag(false));
+    }
+
+    public function testRejectsStringTag(): void
+    {
+        $this->expectException(\TypeError::class);
+
+        $instance = new class {
+            use HasInputContainer;
+        };
+
+        (new \ReflectionMethod($instance, 'inputContainerTag'))->invoke($instance, 'div');
     }
 }

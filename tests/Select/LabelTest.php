@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Select};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\SelectControl};
+use UIAwesome\Html\Field\Tests\Support\Assert;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LabelTest extends \PHPUnit\Framework\TestCase
 {
     public function testDisableLabel(): void
@@ -23,9 +20,9 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->disableLabel()
-                ->input(Select::widget()
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->notLabel()
+                ->input(SelectControl::tag()
                 ->items([1 => 'Apple']))
                 ->render()
         );
@@ -43,8 +40,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->label('Label')
                 ->render()
         );
@@ -62,8 +59,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->labelAttributes(['class' => 'value'])
                 ->render()
         );
@@ -81,8 +78,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->labelClass('value')
                 ->render()
         );
@@ -100,8 +97,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()->formModel(new BasicForm())->property('label')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->labelFor('value')
                 ->render()
         );

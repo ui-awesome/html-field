@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests;
 
-use PHPForge\Support\Assert;
 use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\Assert;
 use UIAwesome\Html\Field\Tests\Support\ConfigForm;
+use UIAwesome\Html\Form\InputText;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender(): void
@@ -19,10 +17,10 @@ final class ConfigTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="configform-name">Name</label>
-            <input class="custom-class form-control" id="configform-name" name="ConfigForm[name]" type="text">
+            <input class="custom-class form-control" id="configform-name" name="ConfigForm[name]" type="text" maxlength="10">
             </div>
             HTML,
-            Field::widget(new ConfigForm(), 'name')->render()
+            Field::tag()->formModel(new ConfigForm())->property('name')->render()
         );
     }
 
@@ -32,10 +30,28 @@ final class ConfigTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="custom-id">Name</label>
-            <input class="custom-class form-control" id="custom-id" name="ConfigForm[name]" type="text">
+            <input class="custom-class form-control" id="custom-id" name="ConfigForm[name]" type="text" maxlength="10">
             </div>
             HTML,
-            Field::widget(new ConfigForm(), 'name', ['id()' => ['custom-id']])->render()
+            Field::tag(['formModel' => new ConfigForm(), 'property' => 'name', 'id' => 'custom-id'])->render()
         );
+    }
+
+    public function testAppliesFormModelConfigurationToAReplacedInput(): void
+    {
+        $field = Field::tag()->formModel(new ConfigForm())->property('name');
+
+        self::assertStringContainsString(
+            'class="custom-class form-control"',
+            $field->input(InputText::tag())->render(),
+        );
+        self::assertStringContainsString('maxlength="10"', $field->input(InputText::tag())->render());
+    }
+
+    public function testReplacesInputBeforeFormModelIsConfigured(): void
+    {
+        $field = Field::tag()->property('name')->input(InputText::tag());
+
+        self::assertSame('', $field->render());
     }
 }

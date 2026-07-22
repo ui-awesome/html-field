@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio, FormControl\Input\RadioList};
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\ChoiceItem, Field\Tests\Support\ChoiceList};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class HintTest extends \PHPUnit\Framework\TestCase
 {
     public function testHint(): void
@@ -29,12 +28,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -58,13 +57,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintAttributes(['class' => 'value'])
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -88,13 +87,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintClass('value')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -118,13 +117,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()->formModel(new BasicForm())->property('agree')
                 ->hintContent('Hint')
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -148,13 +147,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
-                ->hintTag()
+            Field::tag()->formModel(new BasicForm())->property('hint')
+                ->hintTag(Block::DIV)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -176,13 +175,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()->formModel(new BasicForm())->property('hint')
                 ->hintTag(false)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()
@@ -204,13 +203,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
-                ->hintTag('span')
+            Field::tag()->formModel(new BasicForm())->property('hint')
+                ->hintTag(Inline::SPAN)
                 ->input(
-                    RadioList::widget()
+                    ChoiceList::radio()
                         ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::radio()->label('No')->value(0),
+                            ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
                 ->render()

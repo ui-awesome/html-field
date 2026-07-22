@@ -10,11 +10,11 @@ final class HasValidateClassTest extends \PHPUnit\Framework\TestCase
 {
     public function testImmutability(): void
     {
-        $instance = new class () {
+        $instance = new class {
             use HasValidateClass;
         };
 
-        $this->assertNotSame($instance, $instance->invalidClass(''));
-        $this->assertNotSame($instance, $instance->validClass(''));
+        self::assertNotSame($instance, $instance->invalidClass(''));
+        self::assertNotSame($instance, $instance->validClass(''));
     }
 }
