@@ -56,7 +56,7 @@ trait HasError
      *
      * Note: Values are HTML-encoded.
      *
-     * @param Stringable|string ...$values The error text.
+     * @param string|Stringable ...$values The error text.
      */
     public function errorContent(string|Stringable ...$values): static
     {
