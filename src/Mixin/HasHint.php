@@ -79,7 +79,7 @@ trait HasHint
      * $field = \UIAwesome\Html\Field\Field::tag()->hintContent('Choose a unique username.');
      * ```
      *
-     * @param string|RenderableInterface ...$values Hint text parts concatenated in order.
+     * @param RenderableInterface|string ...$values Hint text parts concatenated in order.
      */
     public function hintContent(string|RenderableInterface ...$values): static
     {
