@@ -13,21 +13,24 @@ use UnitEnum;
 use function array_values;
 use function is_string;
 
+/**
+ * Stub list form control exercising list-aware field rendering.
+ */
 final class ChoiceList implements FormControlInterface
 {
     /**
-     * @phpstan-var mixed[]
+     * @var mixed[]
      */
     private array $attributes = [];
 
     /**
-     * @phpstan-var array<mixed>|bool|float|int|string|Stringable|UnitEnum|null
+     * @var array<mixed>|bool|float|int|string|Stringable|UnitEnum|null
      */
     private array|bool|float|int|string|Stringable|UnitEnum|null $checked = null;
     private bool $enclosedByLabel = false;
 
     /**
-     * @phpstan-var list<ChoiceItem>
+     * @var list<ChoiceItem>
      */
     private array $items = [];
 

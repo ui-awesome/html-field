@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Range;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputRange};
-use UIAwesome\Html\Field\Tests\Support\Assert;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputRange;
 
-final class LabelTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} label rendering with {@see InputRange}.
+ */
+#[Group('range')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -17,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(InputRange::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(InputRange::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -29,7 +42,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="range"></label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->enclosedByLabel(true)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRange::tag())
+                ->enclosedByLabel(true)
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -42,7 +61,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRange::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -55,10 +80,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(InputRange::tag())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -71,7 +99,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->labelClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRange::tag())
+                ->labelClass('value')
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -84,7 +118,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="range">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->input(InputRange::tag())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRange::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

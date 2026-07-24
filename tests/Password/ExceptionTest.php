@@ -4,15 +4,34 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Password;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputPassword};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputPassword;
 
-final class ExceptionTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} value casting with {@see InputPassword}.
+ */
+#[Group('password')]
+final class ExceptionTest extends TestCase
 {
-    public function testIntegerValue(): void
+    public function testCastsIntegerValueToString(): void
     {
-        self::assertStringContainsString(
-            'value="1"',
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->value(1)->render(),
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-password">Password</label>
+            <input id="basicform-password" name="BasicForm[password]" type="password" value="1">
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->value(1)
+                ->render(),
+            "'value' must be cast to 'string' and serialized.",
         );
     }
 }

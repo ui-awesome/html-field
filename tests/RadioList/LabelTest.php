@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\ChoiceItem, Field\Tests\Support\ChoiceList};
-use UIAwesome\Html\Field\Tests\Support\Assert;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, ChoiceItem, ChoiceList};
 
-final class LabelTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} label rendering with {@see ChoiceList}.
+ */
+#[Group('radiolist')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -22,7 +28,9 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->notLabel()
                 ->input(
                     ChoiceList::radio()
@@ -31,7 +39,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -47,7 +56,9 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -56,7 +67,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->enclosedByLabel(true)
-                ->render()
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -74,7 +86,9 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -83,7 +97,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->label('Label')
-                ->render()
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -101,7 +116,9 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -110,7 +127,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -128,7 +146,9 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -137,7 +157,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->labelClass('value')
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -155,7 +176,9 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -163,7 +186,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Item label 'class' must be serialized.",
         );
     }
 }

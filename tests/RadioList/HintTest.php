@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\ChoiceItem, Field\Tests\Support\ChoiceList};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, ChoiceItem, ChoiceList};
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class HintTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} hint rendering with {@see ChoiceList}.
+ */
+#[Group('radiolist')]
+final class HintTest extends TestCase
 {
     public function testHint(): void
     {
@@ -28,7 +33,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -36,7 +43,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -57,7 +65,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintAttributes(['class' => 'value'])
                 ->input(
                     ChoiceList::radio()
@@ -66,7 +76,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -87,7 +98,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintClass('value')
                 ->input(
                     ChoiceList::radio()
@@ -96,7 +109,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -117,7 +131,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->hintContent('Hint')
                 ->input(
                     ChoiceList::radio()
@@ -126,7 +142,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -147,7 +164,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintTag(Block::DIV)
                 ->input(
                     ChoiceList::radio()
@@ -156,7 +175,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Hint must render as '<div>'.",
         );
     }
 
@@ -175,7 +195,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintTag(false)
                 ->input(
                     ChoiceList::radio()
@@ -184,7 +206,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Hint tag must be omitted.',
         );
     }
 
@@ -203,7 +226,9 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintTag(Inline::SPAN)
                 ->input(
                     ChoiceList::radio()
@@ -212,7 +237,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Hint must render as the given tag.',
         );
     }
 }

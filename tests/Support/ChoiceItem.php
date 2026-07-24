@@ -10,11 +10,14 @@ use UIAwesome\Html\Helper\CSSClass;
 use UIAwesome\Html\Phrasing\Label;
 use UnitEnum;
 
+/**
+ * Stub choice option consumed by the list control stubs.
+ */
 final class ChoiceItem
 {
     private string $label = '';
     /**
-     * @phpstan-var mixed[]
+     * @var mixed[]
      */
     private array $labelAttributes = [];
     private bool|float|int|string|Stringable|UnitEnum|null $value = null;

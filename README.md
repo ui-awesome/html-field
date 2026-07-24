@@ -1,88 +1,157 @@
+<!-- markdownlint-disable MD041 -->
 <p align="center">
     <a href="https://github.com/ui-awesome/html-field" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/121752654?s=200&v=4" height="100px">
+        <img src="https://raw.githubusercontent.com/ui-awesome/.github/refs/heads/main/logo/ui_awesome.png" alt="UI Awesome" width="25%">
     </a>
-    <h1 align="center">UI Awesome Field for PHP.</h1>
+    <h1 align="center">Html Field</h1>
     <br>
 </p>
+<!-- markdownlint-enable MD041 -->
 
 <p align="center">
     <a href="https://github.com/ui-awesome/html-field/actions/workflows/build.yml" target="_blank">
-        <img src="https://github.com/ui-awesome/html-field/actions/workflows/build.yml/badge.svg" alt="PHPUnit">
-    </a>
-    <a href="https://codecov.io/gh/ui-awesome/html-field" target="_blank">
-        <img src="https://codecov.io/gh/ui-awesome/html-field/branch/main/graph/badge.svg?token=MF0XUGVLYC" alt="Codecov">
+        <img src="https://img.shields.io/github/actions/workflow/status/ui-awesome/html-field/build.yml?style=for-the-badge&label=PHPUnit&logo=github" alt="PHPUnit">
     </a>
     <a href="https://dashboard.stryker-mutator.io/reports/github.com/ui-awesome/html-field/main" target="_blank">
-        <img src="https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fui-awesome%2Fhtml-field%2Fmain" alt="Infection">
+        <img src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fui-awesome%2Fhtml-field%2Fmain" alt="Mutation Testing">
     </a>
     <a href="https://github.com/ui-awesome/html-field/actions/workflows/static.yml" target="_blank">
-        <img src="https://github.com/ui-awesome/html-field/actions/workflows/static.yml/badge.svg" alt="Psalm">
+        <img src="https://img.shields.io/github/actions/workflow/status/ui-awesome/html-field/static.yml?style=for-the-badge&label=PHPStan&logo=github" alt="PHPStan">
     </a>
-    <a href="https://shepherd.dev/github/ui-awesome/html-field" target="_blank">
-        <img src="https://shepherd.dev/github/ui-awesome/html-field/coverage.svg" alt="Psalm Coverage">
+    <a href="https://github.com/ui-awesome/html-field/actions/workflows/security.yml" target="_blank">
+        <img src="https://img.shields.io/github/actions/workflow/status/ui-awesome/html-field/security.yml?style=for-the-badge&label=Security&logo=github" alt="Security">
     </a>
-    <a href="https://github.styleci.io/repos/773914929?branch=main">
-        <img src="https://github.styleci.io/repos/773914929/shield?branch=main" alt="Style ci">
-    </a>         
 </p>
 
-This library provides a way to generate `HTML` code for various types of form fields, including `text`, `text area`,
-`selection`, `checkbox`, `radio`, and all input types.
+<p align="center">
+    <strong>A fluent, immutable PHP library for rendering form fields bound to a form model.</strong><br>
+    <em>Labels, hints, errors, and controls composed through application-scoped configuration.</em>
+</p>
+
+## Features
+
+<picture>
+    <source media="(max-width: 767px)" srcset="./docs/svgs/features-mobile.svg">
+    <img src="./docs/svgs/features.svg" alt="Feature Overview" style="width: 100%;">
+</picture>
+
+### Installation
+
+```bash
+composer require ui-awesome/html-field:^0.1
+```
+
+### Quick start
+
+#### Render a field bound to a form model
+
+The field resolves the `id`, `name`, and `label` from the form model and renders a text input by default.
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use App\Model\BasicForm;
+use UIAwesome\Html\Field\Field;
 
-echo Field::widget(new BasicForm(), 'fruits')
-    ->input(
-        CheckboxList::widget()
-            ->items(
-                Checkbox::widget()->label('Apple')->value(1),
-                Checkbox::widget()->label('Banana')->value(2),
-                Checkbox::widget()->label('Orange')->value(3),
-            )
-    )
-    ->render()
+echo Field::tag()
+    ->formModel(new BasicForm())
+    ->property('username')
+    ->render();
+// <div>
+// <label for="basicform-username">Username</label>
+// <input id="basicform-username" name="BasicForm[username]" type="text">
+// </div>
 ```
 
-## Installation
+#### Hints and validation errors
 
-The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
+Hints link to the input through `aria-describedby`; property errors render after the control.
 
-Either run
+```php
+use App\Model\BasicForm;
+use UIAwesome\Html\Field\Field;
 
-```shell
-composer require --prefer-dist ui-awesome/html-field:^0.1
+$form = new BasicForm();
+$form->addError('username', 'Username is required.');
+
+echo Field::tag()
+    ->formModel($form)
+    ->property('username')
+    ->hintContent('Choose a unique username.')
+    ->render();
+// <div>
+// <label for="basicform-username">Username</label>
+// <input id="basicform-username" name="BasicForm[username]" type="text" aria-describedby="basicform-username-help">
+// <div id="basicform-username-help">
+// Choose a unique username.
+// </div>
+// <div>
+// Username is required.
+// </div>
+// </div>
 ```
 
-or add
+#### Replace the control and style the container
 
-```json
-"ui-awesome/html-field": "^0.1"
+Any form control can replace the default input; the form model field config is applied to the replacement.
+
+```php
+use App\Model\BasicForm;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Form\InputEmail;
+
+echo Field::tag()
+    ->formModel(new BasicForm())
+    ->property('username')
+    ->input(InputEmail::tag())
+    ->containerClass('form-group')
+    ->render();
+// <div class="form-group">
+// <label for="basicform-username">Username</label>
+// <input id="basicform-username" name="BasicForm[username]" type="email">
+// </div>
 ```
 
-to the require section of your `composer.json` file. 
+#### Semantic control factory
 
-## Usage
+`ControlFactory` creates form controls from `field.control.*` component contexts, and plugs into application-scoped
+config to apply the active theme recipes. Registrations are immutable — derive a new factory with `with()`.
 
-[Check the documentation docs](/docs/README.md) to learn about usage.
+```php
+use UIAwesome\Html\Core\Config\{ComponentContext, Config};
+use UIAwesome\Html\Field\Factory\ControlFactory;
 
-## Testing
+$controlFactory = new ControlFactory();
 
-[Check the documentation testing](/docs/testing.md) to learn about testing.
+$control = $controlFactory->create(new ComponentContext('field.control.email'));
 
-## Support versions
+$config = new Config(theme: $theme, factory: $controlFactory->with('editor', EditorControl::class));
 
-[![PHP81](https://img.shields.io/badge/PHP-%3E%3D8.1-787CB5)](https://www.php.net/releases/8.1/en.php)
+$control = $config->create(new ComponentContext('field.control.editor'));
+```
 
-## License
+## Documentation
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+For detailed usage, testing, and quality workflows.
+
+- [Usage Guide](docs/README.md)
+- [Testing Guide](docs/testing.md)
+
+## Package information
+
+[![PHP](https://img.shields.io/badge/%3E%3D8.3-777BB4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/releases/8.3/en.php)
+[![Latest Stable Version](https://img.shields.io/packagist/v/ui-awesome/html-field.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Stable)](https://packagist.org/packages/ui-awesome/html-field)
+[![Total Downloads](https://img.shields.io/packagist/dt/ui-awesome/html-field.svg?style=for-the-badge&logo=composer&logoColor=white&label=Downloads)](https://packagist.org/packages/ui-awesome/html-field)
+
+## Project status
+
+[![Codecov](https://img.shields.io/codecov/c/github/ui-awesome/html-field.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage)](https://codecov.io/github/ui-awesome/html-field)
+[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-4F5D95.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ui-awesome/html-field/actions/workflows/static.yml)
+[![Quality](https://img.shields.io/github/actions/workflow/status/ui-awesome/html-field/quality.yml?style=for-the-badge&label=Quality&logo=github)](https://github.com/ui-awesome/html-field/actions/workflows/quality.yml)
+[![StyleCI](https://img.shields.io/badge/StyleCI-Passed-44CC11.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.styleci.io/repos/773914929?branch=main)
 
 ## Our social networks
 
-[![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555?style=flat)](https://twitter.com/Terabytesoftw)
+[![Follow on X](https://img.shields.io/badge/-Follow%20on%20X-1DA1F2.svg?style=for-the-badge&logo=x&logoColor=white&labelColor=000000)](https://x.com/Terabytesoftw)
+
+## License
+
+[![License](https://img.shields.io/badge/License-BSD--3--Clause-brightgreen.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](LICENSE)

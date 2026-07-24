@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\DatetimeLocal;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputDateTimeLocal};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputDateTimeLocal;
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see InputDateTimeLocal}.
+ */
+#[Group('datetimelocal')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -20,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->attributes(['class' => 'value'])
                 ->input(InputDateTimeLocal::tag())
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -36,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->class('value')->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->class('value')
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -49,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->containerAttributes(['class' => 'value'])
                 ->input(InputDateTimeLocal::tag())
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -65,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->containerClass('value')->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->containerClass('value')
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -78,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->containerTag(Block::DIV)->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->containerTag(Block::DIV)
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -89,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-dateofbirth">Date Of Birth</label>
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->containerTag(false)->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->containerTag(false)
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -102,9 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->containerTag(Block::ARTICLE)
-                ->input(InputDateTimeLocal::tag())->render()
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -117,7 +157,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->id('value')->input(InputDateTimeLocal::tag())->render()
+            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->id('value')->input(InputDateTimeLocal::tag())->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -132,11 +173,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -151,11 +195,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -170,10 +217,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -186,10 +236,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->inputContainerTag(false)
-                ->render()
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -204,10 +257,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->inputContainerTag(Block::ARTICLE)
-                ->render()
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -222,10 +278,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -238,7 +297,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="value" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputDateTimeLocal::tag())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->name('value')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -252,7 +317,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputDateTimeLocal::tag())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -268,12 +339,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -289,12 +363,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -310,11 +387,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -328,11 +408,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -346,11 +429,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -363,7 +449,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Default field structure must be rendered.',
         );
     }
 
@@ -377,7 +468,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputDateTimeLocal::tag())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -393,12 +490,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -414,12 +514,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -435,11 +538,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -453,11 +559,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -471,11 +580,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -490,10 +602,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -506,10 +621,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local" value="1996-12-19T16:39:57-08:00">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->input(InputDateTimeLocal::tag())
                 ->value('1996-12-19T16:39:57-08:00')
-                ->render()
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -527,7 +645,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local" value="1996-12-19T16:39:57-08:00">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('dateOfBirth')->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "'value' must be serialized.",
         );
 
         // null value
@@ -540,7 +663,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('dateOfBirth')->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -553,7 +681,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputDateTimeLocal::tag())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -566,7 +700,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[dateOfBirth]" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->id(null)->input(InputDateTimeLocal::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->id(null)
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -579,7 +719,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" type="datetime-local">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputDateTimeLocal::tag())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

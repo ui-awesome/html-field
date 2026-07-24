@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\SelectControl};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, SelectControl};
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class ErrorTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} error rendering with {@see SelectControl}.
+ */
+#[Group('select')]
+final class ErrorTest extends TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
+
         $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
@@ -29,13 +35,19 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
+
         $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
@@ -51,16 +63,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->errorAttributes(['class' => 'value'])
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
+
         $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
@@ -76,10 +92,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->errorClass('value')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
@@ -98,16 +117,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->errorContent('Error')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
+
         $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
@@ -123,13 +146,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')->errorTag(Block::DIV)->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->errorTag(Block::DIV)
+                ->input(SelectControl::tag()
+                ->items([1 => 'Apple']))
+                ->render(),
+            "Error must render as '<div>'.",
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
+
         $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
@@ -143,16 +174,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->errorTag(false)
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            'Error tag must be omitted.',
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
+
         $formModel->addError('fruits', 'Error');
 
         Assert::equalsWithoutLE(
@@ -166,16 +201,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->errorTag(Inline::SPAN)
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            'Error must render as the given tag.',
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
+
         $formModel->addError('fruits', 'Error - 1');
         $formModel->addError('fruits', 'Error - 2');
 
@@ -193,10 +232,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->showAllErrors()
-                ->render()
+                ->render(),
+            'All errors must be rendered.',
         );
     }
 }

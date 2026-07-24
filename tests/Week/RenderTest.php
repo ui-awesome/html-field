@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Week;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputWeek};
-use UIAwesome\Html\Field\Tests\Support\Assert;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputWeek;
 use UIAwesome\Html\Interop\Block;
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see InputWeek}.
+ */
+#[Group('week')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -19,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->attributes(['class' => 'value'])
                 ->input(InputWeek::tag())
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -35,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->class('value')->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->class('value')
+                ->input(InputWeek::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -48,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->containerAttributes(['class' => 'value'])
                 ->input(InputWeek::tag())
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -64,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerClass('value')->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->containerClass('value')
+                ->input(InputWeek::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -77,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerTag(Block::DIV)->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->containerTag(Block::DIV)
+                ->input(InputWeek::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -88,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-weekofbirth">Week Of Birth</label>
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerTag(false)->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->containerTag(false)
+                ->input(InputWeek::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -101,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->containerTag(Block::ARTICLE)->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputWeek::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -114,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->id('value')->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->id('value')
+                ->input(InputWeek::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -133,7 +182,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->input(InputWeek::tag())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -148,11 +198,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -167,7 +220,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->inputContainerTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -180,7 +239,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -195,7 +260,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->inputContainerTag(Block::ARTICLE)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input must be wrapped in the given tag.',
         );
     }
 
@@ -210,10 +281,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -226,7 +300,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="value" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->name('value')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -240,7 +320,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -256,12 +342,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -277,12 +366,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -298,11 +390,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -315,7 +410,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->render(),
+            'Default field markup must be rendered.',
         );
     }
 
@@ -329,7 +429,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -345,12 +451,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -366,12 +475,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -387,11 +499,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -406,10 +521,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
                 ->input(InputWeek::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -422,7 +540,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week" value="20">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->value('20')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->value('20')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -440,7 +564,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week" value="20">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('weekOfBirth')->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->render(),
+            "Model 'value' must be serialized.",
         );
 
         // null value
@@ -453,7 +582,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('weekOfBirth')->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->render(),
+            "'null' 'value' must be omitted.",
         );
     }
 
@@ -466,7 +600,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->value(null)
+                ->render(),
+            "'value' must be omitted.",
         );
     }
 
@@ -479,7 +619,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[weekOfBirth]" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->id(null)->input(InputWeek::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->id(null)
+                ->input(InputWeek::tag())
+                ->render(),
+            "'id' and the label 'for' must be omitted.",
         );
     }
 
@@ -492,7 +638,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-weekofbirth" type="week">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('weekOfBirth')->input(InputWeek::tag())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('weekOfBirth')
+                ->input(InputWeek::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

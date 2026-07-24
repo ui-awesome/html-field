@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\SelectControl};
-use UIAwesome\Html\Field\Tests\Support\Assert;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, SelectControl};
 
-final class LabelTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} label rendering with {@see SelectControl}.
+ */
+#[Group('select')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -20,11 +26,14 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->notLabel()
                 ->input(SelectControl::tag()
                 ->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -40,10 +49,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->label('Label')
-                ->render()
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -59,10 +71,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -78,10 +93,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->labelClass('value')
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -97,10 +115,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->labelFor('value')
-                ->render()
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

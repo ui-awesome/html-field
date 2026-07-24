@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Radio;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputRadio};
-use UIAwesome\Html\Field\Tests\Support\Assert;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputRadio;
 use UIAwesome\Html\Interop\Block;
 
-final class HintTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} hint rendering with {@see InputRadio}.
+ */
+#[Group('radio')]
+final class HintTest extends TestCase
 {
     public function testHint(): void
     {
@@ -22,7 +29,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->input(InputRadio::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -38,10 +50,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintAttributes(['class' => 'value'])
                 ->input(InputRadio::tag())
-                ->render()
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -57,7 +72,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')->hintClass('value')->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintClass('value')
+                ->input(InputRadio::tag())
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -73,7 +94,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->hintContent('Hint')->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->hintContent('Hint')
+                ->input(InputRadio::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -89,7 +116,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(Block::DIV)->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Block::DIV)
+                ->input(InputRadio::tag())
+                ->render(),
+            "Hint must render as '<div>'.",
         );
     }
 }

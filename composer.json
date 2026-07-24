@@ -1,21 +1,33 @@
 {
     "name": "ui-awesome/html-field",
     "type": "library",
-    "description": "HTML Awesome Field for PHP.",
+    "description": "Form field widget for PHP: renders form controls bound to a form model with label, hint, error, and validation state handling, plus an immutable semantic control factory for application-scoped config recipes.",
     "keywords": [
         "ui-awesome",
         "html",
-        "field",
+        "html-field",
+        "form-field",
+        "form-model",
+        "widget",
+        "control-factory",
         "php"
     ],
-    "license": "mit",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Wilmer Arambula",
+            "email": "terabytesoftw@gmail.com",
+            "homepage": "https://github.com/terabytesoftw",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": "^8.3",
         "ui-awesome/form-model": "^0.2",
-        "ui-awesome/html": "^0.4",
+        "ui-awesome/html": "^0.5@dev",
         "ui-awesome/html-attribute": "^0.6",
         "ui-awesome/html-contracts": "^0.1",
-        "ui-awesome/html-core": "^0.6",
+        "ui-awesome/html-core": "^0.7@dev",
         "ui-awesome/html-helper": "^0.7",
         "ui-awesome/html-interop": "^0.4",
         "ui-awesome/html-mixin": "^0.6"

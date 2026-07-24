@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Radio;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputRadio};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputRadio;
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see InputRadio}.
+ */
+#[Group('radio')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -20,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->attributes(['class' => 'value'])
                 ->input(InputRadio::tag())
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -36,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->class('value')->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->class('value')
+                ->input(InputRadio::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -49,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerAttributes(['class' => 'value'])
                 ->input(InputRadio::tag())
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -65,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->containerClass('value')->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->containerClass('value')
+                ->input(InputRadio::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -78,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(Block::DIV)->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->containerTag(Block::DIV)
+                ->input(InputRadio::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -89,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-agree" name="BasicForm[agree]" type="radio">
             <label for="basicform-agree">Agree</label>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(false)->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->containerTag(false)
+                ->input(InputRadio::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -102,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->containerTag(Block::ARTICLE)->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputRadio::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -115,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="value">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->id('value')->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->id('value')
+                ->input(InputRadio::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -130,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -149,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -168,7 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->inputContainerTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -183,7 +243,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->inputContainerTag(Block::ARTICLE)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -196,7 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -211,10 +283,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->inputTemplate('<div>\n{label}\n{input}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -227,7 +302,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->name('value')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -241,7 +322,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -257,12 +344,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -278,12 +368,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -299,7 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->prefix('prefix')->prefixTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->prefix('prefix')
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -313,11 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -331,11 +434,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -348,7 +454,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->render(),
+            'Default layout must be rendered.',
         );
     }
 
@@ -362,7 +473,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -378,12 +495,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -399,12 +519,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -420,7 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->suffix('suffix')->suffixTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->suffix('suffix')
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -434,11 +564,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -452,11 +585,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -471,10 +607,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(InputRadio::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -487,7 +626,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag()->value('ok'))->value('ok')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag()->value('ok'))
+                ->value('ok')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -505,7 +650,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(true))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(InputRadio::tag()->value(true))
+                ->render(),
+            "'false' must not check the input.",
         );
 
         $formModel->setValue('agree', true);
@@ -517,7 +667,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(true))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(InputRadio::tag()->value(true))
+                ->render(),
+            "'true' must check the input.",
         );
 
         // int value
@@ -530,7 +685,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(1))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(InputRadio::tag()->value(1))
+                ->render(),
+            "Value '0' must not check the input.",
         );
 
         $formModel->setValue('agree', 1);
@@ -542,7 +702,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value(1))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(InputRadio::tag()->value(1))
+                ->render(),
+            "Value '1' must check the input.",
         );
 
         // string value
@@ -555,7 +720,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value('ok'))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(InputRadio::tag()->value('ok'))
+                ->render(),
+            "Empty 'string' must not check the input.",
         );
 
         $formModel->setValue('agree', 'ok');
@@ -567,7 +737,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value('ok'))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(InputRadio::tag()->value('ok'))
+                ->render(),
+            "Matching 'string' must check the input.",
         );
 
         // null value
@@ -580,7 +755,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')->input(InputRadio::tag()->value('ok'))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(InputRadio::tag()->value('ok'))
+                ->render(),
+            "'null' must not check the input.",
         );
     }
 
@@ -593,7 +773,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -606,7 +792,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag()->value(1))->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag()->value(1))
+                ->render(),
+            'No hidden companion must be rendered.',
         );
     }
 
@@ -619,7 +810,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label>Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->id(null)->input(InputRadio::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->id(null)
+                ->input(InputRadio::tag())
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -632,7 +829,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree">Agree</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')->input(InputRadio::tag())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag())->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

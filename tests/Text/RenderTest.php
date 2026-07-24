@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see \UIAwesome\Html\Form\InputText}.
+ */
+#[Group('text')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -20,7 +25,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->attributes(['class' => 'value'])->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->attributes(['class' => 'value'])
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -33,7 +43,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->class('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->class('value')
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -46,7 +61,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerAttributes(['class' => 'value'])->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerAttributes(['class' => 'value'])
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -59,7 +79,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerClass('value')
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -72,7 +97,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::DIV)
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -83,7 +113,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="text">
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(false)
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -96,7 +131,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::ARTICLE)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::ARTICLE)
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -109,7 +149,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->id('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->id('value')
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -124,10 +169,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -142,7 +190,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerClass('value')->inputContainerTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->inputContainerClass('value')
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -157,7 +211,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -170,7 +229,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -185,7 +249,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->inputContainerTag(Block::ARTICLE)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input must be wrapped in the given tag.',
         );
     }
 
@@ -200,7 +269,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->inputTemplate('<div>\n{input}\n{label}\n</div>')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->inputTemplate('<div>\n{input}\n{label}\n</div>')
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -220,7 +294,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($fieldModel)->property('username')->invalidClass('value')->render()
+            Field::tag()
+                ->formModel($fieldModel)
+                ->property('username')
+                ->invalidClass('value')
+                ->render(),
+            "Invalid 'class' must be added on error.",
         );
     }
 
@@ -233,7 +312,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="name" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->name('name')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->name('name')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -247,7 +331,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -263,11 +352,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -283,7 +375,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixClass('value')->prefixTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->prefix('prefix')
+                ->prefixClass('value')
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -299,7 +398,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->prefix('prefix')
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -313,7 +418,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->prefix('prefix')
+                ->prefixTag(false)
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -327,7 +438,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->prefix('prefix')->prefixTag(Inline::SPAN)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->prefix('prefix')
+                ->prefixTag(Inline::SPAN)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -340,7 +457,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->render(),
+            'Default field markup must be rendered.',
         );
     }
 
@@ -354,7 +475,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -370,11 +496,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -390,7 +519,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->suffix('suffix')->suffixClass('value')->suffixTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->suffix('suffix')
+                ->suffixClass('value')
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -406,7 +542,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->suffix('suffix')->suffixTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->suffix('suffix')
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -421,7 +563,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->template('<div>\n{field}\n</div>')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->template('<div>\n{field}\n</div>')
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -438,7 +585,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel($fieldModel)->property('username')->validClass('value')->render()
+            Field::tag()
+                ->formModel($fieldModel)
+                ->property('username')
+                ->validClass('value')
+                ->render(),
+            "Valid 'class' must be added.",
         );
     }
 
@@ -451,7 +603,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->validClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->validClass('value')
+                ->render(),
+            "Valid 'class' must not be added.",
         );
     }
 
@@ -464,7 +621,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text" value="value">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->value('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->value('value')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -482,7 +644,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('username')->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->render(),
+            "Empty 'value' must be omitted.",
         );
 
         $formModel->setValue('username', 'samdark');
@@ -494,7 +660,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text" value="samdark">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('username')->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->render(),
+            "Model 'value' must be serialized.",
         );
 
         // null value.
@@ -507,7 +677,11 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('username')->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->render(),
+            "'null' value must be omitted.",
         );
     }
 
@@ -520,7 +694,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->value(null)
+                ->render(),
+            "'value' must be omitted.",
         );
     }
 
@@ -533,7 +712,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[username]" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->id(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->id(null)
+                ->render(),
+            "'id' and the label 'for' must be omitted.",
         );
     }
 
@@ -546,7 +730,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" type="text">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

@@ -6,6 +6,9 @@ namespace UIAwesome\Html\Field\Tests\Support;
 
 use UIAwesome\FormModel\BaseFormModel;
 
+/**
+ * Stub form model exposing the properties used across the field test suite.
+ */
 final class BasicForm extends BaseFormModel
 {
     public mixed $agree = '';

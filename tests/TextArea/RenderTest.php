@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\TextArea;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\TextArea};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\TextArea;
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see TextArea}.
+ */
+#[Group('textarea')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -20,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea class="value" id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->attributes(['class' => 'value'])
                 ->input(TextArea::tag())
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -36,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea class="value" id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->class('value')->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->class('value')
+                ->input(TextArea::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -49,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->containerAttributes(['class' => 'value'])
                 ->input(TextArea::tag())
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -65,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->containerClass('value')->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->containerClass('value')
+                ->input(TextArea::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -78,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->containerTag(Block::DIV)->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->containerTag(Block::DIV)
+                ->input(TextArea::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -89,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-content">Content</label>
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->containerTag(false)->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->containerTag(false)
+                ->input(TextArea::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -102,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->containerTag(Block::ARTICLE)->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->containerTag(Block::ARTICLE)
+                ->input(TextArea::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -115,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="value" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->id('value')->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->id('value')
+                ->input(TextArea::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -130,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -149,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -168,7 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->inputContainerTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -181,7 +241,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -196,7 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->inputContainerTag(Block::ARTICLE)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input must be wrapped in the given tag.',
         );
     }
 
@@ -211,10 +283,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -227,7 +302,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="value">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->name('value')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -241,7 +322,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -257,12 +344,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->prefix('Prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -278,12 +368,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->prefix('Prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -299,11 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->prefix('Prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -316,7 +412,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->render(),
+            'Default field markup must be rendered.',
         );
     }
 
@@ -330,7 +431,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -346,12 +453,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -367,12 +477,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -388,11 +501,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -406,11 +522,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -424,11 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -443,10 +565,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
                 ->input(TextArea::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -459,7 +584,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]" value="content">\ncontent\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->value('content')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->value('content')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -477,7 +608,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\nxxxxxxxxxx\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('content')->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('content')
+                ->input(TextArea::tag())
+                ->render(),
+            'Model value must be rendered as content.',
         );
 
         // null value.
@@ -490,7 +626,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('content')->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('content')
+                ->input(TextArea::tag())
+                ->render(),
+            "'null' must yield empty content.",
         );
     }
 
@@ -503,7 +644,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content" name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->value(null)
+                ->render(),
+            "'value' must be omitted.",
         );
     }
 
@@ -516,7 +663,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea name="BasicForm[content]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->id(null)->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->id(null)
+                ->input(TextArea::tag())
+                ->render(),
+            "'id' and the label 'for' must be omitted.",
         );
     }
 
@@ -529,7 +682,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-content">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('content')->input(TextArea::tag())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('content')
+                ->input(TextArea::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

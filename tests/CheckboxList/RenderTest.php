@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use UIAwesome\{
     Html\Field\Field,
     Html\Field\Tests\Support\BasicForm,
@@ -14,7 +16,11 @@ use UIAwesome\Html\Field\Tests\Support\Assert;
 use UIAwesome\Html\Interop\Block;
 use UIAwesome\Html\Interop\Inline;
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see ChoiceList}.
+ */
+#[Group('checkboxlist')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -42,7 +48,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -71,7 +78,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -101,7 +109,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -131,7 +140,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -161,7 +171,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -189,7 +200,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -219,7 +231,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -249,7 +262,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -282,7 +296,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -315,7 +330,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -347,7 +363,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -377,7 +394,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->inputContainerTag(false)
-                ->render()
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -409,7 +427,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->inputContainerTag(Block::ARTICLE)
-                ->render()
+                ->render(),
+            'Input must be wrapped in the given tag.',
         );
     }
 
@@ -442,7 +461,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->inputContainerTag(Block::DIV)
                 ->inputTemplate("{input}\n{label}")
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -472,7 +492,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->name('value')
-                ->render()
+                ->render(),
+            "'name' must use the given value.",
         );
     }
 
@@ -503,7 +524,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->prefix('Prefix')
-                ->render()
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -538,7 +560,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -573,7 +596,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -607,7 +631,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -639,7 +664,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -671,7 +697,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -700,7 +727,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            'Default structure must be rendered.',
         );
     }
 
@@ -731,7 +759,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->suffix('suffix')
-                ->render()
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -766,7 +795,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -801,7 +831,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -835,7 +866,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -867,7 +899,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -899,7 +932,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -931,7 +965,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->template('<article>\n{field}\n</article>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -962,7 +997,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                         ->uncheckedValue('0')
                 )
-                ->render()
+                ->render(),
+            'Hidden companion input must be rendered.',
         );
     }
 
@@ -992,7 +1028,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->value([1, 3])
-                ->render()
+                ->render(),
+            "Matching values must set 'checked'.",
         );
     }
 
@@ -1026,7 +1063,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "Matching `int` must set 'checked'.",
         );
 
         // array with string values
@@ -1055,7 +1093,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "Matching `string` values must set 'checked'.",
         );
 
         // value not in array
@@ -1084,7 +1123,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "Unmatched value must not set 'checked'.",
         );
 
         // empty array value
@@ -1113,7 +1153,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "Empty array must not set 'checked'.",
         );
 
         // null value
@@ -1142,7 +1183,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "`null` must not set 'checked'.",
         );
     }
 
@@ -1172,7 +1214,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->value(null)
-                ->render()
+                ->render(),
+            "`null` must not set 'checked'.",
         );
     }
 
@@ -1202,7 +1245,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -1232,7 +1276,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->name(null)
-                ->render()
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

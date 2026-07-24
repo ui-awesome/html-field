@@ -4,15 +4,32 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
 
-final class ExceptionTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} value casting with {@see \UIAwesome\Html\Form\InputText}.
+ */
+#[Group('text')]
+final class ExceptionTest extends TestCase
 {
-    public function testIntegerValue(): void
+    public function testCastsIntegerValueToString(): void
     {
-        self::assertStringContainsString(
-            'value="1"',
-            Field::tag()->formModel(new BasicForm())->property('username')->value(1)->render(),
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-username">Username</label>
+            <input id="basicform-username" name="BasicForm[username]" type="text" value="1">
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->value(1)
+                ->render(),
+            "'value' must be cast to 'string' and serialized.",
         );
     }
 }

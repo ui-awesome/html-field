@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\TextArea;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\TextArea};
-use UIAwesome\Html\Field\Tests\Support\Assert;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\TextArea;
 
-final class LabelTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} label rendering with {@see TextArea}.
+ */
+#[Group('textarea')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -17,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->notLabel()->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(TextArea::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -29,7 +42,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><textarea id="basicform-label" name="BasicForm[label]">\n</textarea></label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->enclosedByLabel(true)->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->enclosedByLabel(true)
+                ->input(TextArea::tag())
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -42,10 +61,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(TextArea::tag())
                 ->labelAttributes(['class' => 'class'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -58,7 +80,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->input(TextArea::tag())->labelClass('class')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(TextArea::tag())
+                ->labelClass('class')
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -71,7 +99,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->input(TextArea::tag())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(TextArea::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -84,7 +118,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-label" name="BasicForm[label]">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('label')->input(TextArea::tag())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(TextArea::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

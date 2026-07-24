@@ -10,6 +10,9 @@ use UIAwesome\Html\Core\Base\BaseTag;
 use UIAwesome\Html\Helper\Attributes;
 use UIAwesome\Html\Mixin\HasAttributes;
 
+/**
+ * Stub form control rendering a generic `<control>` tag for field rendering tests.
+ */
 final class InputWidget extends BaseTag implements FormControlInterface
 {
     use HasAttributes;

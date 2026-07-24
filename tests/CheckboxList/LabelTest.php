@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\{
     Field\Field,
     Field\Tests\Support\BasicForm,
@@ -12,7 +14,11 @@ use UIAwesome\Html\{
 };
 use UIAwesome\Html\Field\Tests\Support\Assert;
 
-final class LabelTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} label rendering with {@see ChoiceList}.
+ */
+#[Group('checkboxlist')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -39,7 +45,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::checkbox()->label('Orange')->value(3),
                         )
                 )
-                ->render()
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -66,7 +73,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->enclosedByLabel(true)
-                ->render()
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -96,7 +104,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->label('Label')
-                ->render()
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -126,7 +135,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -156,7 +166,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->labelClass('value')
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -186,7 +197,8 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->label('Label')
-                ->render()
+                ->render(),
+            "Item label 'class' must be serialized.",
         );
     }
 }

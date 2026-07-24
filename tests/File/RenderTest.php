@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\File;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputFile};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputFile;
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see InputFile}.
+ */
+#[Group('file')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -20,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->attributes(['class' => 'value'])
                 ->input(InputFile::tag())
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -36,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->class('value')->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->class('value')
+                ->input(InputFile::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -49,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->containerAttributes(['class' => 'value'])
                 ->input(InputFile::tag())
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -65,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->containerClass('value')->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->containerClass('value')
+                ->input(InputFile::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -78,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::DIV)
+                ->input(InputFile::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -89,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="file">
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(false)->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(false)
+                ->input(InputFile::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -102,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="file">
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::ARTICLE)->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputFile::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -115,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="id" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->id('id')->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->id('id')
+                ->input(InputFile::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -130,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -149,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -168,10 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -186,10 +243,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -202,7 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment][]" type="file" multiple>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag()->multiple(true))->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->input(InputFile::tag()
+                ->multiple(true))
+                ->render(),
+            "'multiple' and array 'name' must be serialized.",
         );
     }
 
@@ -215,7 +281,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="name" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->name('name')->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->name('name')
+                ->input(InputFile::tag())
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -229,7 +301,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -245,12 +323,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -266,12 +347,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -287,11 +371,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -305,11 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -323,11 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -340,7 +433,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->render(),
+            'Default field structure must be rendered.',
         );
     }
 
@@ -354,7 +452,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -370,12 +474,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -391,12 +498,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -412,11 +522,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -430,11 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -448,11 +564,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -467,10 +586,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
                 ->input(InputFile::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -483,7 +605,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->value('my-file.jpg')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->value('my-file.jpg')
+                ->render(),
+            "'value' must be omitted for file input.",
         );
     }
 
@@ -501,7 +629,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('attachment')->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->render(),
+            "'value' must be omitted for file input.",
         );
 
         // null value
@@ -514,7 +647,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('attachment')->input(InputFile::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->render(),
+            "'value' must be omitted for file input.",
         );
     }
 
@@ -527,7 +665,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('dateOfBirth')->input(InputFile::tag())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputFile::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -540,7 +684,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[attachment]" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->id(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->id(null)
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -553,7 +703,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-attachment" type="file">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('attachment')->input(InputFile::tag())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('attachment')
+                ->input(InputFile::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

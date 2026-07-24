@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Month;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputMonth};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputMonth;
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see InputMonth}.
+ */
+#[Group('month')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -20,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->attributes(['class' => 'value'])
                 ->input(InputMonth::tag())
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -36,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->class('value')->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->class('value')
+                ->input(InputMonth::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -49,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->containerAttributes(['class' => 'value'])
                 ->input(InputMonth::tag())
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -65,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerClass('value')->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerClass('value')
+                ->input(InputMonth::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -78,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerTag(Block::DIV)->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerTag(Block::DIV)
+                ->input(InputMonth::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -89,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-monthofbirth">Month Of Birth</label>
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerTag(false)->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerTag(false)
+                ->input(InputMonth::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -102,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->containerTag(Block::ARTICLE)->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputMonth::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -115,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->id('value')->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->id('value')
+                ->input(InputMonth::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -130,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -149,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -168,11 +222,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->inputContainerTag(Block::ARTICLE)
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -185,7 +242,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -200,10 +263,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->inputContainerTag(Block::ARTICLE)
-                ->render()
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -218,10 +284,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -234,7 +303,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="value" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->name('value')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -248,7 +323,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -264,12 +345,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -285,12 +369,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -306,11 +393,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -324,11 +414,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -342,11 +435,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -359,7 +455,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->render(),
+            'Default field structure must be rendered.',
         );
     }
 
@@ -373,7 +474,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -389,12 +496,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -410,12 +520,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -431,11 +544,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -449,11 +565,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -467,11 +586,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -486,10 +608,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->input(InputMonth::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -502,7 +627,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month" value="11">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->value('11')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->value('11')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -520,7 +651,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month" value="11">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('monthOfBirth')->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->render(),
+            "'value' must reflect the model value.",
         );
 
         // null value
@@ -533,7 +669,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('monthOfBirth')->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -546,7 +687,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -559,7 +706,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[monthOfBirth]" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->id(null)->input(InputMonth::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->id(null)
+                ->input(InputMonth::tag())
+                ->render(),
+            "'null' must omit 'id' and the label 'for'.",
         );
     }
 
@@ -572,7 +725,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" type="month">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('monthOfBirth')->input(InputMonth::tag())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputMonth::tag())
+                ->name(null)
+                ->render(),
+            "'null' must omit the 'name' attribute.",
         );
     }
 }

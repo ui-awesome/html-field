@@ -14,15 +14,18 @@ use function in_array;
 use function is_array;
 use function is_object;
 
+/**
+ * Stub select form control with option handling and object-value rejection.
+ */
 final class SelectControl implements FormControlInterface
 {
     /**
-     * @phpstan-var mixed[]
+     * @var mixed[]
      */
     private array $attributes = [];
 
     /**
-     * @phpstan-var array<int|string, string>
+     * @var array<int|string, string>
      */
     private array $items = [];
 

@@ -6,6 +6,9 @@ namespace UIAwesome\Html\Field\Tests\Support;
 
 use UIAwesome\FormModel\BaseFormModel;
 
+/**
+ * Stub form model providing a per-property field config for configuration tests.
+ */
 final class ConfigForm extends BaseFormModel
 {
     public string $name = '';

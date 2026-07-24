@@ -1,8 +1,17 @@
-# Change Log
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## 0.1.0 Under development
 
-- Initial commit
-- Enh #2: Add configuration for the widget to `FormModelInterface::class` (@terabytesoftw)
-- Bug #3: Refactor namespace imports in test files (@terabytesoftw)
-- Enh #5: Migrated to the stable UI Awesome architecture and modern PHP 8.3 tooling (@terabytesoftw)
+- feat: initial `ui-awesome/html-field` package structure.
+- feat: add configuration for the widget to `FormModelInterface::class`.
+- refactor: update namespace imports in test files.
+- chore: migrate to the stable UI Awesome architecture and modern PHP `8.3` tooling.
+- feat: add immutable semantic `ControlFactory` integrated with application-scoped `Config`.
+- feat: add `Message` enum centralizing exception message templates.
+- chore: require the `ui-awesome/html-core ^0.7` and `ui-awesome/html ^0.5` development lines.
+- test: normalize the test suite with full-HTML assertions, failure messages, and external data providers.

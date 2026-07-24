@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\ChoiceItem, Field\Tests\Support\ChoiceList};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, ChoiceItem, ChoiceList};
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see ChoiceList}.
+ */
+#[Group('radiolist')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -25,7 +30,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->attributes(['class' => 'value'])
                 ->input(
                     ChoiceList::radio()
@@ -34,7 +41,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -52,7 +60,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->class('value')
                 ->input(
                     ChoiceList::radio()
@@ -61,7 +71,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -79,7 +90,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerAttributes(['class' => 'value'])
                 ->input(
                     ChoiceList::radio()
@@ -88,7 +101,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -106,7 +120,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerClass('value')
                 ->input(
                     ChoiceList::radio()
@@ -115,7 +131,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -133,7 +150,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerTag(Block::DIV)
                 ->input(
                     ChoiceList::radio()
@@ -142,7 +161,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -158,7 +178,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-agree-w1">Yes</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerTag(false)
                 ->input(
                     ChoiceList::radio()
@@ -167,7 +189,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -185,7 +208,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerTag(Block::ARTICLE)
                 ->input(
                     ChoiceList::radio()
@@ -194,7 +219,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -212,7 +238,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->id('value')
                 ->input(
                     ChoiceList::radio()
@@ -221,7 +249,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->value(1)->label('Yes'),
                         )
                 )
-                ->render()
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -241,7 +270,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -251,7 +282,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -271,7 +303,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -281,7 +315,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -301,7 +336,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -310,7 +347,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -328,7 +366,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->inputContainerTag(false)
                 ->input(
                     ChoiceList::radio()
@@ -337,7 +377,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -357,7 +398,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->inputContainerTag(Block::ARTICLE)
                 ->input(
                     ChoiceList::radio()
@@ -366,7 +409,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -386,7 +430,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -395,7 +441,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -413,7 +460,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -422,7 +471,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->name('value')
-                ->render()
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -441,7 +491,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -450,7 +502,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->prefix('Prefix')
-                ->render()
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -471,7 +524,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -482,7 +537,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -503,7 +559,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -514,7 +572,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -535,7 +594,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -545,7 +606,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -564,7 +626,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -574,7 +638,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -593,7 +658,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -603,7 +670,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -621,7 +689,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -629,7 +699,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Default layout must be rendered.',
         );
     }
 
@@ -650,7 +721,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -661,7 +734,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -680,7 +754,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -688,7 +764,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->suffix('suffix')->render()
+                ->suffix('suffix')->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -709,7 +786,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -720,7 +799,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -741,7 +821,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -751,7 +833,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -770,7 +853,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -780,7 +865,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -799,7 +885,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -809,7 +897,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                 )
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -829,7 +918,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -838,7 +929,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -857,7 +949,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -866,7 +960,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                         ->uncheckedValue('none')
                 )
-                ->render()
+                ->render(),
+            'Hidden input must carry the unchecked value.',
         );
     }
 
@@ -884,7 +979,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -893,7 +990,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->value(1)
-                ->render()
+                ->render(),
+            "'checked' must be serialized.",
         );
     }
 
@@ -916,7 +1014,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -924,7 +1024,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "'int' value must check the matching item.",
         );
 
         // string values
@@ -942,7 +1043,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -950,7 +1053,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "'string' value must check the matching item.",
         );
 
         // value not in list
@@ -968,7 +1072,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('agree')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -976,7 +1082,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            'Unlisted value must check no item.',
         );
 
         // null value
@@ -994,7 +1101,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -1002,7 +1111,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "'null' must check no item.",
         );
     }
 
@@ -1020,7 +1130,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -1029,7 +1141,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->value(null)
-                ->render()
+                ->render(),
+            "'null' must check no item.",
         );
     }
 
@@ -1047,7 +1160,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->id(null)
                 ->input(
                     ChoiceList::radio()
@@ -1056,7 +1171,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ChoiceItem::radio()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -1074,7 +1190,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
                     ChoiceList::radio()
                         ->items(
@@ -1083,7 +1201,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                         )
                 )
                 ->name(null)
-                ->render()
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

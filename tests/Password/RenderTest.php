@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Password;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputPassword};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputPassword;
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see InputPassword}.
+ */
+#[Group('password')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -20,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->attributes(['class' => 'value'])
                 ->input(InputPassword::tag())
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -36,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->class('value')->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->class('value')
+                ->input(InputPassword::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -49,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->containerAttributes(['class' => 'value'])
                 ->input(InputPassword::tag())
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -65,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->containerClass('value')->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->containerClass('value')
+                ->input(InputPassword::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -78,7 +102,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->input(InputPassword::tag())->render()
+            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::DIV)->input(InputPassword::tag())->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -89,7 +114,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="password">
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(false)->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(false)
+                ->input(InputPassword::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -102,7 +133,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="password">
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('username')->containerTag(Block::ARTICLE)->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputPassword::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -115,7 +152,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="id" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->id('id')->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->id('id')
+                ->input(InputPassword::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -130,11 +173,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -149,11 +195,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -168,7 +217,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->inputContainerTag(Block::DIV)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -181,7 +236,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -196,7 +257,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->inputContainerTag(Block::ARTICLE)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -211,10 +278,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -227,7 +297,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="name" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->name('name')->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->name('name')
+                ->input(InputPassword::tag())
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -241,7 +317,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -257,12 +339,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -278,12 +363,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -299,11 +387,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -317,11 +408,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -335,11 +429,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -352,7 +449,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->render(),
+            'Default field structure must be rendered.',
         );
     }
 
@@ -366,7 +468,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -382,12 +490,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -403,12 +514,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -424,11 +538,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -443,10 +560,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
                 ->input(InputPassword::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -459,7 +579,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password" value="#000000">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->value('#000000')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->value('#000000')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -477,7 +603,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('password')->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->render(),
+            "Empty 'string' must omit the 'value' attribute.",
         );
 
         $formModel->setValue('password', '#000000');
@@ -489,7 +620,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password" value="#000000">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('password')->input(InputPassword::tag())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->render(),
+            "'value' must reflect the model value.",
         );
 
         // null value
@@ -502,7 +638,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('password')->input(InputPassword::tag())->render()
+            Field::tag()->formModel($formModel)->property('password')->input(InputPassword::tag())->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -515,7 +652,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -528,7 +671,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[password]" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->id(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->id(null)
+                ->render(),
+            "'null' must omit 'id' and the label 'for'.",
         );
     }
 
@@ -541,7 +690,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-password" type="password">
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('password')->input(InputPassword::tag())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->name(null)
+                ->render(),
+            "'null' must omit the 'name' attribute.",
         );
     }
 }

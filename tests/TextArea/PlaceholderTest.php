@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\TextArea;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\TextArea};
-use UIAwesome\Html\Field\Tests\Support\Assert;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\TextArea;
 
-final class PlaceholderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} placeholder rendering with {@see TextArea}.
+ */
+#[Group('textarea')]
+final class PlaceholderTest extends TestCase
 {
     public function testPlaceholder(): void
     {
@@ -18,7 +25,12 @@ final class PlaceholderTest extends \PHPUnit\Framework\TestCase
             <textarea id="basicform-placeholder" name="BasicForm[placeholder]" placeholder="This is a placeholder.">\n</textarea>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('placeholder')->input(TextArea::tag())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('placeholder')
+                ->input(TextArea::tag())
+                ->render(),
+            "'placeholder' must be serialized.",
         );
     }
 }

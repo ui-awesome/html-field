@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Field\Tests\Support\SelectControl};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, SelectControl};
+use UIAwesome\Html\Interop\{Block, Inline};
 
-final class RenderTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for {@see Field} rendering with {@see SelectControl}.
+ */
+#[Group('select')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -23,10 +28,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->attributes(['class' => 'value'])
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -42,10 +50,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->class('value')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -61,10 +72,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerAttributes(['class' => 'value'])
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -80,10 +94,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerClass('value')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -99,10 +116,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerTag(Block::DIV)
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -116,10 +136,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <option value="1">Apple</option>
             </select>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerTag(false)
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -135,10 +158,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerTag(Block::ARTICLE)
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -154,10 +180,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->id('value')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
-                ->render()
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -175,11 +204,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -197,11 +229,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -219,10 +254,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerTag(Block::DIV)
-                ->render()
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -238,10 +276,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerTag(false)
-                ->render()
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -259,10 +300,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputContainerTag(Block::ARTICLE)
-                ->render()
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -280,10 +324,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -299,10 +346,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->name('value')
-                ->render()
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -319,10 +369,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
-                ->render()
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -341,12 +394,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -365,12 +421,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -389,11 +448,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -410,11 +472,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -433,11 +498,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->prefix('prefix')
                 ->prefixTag(Block::ARTICLE)
-                ->render()
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -453,7 +521,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->render(),
+            'Default layout must be rendered.',
         );
     }
 
@@ -470,10 +543,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
-                ->render()
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -492,12 +568,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -516,12 +595,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -540,11 +622,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
-                ->render()
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -561,11 +646,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -582,11 +670,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
-                ->render()
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -604,10 +695,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -623,7 +717,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->value(1)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->value(1)
+                ->render(),
+            "'selected' must be serialized.",
         );
     }
 
@@ -644,7 +744,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->render(),
+            "'int' value must select the matching option.",
         );
 
         // string value
@@ -660,7 +765,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->render(),
+            "'string' value must select the matching option.",
         );
 
         // array value
@@ -679,7 +789,9 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->input(
                     SelectControl::tag()
                         ->items(
@@ -691,7 +803,8 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
                             ]
                         )
                 )
-                ->render()
+                ->render(),
+            'Array value must select multiple options.',
         );
 
         // value not in items
@@ -707,7 +820,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->render(),
+            'Unlisted value must select no option.',
         );
 
         // null value.
@@ -723,7 +841,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel($formModel)->property('fruits')->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->render(),
+            "'null' must select no option.",
         );
     }
 
@@ -739,10 +862,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->value(null)
-                ->render()
+                ->render(),
+            "'null' must select no option.",
         );
     }
 
@@ -758,7 +884,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')->id(null)->input(SelectControl::tag()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->id(null)
+                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -774,10 +906,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </select>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(SelectControl::tag()->items([1 => 'Apple']))
                 ->name(null)
-                ->render()
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

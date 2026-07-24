@@ -1,0 +1,52 @@
+<!-- Mobile version - Single column -->
+<svg viewBox="0 0 620 620" width="100%" height="580" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .box-bg { fill: #e6f4ea; stroke: #a7cdb3; stroke-width: 1; }
+        .title { font-weight: 700; font-size: 14px; fill: #1a202c; }
+        .content { font-size: 11px; fill: #4a5568; }
+    </style>
+
+    <g>
+        <rect class="box-bg" x="16" y="16" width="588" height="84" rx="6"/>
+        <rect x="16" y="16" width="4" height="84" fill="#1f883d"/>
+        <text class="title" x="32" y="42">Error and Hint Rendering</text>
+        <text class="content" x="32" y="66">Per-property error and hint blocks with configurable tags and classes</text>
+        <text class="content" x="32" y="84">First error or all errors, plus valid and invalid state classes</text>
+    </g>
+    <g>
+        <rect class="box-bg" x="16" y="116" width="588" height="84" rx="6"/>
+        <rect x="16" y="116" width="4" height="84" fill="#1f883d"/>
+        <text class="title" x="32" y="142">Flexible Layout Templates</text>
+        <text class="content" x="32" y="166">Template, container and input container composition per field</text>
+        <text class="content" x="32" y="184">Labels can enclose checkbox and radio controls</text>
+    </g>
+    <g>
+        <rect class="box-bg" x="16" y="216" width="588" height="84" rx="6"/>
+        <rect x="16" y="216" width="4" height="84" fill="#1f883d"/>
+        <text class="title" x="32" y="242">Form Model Binding</text>
+        <text class="content" x="32" y="266">Resolves id, name, label, hint and value from the form model</text>
+        <text class="content" x="32" y="284">Unknown properties fail fast with AttributeNotSet</text>
+    </g>
+    <g>
+        <rect class="box-bg" x="16" y="316" width="588" height="84" rx="6"/>
+        <rect x="16" y="316" width="4" height="84" fill="#1f883d"/>
+        <text class="title" x="32" y="342">Immutable Fluent API</text>
+        <text class="content" x="32" y="366">Clone-based configuration keeps every derived field independent</text>
+        <text class="content" x="32" y="384">Reuse base field definitions safely across forms</text>
+    </g>
+    <g>
+        <rect class="box-bg" x="16" y="416" width="588" height="84" rx="6"/>
+        <rect x="16" y="416" width="4" height="84" fill="#1f883d"/>
+        <text class="title" x="32" y="442">Per-Property Configuration</text>
+        <text class="content" x="32" y="466">Form model field configs configure the field and its control</text>
+        <text class="content" x="32" y="484">User configuration remains the final override layer</text>
+    </g>
+    <g>
+        <rect class="box-bg" x="16" y="516" width="588" height="84" rx="6"/>
+        <rect x="16" y="516" width="4" height="84" fill="#1f883d"/>
+        <text class="title" x="32" y="542">Semantic Control Factory</text>
+        <text class="content" x="32" y="566">field.control.* registry resolved through application-scoped Config</text>
+        <text class="content" x="32" y="584">Immutable with() derivation registers or replaces controls</text>
+    </g>
+</svg>
