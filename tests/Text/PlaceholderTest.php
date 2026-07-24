@@ -7,7 +7,7 @@ namespace UIAwesome\Html\Field\Tests\Text;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{BasicForm, Assert};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
 
 /**
  * Unit tests for {@see Field} placeholder rendering with {@see \UIAwesome\Html\Form\InputText}.

@@ -7,8 +7,8 @@ namespace UIAwesome\Html\Field\Tests\Time;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Form\InputTime;
 use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputTime;
 
 /**
  * Unit tests for {@see Field} value casting with {@see InputTime}.

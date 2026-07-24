@@ -7,9 +7,9 @@ namespace UIAwesome\Html\Field\Tests\Date;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Form\InputDate;
 use UIAwesome\Html\Field\Tests\Support\Assert;
 use UIAwesome\Html\Field\Tests\Support\BasicForm;
+use UIAwesome\Html\Form\InputDate;
 
 /**
  * Unit tests for {@see Field} value casting with {@see InputDate}.

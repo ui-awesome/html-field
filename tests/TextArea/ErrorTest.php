@@ -7,8 +7,8 @@ namespace UIAwesome\Html\Field\Tests\TextArea;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Form\TextArea;
 use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\TextArea;
 use UIAwesome\Html\Interop\{Block, Inline};
 
 /**

@@ -7,8 +7,8 @@ namespace UIAwesome\Html\Field\Tests\Date;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Form\InputDate;
 use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputDate;
 
 /**
  * Unit tests for {@see Field} label rendering with {@see InputDate}.
