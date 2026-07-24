@@ -11,7 +11,7 @@
     },
     "files": {
         ".editorconfig": {
-            "hash": "sha256:390bd60bdb2f60967fd7142c947d7bc399c16c23aff1d660f61abf945da1e8c1",
+            "hash": "sha256:f0cafe474d79d769f397f2e8839c642ca3ef1a0ce38b6e9f82ed9e49bccf84f6",
             "provider": "php-forge/baseline",
             "source": "metadata/.editorconfig",
             "mode": "append"
@@ -23,7 +23,7 @@
             "mode": "replace"
         },
         ".gitignore": {
-            "hash": "sha256:27a0221670bf2ed4b3930e6aaa6b7ea8a3b2441c31ae422abf1653d82b34d4c1",
+            "hash": "sha256:7d7753b2cc6184d74fb22f78c6b351b6c9c9dc04bcabe5481a0ed64b06858597",
             "provider": "php-forge/baseline",
             "source": "metadata/.gitignore",
             "mode": "append"

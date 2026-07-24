@@ -1,22 +1,14 @@
-#code coverage
-/code_coverage
 # Local AI agent, editor, and GitHub CLI config (if present)
 .claude
 .codex
 .config/gh
 
-# composer vendor dir
-/vendor
-/composer.lock
 # codecoverage (if present)
 code_coverage
 
-#node_modules
-/node_modules
 # codeception (if present)
 c3.php
 
-# phpstorm project files
 # composer
 composer.lock
 
@@ -41,22 +33,16 @@ package-lock.json
 # phpstorm project (if present)
 .idea
 
-# phpunit
-phpunit.phar
-.phpunit.result.cache
 # phpactor (if present)
 .phpactor.*
 
 # phpunit (if present)
 .phpunit.cache
-phpunit.xlm
+.phpunit.result.cache
 
-#yii3 config packages
-/config/packages
 # vagrant (if present)
 .vagrant
 
-# windows thumbnail cache
 # vendor
 vendor
 
