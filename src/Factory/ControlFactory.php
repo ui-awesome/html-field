@@ -7,6 +7,7 @@ namespace UIAwesome\Html\Field\Factory;
 use Closure;
 use InvalidArgumentException;
 use UIAwesome\Html\Contracts\Form\FormControlInterface;
+use UIAwesome\Html\Core\Base\BaseTag;
 use UIAwesome\Html\Core\Config\ComponentContext;
 use UIAwesome\Html\Core\Factory\ComponentFactoryInterface;
 use UIAwesome\Html\Field\Exception\{ControlNotFound, InvalidControl, Message};
@@ -91,7 +92,7 @@ final readonly class ControlFactory implements ComponentFactoryInterface
 
         $definition = $this->definitions[$type] ?? throw new ControlNotFound($context->component);
 
-        $control = is_string($definition) ? new $definition() : $definition($context);
+        $control = is_string($definition) ? self::createFromClass($definition) : $definition($context);
 
         if (($control instanceof FormControlInterface) === false) {
             throw new InvalidControl($context->component, get_debug_type($control));
@@ -121,6 +122,16 @@ final readonly class ControlFactory implements ComponentFactoryInterface
         $definition = self::normalizeDefinition($type, $definition);
 
         return new self([...$this->definitions, $type => $definition]);
+    }
+
+    /**
+     * Creates a registered control class while preserving class-level tag defaults when available.
+     *
+     * @param class-string<FormControlInterface> $definition Registered form control class.
+     */
+    private static function createFromClass(string $definition): FormControlInterface
+    {
+        return is_a($definition, BaseTag::class, true) ? $definition::tag() : new $definition();
     }
 
     /**

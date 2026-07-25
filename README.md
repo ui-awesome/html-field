@@ -112,21 +112,28 @@ echo Field::tag()
 
 #### Semantic control factory
 
-`ControlFactory` creates form controls from `field.control.*` component contexts, and plugs into application-scoped
-config to apply the active theme recipes. Registrations are immutable — derive a new factory with `with()`.
+`Field` selects controls through `ControlFactory` and applies application-scoped recipes to the field, container,
+label, control, hint, error, prefix, and suffix contexts. The package does not select a theme: replace `$theme` with
+any `ThemeInterface` implementation, such as a Flowbite or DaisyUI theme.
 
 ```php
-use UIAwesome\Html\Core\Config\{ComponentContext, Config};
+use UIAwesome\Html\Core\Config\Config;
 use UIAwesome\Html\Field\Factory\ControlFactory;
+use UIAwesome\Html\Field\Field;
 
-$controlFactory = new ControlFactory();
+$config = new Config(theme: $theme, factory: new ControlFactory());
 
-$control = $controlFactory->create(new ComponentContext('field.control.email'));
-
-$config = new Config(theme: $theme, factory: $controlFactory->with('editor', EditorControl::class));
-
-$control = $config->create(new ComponentContext('field.control.editor'));
+echo Field::tag()
+    ->config($config)
+    ->control('email')
+    ->formModel($form)
+    ->property('email')
+    ->render();
 ```
+
+The default registry supports `checkbox`, `email`, `password`, `radio`, `select`, `text`, and `textarea`.
+Registrations are immutable — derive a factory with `with()` to replace or extend them. See the usage guide for the
+slot contexts and recipe methods.
 
 ## Documentation
 

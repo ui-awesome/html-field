@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - refactor: update namespace imports in test files.
 - chore: migrate to the stable UI Awesome architecture and modern PHP `8.3` tooling.
 - feat: add immutable semantic `ControlFactory` integrated with application-scoped `Config`.
+- feat: connect `Field` to semantic control creation and scoped recipes for every field slot.
+- fix: preserve class-level defaults when `ControlFactory` creates `BaseTag` controls.
 - feat: add `Message` enum centralizing exception message templates.
 - chore: require the `ui-awesome/html-core ^0.7` and `ui-awesome/html ^0.5` development lines.
 - test: normalize the test suite with full-HTML assertions, failure messages, and external data providers.

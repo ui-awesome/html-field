@@ -82,6 +82,17 @@ final class ControlFactoryTest extends TestCase
         self::assertInstanceOf($expected, $control, 'Default registry must map the type to its control.');
     }
 
+    public function testCreatesDefaultControlsWithTheirClassDefaults(): void
+    {
+        $control = (new ControlFactory())->create(new ComponentContext('field.control.email'));
+
+        self::assertSame(
+            '<input type="email">',
+            $control->render(),
+            'Class-level control defaults must be preserved.',
+        );
+    }
+
     public function testOverridesADefaultControlThroughTheConstructor(): void
     {
         $controlFactory = new ControlFactory(['email' => InputWidget::class]);

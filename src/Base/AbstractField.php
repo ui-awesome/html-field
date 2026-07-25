@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace UIAwesome\Html\Field\Base;
 
 use BackedEnum;
+use Override;
 use UIAwesome\FormModel\FormModelInterface;
 use UIAwesome\Html\Attribute\Global\{HasClass, HasId};
 use UIAwesome\Html\Attribute\HasName;
 use UIAwesome\Html\Attribute\Values\ElementAttribute;
 use UIAwesome\Html\Contracts\Attribute\AttributesInterface;
+use UIAwesome\Html\Contracts\Form\FormControlInterface;
 use UIAwesome\Html\Contracts\RenderableInterface;
 use UIAwesome\Html\Core\Base\BaseTag;
+use UIAwesome\Html\Core\Config\{ComponentContext, Config};
+use UIAwesome\Html\Core\Exception\{ConfigException, Message as ConfigMessage};
 use UIAwesome\Html\Core\Factory\SimpleFactory;
 use UIAwesome\Html\Core\Html;
-use UIAwesome\Html\Field\Exception\AttributeNotSet;
+use UIAwesome\Html\Field\Exception\{AttributeNotSet, InvalidControl};
+use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Mixin\{
     CanBeEnclosedByLabel,
     HasError,
@@ -23,7 +28,7 @@ use UIAwesome\Html\Field\Mixin\{
     HasInputTemplate,
     HasValidateClass,
 };
-use UIAwesome\Html\Form\{InputCheckbox, InputRadio, InputText};
+use UIAwesome\Html\Form\{InputCheckbox, InputRadio};
 use UIAwesome\Html\Helper\{Encode, Naming, Template};
 use UIAwesome\Html\Interop\{Block, Inline};
 use UIAwesome\Html\Mixin\{
@@ -38,6 +43,7 @@ use UIAwesome\Html\Phrasing\Label;
 use UnitEnum;
 
 use function array_key_exists;
+use function get_debug_type;
 use function implode;
 use function is_array;
 use function is_string;
@@ -69,6 +75,18 @@ abstract class AbstractField extends BaseTag
     use HasValidateClass;
 
     /**
+     * Application-scoped config used to create and configure semantic controls.
+     */
+    private Config|null $config = null;
+    /**
+     * Base semantic context inherited by every field slot.
+     */
+    private ComponentContext|null $configContext = null;
+    /**
+     * Semantic control type created through the configured factory, or `null` for an explicitly supplied input.
+     */
+    private string|null $controlType = 'text';
+    /**
      * Form model providing labels, hints, values, and per-property configuration.
      */
     private FormModelInterface|null $formModel = null;
@@ -80,6 +98,82 @@ abstract class AbstractField extends BaseTag
      * Form control rendered by the field, or `null` until a control is configured.
      */
     private (AttributesInterface&RenderableInterface)|null $widget = null;
+
+    /**
+     * Applies application-scoped recipes to the field and each semantic slot.
+     *
+     * Slot contexts inherit the field qualifiers and use `field.container`, `field.label`, `field.control.*`,
+     * `field.hint`, `field.error`, `field.prefix`, and `field.suffix` component identifiers by default.
+     *
+     * @param Config $config Application-scoped config service.
+     * @param ComponentContext $context Base field context whose qualifiers are inherited by every slot.
+     *
+     * @throws ConfigException If a recipe cannot be applied or returns an incompatible field.
+     * @throws InvalidControl If the configured factory returns an incompatible control.
+     */
+    #[Override]
+    public function config(Config $config, ComponentContext $context = new ComponentContext('field')): static
+    {
+        $field = $this->applyConfig($config, $context);
+
+        foreach (['container', 'label'] as $slot) {
+            $field = $field->applyConfig($config, self::slotContext($context, $slot));
+        }
+
+        $field->config = $config;
+        $field->configContext = $context;
+
+        $field = $field->configureControlFromConfig();
+
+        foreach (['hint', 'error', 'prefix', 'suffix'] as $slot) {
+            $field = $field->applyConfig($config, self::slotContext($context, $slot));
+        }
+
+        $field->config = $config;
+        $field->configContext = $context;
+
+        return $field;
+    }
+
+    /**
+     * Selects a semantic control type and creates it through the field control factory.
+     *
+     * The default registry supports `checkbox`, `email`, `password`, `radio`, `select`, `text`, and `textarea`.
+     *
+     * When application config is present, its factory replaces the default registry and its recipe is applied to the
+     * `field.control.<type>` context.
+     *
+     * @param string $type Semantic control type without the `field.control.` prefix.
+     *
+     * @throws InvalidControl If the configured factory or applier returns an incompatible control.
+     */
+    public function control(string $type): static
+    {
+        $baseContext = $this->configContext ?? new ComponentContext('field');
+
+        $context = self::slotContext($baseContext, "control.{$type}");
+
+        $factory = $this->config->factory ?? new ControlFactory();
+
+        $control = $factory->create($context);
+
+        if (($control instanceof FormControlInterface) === false) {
+            throw new InvalidControl($context->component, get_debug_type($control));
+        }
+
+        if ($this->config !== null) {
+            $control = $this->config->apply($control, $context);
+
+            if (($control instanceof FormControlInterface) === false) {
+                throw new InvalidControl($context->component, get_debug_type($control));
+            }
+        }
+
+        $new = $this->withWidget($control);
+        $new->controlType = $type;
+
+        return $new;
+    }
 
     /**
      * Sets the form model used to configure and populate the field.
@@ -146,12 +240,8 @@ abstract class AbstractField extends BaseTag
      */
     public function input(AttributesInterface&RenderableInterface $widget): static
     {
-        $new = clone $this;
-        $new->widget = $new->applyDefinitionsToWidget($widget, $new->getFieldConfig());
-
-        if ($widget instanceof InputCheckbox || $widget instanceof InputRadio) {
-            $new->inputTemplate = "{input}\n{label}";
-        }
+        $new = $this->withWidget($widget);
+        $new->controlType = null;
 
         return $new;
     }
@@ -198,11 +288,12 @@ abstract class AbstractField extends BaseTag
      *
      * @return array<string, mixed> Default container tag, control, and templates indexed by configuration method.
      */
+    #[Override]
     protected function loadDefault(): array
     {
         return [
             'containerTag' => [Block::DIV],
-            'input' => [InputText::tag()],
+            'control' => ['text'],
             'inputTemplate' => ["{label}\n{input}"],
             'template' => ["{prefix}\n{field}\n{suffix}\n{hint}\n{error}"],
         ];
@@ -228,6 +319,26 @@ abstract class AbstractField extends BaseTag
             $this->renderField($widget, $formModel, $property),
             $this->containerTag,
         );
+    }
+
+    /**
+     * Applies recipes to the field while preserving the fluent component type.
+     */
+    private function applyConfig(Config $config, ComponentContext $context): static
+    {
+        $field = $config->apply($this, $context);
+
+        if (($field instanceof $this) === false) {
+            throw new ConfigException(
+                ConfigMessage::CONFIG_RETURNED_INCOMPATIBLE_COMPONENT->getMessage(
+                    $context->component,
+                    get_debug_type($this),
+                    get_debug_type($field),
+                ),
+            );
+        }
+
+        return $field;
     }
 
     /**
@@ -327,6 +438,32 @@ abstract class AbstractField extends BaseTag
         }
 
         return $widget;
+    }
+
+    /**
+     * Creates a semantic control or applies the generic control-slot recipe to an explicitly supplied input.
+     */
+    private function configureControlFromConfig(): static
+    {
+        if ($this->controlType !== null) {
+            return $this->control($this->controlType);
+        }
+
+        if ($this->widget === null || $this->config === null || $this->configContext === null) {
+            return $this;
+        }
+
+        $context = self::slotContext($this->configContext, 'control');
+        $widget = $this->config->apply($this->widget, $context);
+
+        if (($widget instanceof AttributesInterface) === false || ($widget instanceof RenderableInterface) === false) {
+            throw new InvalidControl($context->component, get_debug_type($widget));
+        }
+
+        $new = $this->withWidget($widget);
+        $new->controlType = null;
+
+        return $new;
     }
 
     /**
@@ -582,5 +719,35 @@ abstract class AbstractField extends BaseTag
     private function renderSuffixTag(): string
     {
         return $this->renderOptionalTag($this->suffixAttributes, $this->suffix, $this->suffixTag);
+    }
+
+    /**
+     * Derives a semantic slot context while preserving every field qualifier and metadata value.
+     */
+    private static function slotContext(ComponentContext $context, string $slot): ComponentContext
+    {
+        return new ComponentContext(
+            "{$context->component}.{$slot}",
+            $context->variant,
+            $context->size,
+            $context->scheme,
+            $context->states,
+            $context->metadata,
+        );
+    }
+
+    /**
+     * Stores a form control and applies any already resolved form-model definitions.
+     */
+    private function withWidget(AttributesInterface&RenderableInterface $widget): static
+    {
+        $new = clone $this;
+        $new->widget = $new->applyDefinitionsToWidget($widget, $new->getFieldConfig());
+
+        if ($widget instanceof InputCheckbox || $widget instanceof InputRadio) {
+            $new->inputTemplate = "{input}\n{label}";
+        }
+
+        return $new;
     }
 }
