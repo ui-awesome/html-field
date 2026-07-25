@@ -31,17 +31,17 @@ echo Field::tag()
 The base context defaults to `field`. Its variant, size, scheme, states, and metadata are copied to every derived slot
 context.
 
-| Context | Recipe target | Typical calls |
-|---|---|---|
-| `field` | `Field` | `template`, `inputTemplate`, `inputContainerTag`, `inputContainerClass` |
-| `field.container` | `Field` | `containerTag`, `containerAttributes`, `containerClass` |
-| `field.label` | `Field` | `labelAttributes`, `labelClass` |
-| `field.control.<type>` | Created form control | `attributes`, `class`, and control-specific methods |
-| `field.control` | Explicit input configured before `config()` | `attributes`, `class` |
-| `field.hint` | `Field` | `hintTag`, `hintAttributes`, `hintClass` |
-| `field.error` | `Field` | `errorTag`, `errorAttributes`, `errorClass` |
-| `field.prefix` | `Field` | `prefixTag`, `prefixAttributes`, `prefixClass` |
-| `field.suffix` | `Field` | `suffixTag`, `suffixAttributes`, `suffixClass` |
+| Context                | Recipe target                               | Typical calls                                                           |
+| ---------------------- | ------------------------------------------- | ----------------------------------------------------------------------- |
+| `field`                | `Field`                                     | `template`, `inputTemplate`, `inputContainerTag`, `inputContainerClass` |
+| `field.container`      | `Field`                                     | `containerTag`, `containerAttributes`, `containerClass`                 |
+| `field.label`          | `Field`                                     | `labelAttributes`, `labelClass`                                         |
+| `field.control.<type>` | Created form control                        | `attributes`, `class`, and control-specific methods                     |
+| `field.control`        | Explicit input configured before `config()` | `attributes`, `class`                                                   |
+| `field.hint`           | `Field`                                     | `hintTag`, `hintAttributes`, `hintClass`                                |
+| `field.error`          | `Field`                                     | `errorTag`, `errorAttributes`, `errorClass`                             |
+| `field.prefix`         | `Field`                                     | `prefixTag`, `prefixAttributes`, `prefixClass`                          |
+| `field.suffix`         | `Field`                                     | `suffixTag`, `suffixAttributes`, `suffixClass`                          |
 
 Themes own these recipes. `html-field` only defines the semantic contexts, so switching from a Flowbite config to a
 DaisyUI config does not require a field subclass or package-level mutable state:
