@@ -89,21 +89,21 @@ applies the field config last. Entries are explicit per-property overrides and a
 
 The precedence chain, lowest to highest:
 
-| Source | Example | Wins over |
-| ------ | ------- | --------- |
-| Model-derived binding | property value, generated `id` and `name`, `#[Placeholder]` | nothing |
-| Field fluent state | `Field::value()` | model-derived |
-| Field configuration | `#[FieldConfig(['value' => 'admin'])]` | both |
+| Source                | Example                                                     | Wins over     |
+| --------------------- | ----------------------------------------------------------- | ------------- |
+| Model-derived binding | property value, generated `id` and `name`, `#[Placeholder]` | nothing       |
+| Field fluent state    | `Field::value()`                                            | model-derived |
+| Field configuration   | `#[FieldConfig(['value' => 'admin'])]`                      | both          |
 
 Verified per key against a `text` control bound to a model that supplies a competing value:
 
-| Entry | Rendered result |
-| ----- | --------------- |
-| `['id' => 'custom-id']` | `id="custom-id"`, and the label follows with `for="custom-id"` |
-| `['name' => 'custom-name']` | `name="custom-name"` instead of the generated `Model[property]` |
-| `['value' => 'custom-value']` | `value="custom-value"`, outranking both the model value and `Field::value()` |
-| `['placeholder' => 'Custom.']` | `placeholder="Custom."` instead of the model placeholder |
-| `['checked' => true]` | `checked` rendered even when the model value would leave the control unchecked |
+| Entry                          | Rendered result                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------ |
+| `['id' => 'custom-id']`        | `id="custom-id"`, and the label follows with `for="custom-id"`                 |
+| `['name' => 'custom-name']`    | `name="custom-name"` instead of the generated `Model[property]`                |
+| `['value' => 'custom-value']`  | `value="custom-value"`, outranking both the model value and `Field::value()`   |
+| `['placeholder' => 'Custom.']` | `placeholder="Custom."` instead of the model placeholder                       |
+| `['checked' => true]`          | `checked` rendered even when the model value would leave the control unchecked |
 
 Artifacts derived from the control follow its final state: the label's `for` reads the control's post-config `id`, and
 `aria-describedby` keeps pointing at the rendered hint element.
@@ -134,6 +134,6 @@ public function getFieldConfigs(): array
 - Entries indexed by a non-string or empty key, such as `[0 => null]`. Integer keys were previously skipped silently.
 - Entries passing arguments as an associative array, such as `['class' => ['value' => 'form-control']]`. Config calls
   are positional.
-Every entry naming a public method of the resolved control is accepted, including the binding keys, which the config
-overrides. The validation state classes are merged into `class` rather than replacing it, so a configured `class`
-always survives.
+  Every entry naming a public method of the resolved control is accepted, including the binding keys, which the config
+  overrides. The validation state classes are merged into `class` rather than replacing it, so a configured `class`
+  always survives.
