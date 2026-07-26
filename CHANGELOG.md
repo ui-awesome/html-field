@@ -24,3 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - refactor: replace `method_exists()` capability checks in `AbstractField` with `ui-awesome/html-contracts` interfaces.
 - chore: require the `ui-awesome/html-contracts ^0.2` development line.
 - test: replace the `InputWidget` stub with real `ui-awesome/html` controls across the suite.
+- chore: rename the `test` composer script to `tests` and migrate the Infection configuration to `infection.json5` for ecosystem consistency.
+- feat!: apply field configurations through the core Config applier in strict mode; unknown methods now throw `ConfigException`.
+- feat!: apply field configurations to the form control only; entries naming field-level methods must move to the field or a theme recipe.
+- feat: reject field config entries indexed by non-string or empty keys and entries passing named arguments with `InvalidFieldConfig`.
+- refactor: remove `applyDefinitionsToWidget()` and the last `method_exists()` capability check from `AbstractField`.
+- docs: add `UPGRADE.md` and document the supported field config shapes and strict-mode failures.
+- fix: apply the field configuration once per render against the resolved control, removing fluent-order sensitivity where a replacement-control entry threw against the default control.
+- refactor: guard the form model binding with an `instanceof` check instead of `@var` narrowing, keeping the intrinsic binding type-safe under style fixers.
+- feat!: apply field configuration after model binding so explicit entries override derived `value`, `id`, `name`, `checked`, and `placeholder` state.
+- fix: derive the label `for` attribute from the control's final `id`, keeping it linked when a field configuration overrides the identifier.

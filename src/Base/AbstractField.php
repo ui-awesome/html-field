@@ -20,11 +20,11 @@ use UIAwesome\Html\Contracts\Form\{
 };
 use UIAwesome\Html\Contracts\RenderableInterface;
 use UIAwesome\Html\Core\Base\BaseTag;
-use UIAwesome\Html\Core\Config\{ComponentContext, Config};
+use UIAwesome\Html\Core\Config\{Call, ComponentContext, Config, ConfigApplier, Cookbook, Recipe};
 use UIAwesome\Html\Core\Exception\{ConfigException, Message as ConfigMessage};
 use UIAwesome\Html\Core\Factory\SimpleFactory;
 use UIAwesome\Html\Core\Html;
-use UIAwesome\Html\Field\Exception\{AttributeNotSet, InvalidControl};
+use UIAwesome\Html\Field\Exception\{AttributeNotSet, InvalidControl, InvalidFieldConfig};
 use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Mixin\{
     CanBeEnclosedByLabel,
@@ -47,11 +47,11 @@ use UIAwesome\Html\Mixin\{
 use UIAwesome\Html\Phrasing\Label;
 use UnitEnum;
 
+use function array_is_list;
 use function get_debug_type;
 use function implode;
 use function is_array;
 use function is_string;
-use function method_exists;
 use function preg_replace;
 
 /**
@@ -314,6 +314,9 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the field, or an empty string until the form model, property, and control are configured.
+     *
+     * @throws ConfigException If the form model field config cannot be applied to the resolved control.
+     * @throws InvalidFieldConfig If the form model field config shape is not supported.
      */
     protected function run(): string
     {
@@ -326,6 +329,7 @@ abstract class AbstractField extends BaseTag
         }
 
         $widget = $this->configureWidget($widget, $formModel, $property);
+        $widget = $this->applyFieldConfig($widget, $formModel, $property);
 
         return $this->renderOptionalTag(
             $this->containerAttributes,
@@ -355,30 +359,47 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
-     * Applies form model field config entries to the control by calling matching methods.
+     * Applies the form model field config to the resolved control through the core config applier in strict mode.
      *
-     * Unsupported entries are skipped, and a call whose result is not a compatible control is discarded.
+     * The field config is applied once per render, against the control the field ultimately renders, so the fluent
+     * call order does not change the outcome. A call naming a method the control does not expose fails instead of
+     * being skipped.
      *
-     * @param array<array-key, mixed> $definitions Method arguments indexed by control method name.
+     * The form model binding runs first and derives the control state, so field config entries act as explicit
+     * per-property overrides and are never silently discarded.
+     *
+     * @throws ConfigException If a call is unavailable, returns an incompatible control, fails during execution, or
+     * the applier returns a component incompatible with the control.
+     * @throws InvalidFieldConfig If the field config shape cannot be converted into ordered config calls.
      */
-    private function applyDefinitionsToWidget(
+    private function applyFieldConfig(
         AttributesInterface&RenderableInterface $widget,
-        array $definitions,
+        FormModelInterface $formModel,
+        string $property,
     ): AttributesInterface&RenderableInterface {
-        foreach ($definitions as $action => $arguments) {
-            $method = (string) $action;
+        $context = self::slotContext($this->configContext ?? new ComponentContext('field'), 'control');
 
-            if (method_exists($widget, $method)) {
-                /** @phpstan-ignore method.dynamicName */
-                $configured = $widget->{$method}(...(is_array($arguments) ? $arguments : [$arguments]));
+        $configured = (new ConfigApplier())->apply(
+            $widget,
+            new Recipe(
+                "field-config.{$property}",
+                self::toCookbook($formModel->getFieldConfig($property), $property),
+            ),
+            $context,
+            strict: true,
+        );
 
-                if ($configured instanceof $widget) {
-                    $widget = $configured;
-                }
-            }
+        if (($configured instanceof $widget) === false) {
+            throw new ConfigException(
+                ConfigMessage::CONFIG_RETURNED_INCOMPATIBLE_COMPONENT->getMessage(
+                    $context->component,
+                    get_debug_type($widget),
+                    get_debug_type($configured),
+                ),
+            );
         }
 
-        return $widget;
+        return $configured;
     }
 
     /**
@@ -502,7 +523,6 @@ abstract class AbstractField extends BaseTag
 
         $id = Naming::generateInputId($formModel->getModelName(), $property);
 
-        /** @var static $configured */
         $configured = SimpleFactory::configure(
             $this,
             [
@@ -514,13 +534,14 @@ abstract class AbstractField extends BaseTag
             ],
         );
 
-        $fieldConfig = $formModel->getFieldConfig($property);
-
-        /** @var static $configured */
-        $configured = SimpleFactory::configure($configured, $fieldConfig);
-
-        if ($configured->widget !== null) {
-            $configured->widget = $configured->applyDefinitionsToWidget($configured->widget, $fieldConfig);
+        if (($configured instanceof $this) === false) {
+            throw new ConfigException(
+                ConfigMessage::CONFIG_RETURNED_INCOMPATIBLE_COMPONENT->getMessage(
+                    'field',
+                    get_debug_type($this),
+                    get_debug_type($configured),
+                ),
+            );
         }
 
         return $configured;
@@ -547,18 +568,6 @@ abstract class AbstractField extends BaseTag
         }
 
         return $widget;
-    }
-
-    /**
-     * Returns the form model field config for the configured property.
-     *
-     * @return array<array-key, mixed> Field config entries, or an empty array until model and property are set.
-     */
-    private function getFieldConfig(): array
-    {
-        return $this->formModel === null || $this->property === ''
-            ? []
-            : $this->formModel->getFieldConfig($this->property);
     }
 
     /**
@@ -653,6 +662,8 @@ abstract class AbstractField extends BaseTag
     /**
      * Renders the label, enclosing the control when configured.
      *
+     * The `for` attribute follows the control's final `id`, so a field config overriding it stays linked.
+     *
      * @return array{AttributesInterface&RenderableInterface, string} Control to render and the rendered label markup.
      */
     private function renderLabelTag(AttributesInterface&RenderableInterface $widget): array
@@ -661,7 +672,7 @@ abstract class AbstractField extends BaseTag
             return [$widget, ''];
         }
 
-        $id = $this->getAttribute('id');
+        $id = $widget->getAttribute('id');
         $for = $this->getLabelAttribute('for', is_string($id) ? $id : null);
 
         $for = is_string($for) ? $for : null;
@@ -749,12 +760,48 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
-     * Stores a form control and applies any already resolved form-model definitions.
+     * Converts a form model field config into ordered config calls.
+     *
+     * A bare value becomes a single positional argument, and a list becomes the ordered argument list. Associative
+     * argument arrays are rejected because config calls are positional.
+     *
+     * @param array<array-key, mixed> $fieldConfig Bare values or positional argument lists indexed by method name.
+     * @param string $property Name of the form model property owning the field config.
+     *
+     * @throws InvalidFieldConfig If an entry is not indexed by a method name or passes named arguments.
+     */
+    private static function toCookbook(array $fieldConfig, string $property): Cookbook
+    {
+        $calls = [];
+
+        foreach ($fieldConfig as $method => $arguments) {
+            if (is_string($method) === false || $method === '') {
+                throw InvalidFieldConfig::forMethodName($property);
+            }
+
+            if (is_array($arguments) === false) {
+                $calls[] = new Call($method, $arguments);
+
+                continue;
+            }
+
+            if (array_is_list($arguments) === false) {
+                throw InvalidFieldConfig::forNamedArguments($method, $property);
+            }
+
+            $calls[] = new Call($method, ...$arguments);
+        }
+
+        return new Cookbook(...$calls);
+    }
+
+    /**
+     * Stores a form control, switching the input template for controls rendered before their label.
      */
     private function withWidget(AttributesInterface&RenderableInterface $widget): static
     {
         $new = clone $this;
-        $new->widget = $new->applyDefinitionsToWidget($widget, $new->getFieldConfig());
+        $new->widget = $widget;
 
         if ($widget instanceof CheckedStateInterface && ($widget instanceof ChoiceListInterface) === false) {
             $new->inputTemplate = "{input}\n{label}";

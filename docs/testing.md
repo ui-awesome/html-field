@@ -40,5 +40,5 @@ composer run psalm
 The code is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
 ```shell
-composer run test
+composer run tests
 ```

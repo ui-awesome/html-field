@@ -61,6 +61,53 @@ $daisyUiField = Field::tag()->config($daisyUi)->control('email');
 Calls made after `config()` are local overrides. An explicit input configured before `config()` receives the generic
 `field.control` recipe; an input supplied afterward intentionally replaces the themed control.
 
+## Form model field configurations
+
+`FormModelInterface::getFieldConfig()` entries are converted into config calls and applied to the form control through
+the core config applier in strict mode. Entries are indexed by method name; a bare value becomes a single positional
+argument and a list becomes the ordered argument list.
+
+```php
+use UIAwesome\FormModel\Attribute\FieldConfig;
+
+final class LoginForm extends BaseFormModel
+{
+    #[FieldConfig(['class' => ['form-control'], 'maxlength' => 10])]
+    public string $email = '';
+}
+```
+
+The field config is applied when the field renders, against the control the field finally resolves, exactly once per
+render. Because the resolved control is what gets configured, `control()` and `input()` may appear anywhere in the
+fluent chain: entries valid only on a replacement control, such as `rows` for `TextArea`, are checked against that
+replacement and never against the default `text` control.
+
+Strict mode makes typos fail instead of rendering a control that silently ignores them. An entry naming a method the
+resolved control does not expose throws `ConfigException` at render time:
+
+```text
+Config call 'maxlenght' from recipe 'field-config.email' is not a public instance method for component
+'field.control' (UIAwesome\Html\Form\InputText).
+```
+
+The recipe name traces the originating property, and the component identifier is the `field.control` slot derived from
+the field context, so an error reports exactly which property and which control rejected the call.
+
+`InvalidFieldConfig` is thrown before any call runs when an entry is indexed by a non-string or empty key, or passes
+its arguments as an associative array instead of a positional list.
+
+The field derives the control state from the model first and applies the field config last, so entries are explicit
+per-property overrides and are never silently discarded. Precedence runs model-derived binding < field fluent state
+(`Field::value()`) < field configuration, which means `['value' => 'admin']` outranks both the model value and
+`Field::value()`, and the same holds for `id`, `name`, `checked`, and `placeholder`.
+
+Artifacts derived from the control follow its final state: a `['id' => 'custom-id']` entry renders the label as
+`for="custom-id"`, and `aria-describedby` keeps pointing at the rendered hint element. Validation state classes are
+merged into `class` rather than replacing it, so a configured `class` always survives.
+
+Field configurations target the form control, not the `Field` itself. Configure field-level slots such as `template`
+or `containerTag` on the field or through a theme recipe.
+
 ## Semantic control factory
 
 The default registry supports `checkbox`, `checkbox-list`, `email`, `password`, `radio`, `radio-list`, `select`,
