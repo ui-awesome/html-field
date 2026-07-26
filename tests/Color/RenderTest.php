@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Color;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Color};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputColor;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see InputColor}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('color')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -21,7 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->attributes(['class' => 'value'])->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->attributes(['class' => 'value'])
+                ->input(InputColor::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -34,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->class('value')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->class('value')
+                ->input(InputColor::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -47,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Color::widget())
-                ->render()
+                ->input(InputColor::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -63,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->containerClass('value')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->containerClass('value')
+                ->input(InputColor::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -76,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag()->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::DIV)
+                ->input(InputColor::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -87,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="color">
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag(false)->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(false)
+                ->input(InputColor::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -100,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="color">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('article')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputColor::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -113,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->id('value')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->id('value')
+                ->input(InputColor::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -128,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -147,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -166,10 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
-                ->inputContainerTag()
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -182,10 +241,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->inputContainerTag(false)
-                ->render()
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -200,10 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
-                ->inputContainerTag('article')
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input must be wrapped in the given tag.',
         );
     }
 
@@ -218,10 +283,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -234,7 +302,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="value" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->name('value')
+                ->render(),
+            "'name' must use the given value.",
         );
     }
 
@@ -248,7 +322,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -264,12 +344,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -285,12 +368,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -306,11 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -324,11 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -342,11 +434,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
-                ->render()
+                ->prefixTag(Inline::SPAN)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -359,7 +454,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->render(),
+            'Default structure must be rendered.',
         );
     }
 
@@ -373,7 +473,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -389,12 +495,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -410,12 +519,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -431,11 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -449,11 +564,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -467,11 +585,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
-                ->render()
+                ->suffixTag(Inline::SPAN)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -486,10 +607,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -502,7 +626,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color" value="#000000">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->value('#000000')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->value('#000000')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -511,7 +641,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('color', '');
+        $formModel->setValue('color', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -520,10 +650,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->input(InputColor::tag())
+                ->render(),
+            "Empty 'string' must omit 'value'.",
         );
 
-        $formModel->setPropertyValue('color', '#000000');
+        $formModel->setValue('color', '#000000');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -532,11 +667,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color" value="#000000">
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->input(InputColor::tag())
+                ->render(),
+            "Model value must fill 'value'.",
         );
 
         // null value
-        $formModel->setPropertyValue('color', null);
+        $formModel->setValue('color', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -545,7 +685,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->input(InputColor::tag())
+                ->render(),
+            "'null' must omit 'value'.",
         );
     }
 
@@ -558,7 +703,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Color::widget())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputColor::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit 'value'.",
         );
     }
 
@@ -571,7 +722,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[color]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->id(null)->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->id(null)
+                ->input(InputColor::tag())
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -584,7 +741,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-color" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->input(Color::widget())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->input(InputColor::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

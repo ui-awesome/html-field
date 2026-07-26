@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Url;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Url};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputUrl;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see InputUrl}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('url')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -20,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(InputUrl::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -32,7 +42,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="url"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->enclosedByLabel(true)->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->enclosedByLabel(true)
+                ->input(InputUrl::tag())
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -45,7 +61,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Url::widget())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputUrl::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -58,10 +80,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputUrl::tag())
                 ->labelAttributes(['class' => 'class'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -74,7 +99,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Url::widget())->labelClass('class')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputUrl::tag())
+                ->labelClass('class')
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -87,7 +118,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Url::widget())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputUrl::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

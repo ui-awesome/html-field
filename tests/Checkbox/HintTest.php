@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Checkbox;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Checkbox};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputCheckbox;
+use UIAwesome\Html\Interop\Inline;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} hint rendering with {@see InputCheckbox}.
  */
-final class HintTest extends \PHPUnit\Framework\TestCase
+#[Group('checkbox')]
+final class HintTest extends TestCase
 {
     public function testHint(): void
     {
@@ -24,7 +29,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->input(Checkbox::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->input(InputCheckbox::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -40,10 +50,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(Checkbox::widget())
-                ->render()
+                ->input(InputCheckbox::tag())
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -59,7 +72,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->input(Checkbox::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintClass('value')
+                ->input(InputCheckbox::tag())
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -75,7 +94,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')->hintContent('Hint')->input(Checkbox::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->hintContent('Hint')
+                ->input(InputCheckbox::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -89,7 +114,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->input(Checkbox::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Inline::SPAN)
+                ->input(InputCheckbox::tag())
+                ->render(),
+            'Hint must render as the given tag.',
         );
     }
 }

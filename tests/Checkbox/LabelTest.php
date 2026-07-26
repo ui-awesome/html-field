@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Checkbox;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Checkbox};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputCheckbox;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see InputCheckbox}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('checkbox')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -20,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="checkbox">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Checkbox::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(InputCheckbox::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -35,45 +45,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->enclosedByLabel(true)->input(Checkbox::widget())->render()
-        );
-    }
-
-    public function testEnclosedByLabelWithLabel(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label for="basicform-label">
-            <input id="basicform-label" name="BasicForm[label]" type="checkbox">
-            Label
-            </label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->enclosedByLabel(true)
-                ->input(Checkbox::widget())
-                ->label('Label')
-                ->render()
-        );
-    }
-
-    public function testEnclosedByLabelWithLabelFor(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label for="value">
-            <input id="basicform-label" name="BasicForm[label]" type="checkbox">
-            This is a label.
-            </label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->enclosedByLabel(true)
-                ->input(Checkbox::widget())
-                ->labelFor('value')
-                ->render()
+                ->input(InputCheckbox::tag())
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -88,10 +66,57 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->enclosedByLabel(true)
-                ->input(Checkbox::widget()->enclosedByLabel(true))
-                ->render()
+                ->input(InputCheckbox::tag())
+                ->render(),
+            'Label must enclose the control.',
+        );
+    }
+
+    public function testEnclosedByLabelWithLabel(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-label">
+            <input id="basicform-label" name="BasicForm[label]" type="checkbox">
+            Label
+            </label>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->enclosedByLabel(true)
+                ->input(InputCheckbox::tag())
+                ->label('Label')
+                ->render(),
+            'Enclosing label must use the given content.',
+        );
+    }
+
+    public function testEnclosedByLabelWithLabelFor(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="value">
+            <input id="basicform-label" name="BasicForm[label]" type="checkbox">
+            This is a label.
+            </label>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->enclosedByLabel(true)
+                ->input(InputCheckbox::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 
@@ -104,7 +129,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label">Label</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Checkbox::widget())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputCheckbox::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -117,10 +148,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label class="value" for="basicform-label">This is a label.</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Checkbox::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputCheckbox::tag())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -133,7 +167,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label class="value" for="basicform-label">This is a label.</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Checkbox::widget())->labelClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputCheckbox::tag())
+                ->labelClass('value')
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -146,7 +186,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="value">This is a label.</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Checkbox::widget())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputCheckbox::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

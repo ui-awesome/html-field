@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Radio;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputRadio;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see InputRadio}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('radio')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -20,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="radio">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Radio::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(InputRadio::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -35,45 +45,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->enclosedByLabel(true)->input(Radio::widget())->render()
-        );
-    }
-
-    public function testEnclosedByLabelWithLabelContent(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label for="basicform-label">
-            <input id="basicform-label" name="BasicForm[label]" type="radio">
-            Label
-            </label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->enclosedByLabel(true)
-                ->input(Radio::widget())
-                ->label('Label')
-                ->render()
-        );
-    }
-
-    public function testEnclosedByLabelWithLabelFor(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label for="value">
-            <input id="basicform-label" name="BasicForm[label]" type="radio">
-            This is a label.
-            </label>
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->enclosedByLabel(true)
-                ->input(Radio::widget())
-                ->labelFor('value')
-                ->render()
+                ->input(InputRadio::tag())
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -88,10 +66,57 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             </label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->enclosedByLabel(true)
-                ->input(Radio::widget()->enclosedByLabel(true))
-                ->render()
+                ->input(InputRadio::tag())
+                ->render(),
+            'Label must enclose the control.',
+        );
+    }
+
+    public function testEnclosedByLabelWithLabelContent(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-label">
+            <input id="basicform-label" name="BasicForm[label]" type="radio">
+            Label
+            </label>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->enclosedByLabel(true)
+                ->input(InputRadio::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
+        );
+    }
+
+    public function testEnclosedByLabelWithLabelFor(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="value">
+            <input id="basicform-label" name="BasicForm[label]" type="radio">
+            This is a label.
+            </label>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->enclosedByLabel(true)
+                ->input(InputRadio::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 
@@ -104,7 +129,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label">Label</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Radio::widget())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRadio::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -117,10 +148,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label class="value" for="basicform-label">This is a label.</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Radio::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRadio::tag())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -133,7 +167,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label class="value" for="basicform-label">This is a label.</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Radio::widget())->labelClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRadio::tag())
+                ->labelClass('value')
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -146,7 +186,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="value">This is a label.</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Radio::widget())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputRadio::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

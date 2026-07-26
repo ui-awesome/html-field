@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} placeholder rendering with {@see \UIAwesome\Html\Form\InputText}.
  */
-final class PlaceholderTest extends \PHPUnit\Framework\TestCase
+#[Group('text')]
+final class PlaceholderTest extends TestCase
 {
     public function testPlaceholder(): void
     {
@@ -21,7 +24,11 @@ final class PlaceholderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-placeholder" name="BasicForm[placeholder]" type="text" placeholder="This is a placeholder.">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'placeholder')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('placeholder')
+                ->render(),
+            "'placeholder' must be serialized.",
         );
     }
 }

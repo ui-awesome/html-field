@@ -7,20 +7,22 @@ namespace UIAwesome\Html\Field\Exception;
 use InvalidArgumentException;
 
 /**
- * Thrown when the widget is created without attribute.
+ * Thrown when the configured form model property does not exist.
+ *
+ * Usage example:
+ * ```php
+ * throw new \UIAwesome\Html\Field\Exception\AttributeNotSet('email');
+ * ```
  */
 final class AttributeNotSet extends InvalidArgumentException
 {
-    public function __construct(string $message = '')
-    {
-        parent::__construct($message ?: $this->getName());
-    }
-
     /**
-     * @return string the user-friendly name of this exception
+     * @param string $property Name of the missing form model property.
      */
-    private function getName(): string
+    public function __construct(string $property)
     {
-        return 'Failed to create widget because "attribute" is not set or not exists.';
+        parent::__construct(
+            Message::ATTRIBUTE_NOT_SET->getMessage($property),
+        );
     }
 }

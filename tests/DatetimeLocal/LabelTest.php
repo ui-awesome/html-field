@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\DatetimeLocal;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\DatetimeLocal};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputDateTimeLocal;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see InputDateTimeLocal}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('datetimelocal')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -20,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="datetime-local">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(DatetimeLocal::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -32,7 +42,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="datetime-local"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(DatetimeLocal::widget())->enclosedByLabel(true)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputDateTimeLocal::tag())
+                ->enclosedByLabel(true)
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -45,7 +61,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="datetime-local">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(DatetimeLocal::widget())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputDateTimeLocal::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -58,10 +80,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="datetime-local">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(DatetimeLocal::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputDateTimeLocal::tag())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -74,7 +99,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="datetime-local">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(DatetimeLocal::widget())->labelClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputDateTimeLocal::tag())
+                ->labelClass('value')
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -87,7 +118,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="datetime-local">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(DatetimeLocal::widget())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputDateTimeLocal::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

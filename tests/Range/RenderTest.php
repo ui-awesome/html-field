@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Range;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Range};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputRange;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see InputRange}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('range')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -21,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->attributes(['class' => 'value'])
-                ->input(Range::widget())
-                ->render()
+                ->input(InputRange::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -37,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->class('value')->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->class('value')
+                ->input(InputRange::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -50,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Range::widget())
-                ->render()
+                ->input(InputRange::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -66,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerClass('value')->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerClass('value')
+                ->input(InputRange::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -79,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerTag()->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerTag(Block::DIV)
+                ->input(InputRange::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -90,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-monthofbirth">Month Of Birth</label>
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerTag(false)->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerTag(false)
+                ->input(InputRange::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -103,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->containerTag('article')->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputRange::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -116,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->id('value')->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->id('value')
+                ->input(InputRange::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -131,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -150,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -169,10 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
-                ->inputContainerTag()
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -185,7 +241,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -200,10 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -216,7 +281,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="value" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->name('value')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -230,7 +301,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -246,12 +323,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -267,12 +347,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -288,11 +371,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->prefix('prefix')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -306,11 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -324,11 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
-                ->render()
+                ->prefixTag(Inline::SPAN)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -341,7 +433,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->render(),
+            'Default layout must be rendered.',
         );
     }
 
@@ -355,7 +452,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -371,12 +474,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -392,12 +498,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -413,11 +522,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->suffix('suffix')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -431,11 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -449,11 +564,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
-                ->render()
+                ->suffixTag(Inline::SPAN)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -468,10 +586,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')
-                ->input(Range::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -484,7 +605,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range" value="11">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->value('11')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->value('11')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -493,7 +620,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('monthOfBirth', '11');
+        $formModel->setValue('monthOfBirth', '11');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -502,11 +629,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range" value="11">
             </div>
             HTML,
-            Field::widget($formModel, 'monthOfBirth')->input(Range::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->render(),
+            'Model value must be serialized.',
         );
 
         // null value
-        $formModel->setPropertyValue('monthOfBirth', null);
+        $formModel->setValue('monthOfBirth', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -515,7 +647,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget($formModel, 'monthOfBirth')->input(Range::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -528,7 +665,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -541,7 +684,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[monthOfBirth]" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->id(null)->input(Range::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->id(null)
+                ->input(InputRange::tag())
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -554,7 +703,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-monthofbirth" type="range">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'monthOfBirth')->input(Range::widget())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('monthOfBirth')
+                ->input(InputRange::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

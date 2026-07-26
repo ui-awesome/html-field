@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Color;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Color};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputColor;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see InputColor}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('color')]
+final class LabelTest extends TestCase
 {
-    public function testDisableLabel()
+    public function testDisableLabel(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
@@ -20,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(InputColor::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -32,7 +42,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="color"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->enclosedByLabel(true)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputColor::tag())
+                ->enclosedByLabel(true)
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -45,7 +61,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputColor::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -58,10 +80,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Color::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputColor::tag())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -74,7 +99,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->labelClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputColor::tag())
+                ->labelClass('value')
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -87,7 +118,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="color">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Color::widget())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputColor::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Number;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Number};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputNumber;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see InputNumber}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('number')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -21,10 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
                 ->attributes(['class' => 'value'])
-                ->input(Number::widget())
-                ->render()
+                ->input(InputNumber::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -37,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->class('value')->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->class('value')
+                ->input(InputNumber::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -50,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Number::widget())
-                ->render()
+                ->input(InputNumber::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -66,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerClass('value')->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->containerClass('value')
+                ->input(InputNumber::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -79,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerTag()->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->containerTag(Block::DIV)
+                ->input(InputNumber::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -90,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-amount">Amount</label>
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerTag(false)->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->containerTag(false)
+                ->input(InputNumber::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -103,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->containerTag('article')->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputNumber::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -116,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->id('value')->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->id('value')
+                ->input(InputNumber::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -131,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -150,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -169,10 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
-                ->inputContainerTag()
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -185,7 +241,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -200,10 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -216,7 +281,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="value" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->name('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->name('value')
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -230,7 +301,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -246,12 +323,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -267,12 +347,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -288,7 +371,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->prefix('prefix')->prefixTag()->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->prefix('prefix')
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -302,11 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -320,11 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
-                ->render()
+                ->prefixTag(Inline::SPAN)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -337,7 +433,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->render(),
+            'Default field structure must be rendered.',
         );
     }
 
@@ -351,7 +452,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -367,12 +474,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -388,12 +498,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -409,11 +522,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -427,11 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -445,11 +564,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
-                ->render()
+                ->suffixTag(Inline::SPAN)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -464,10 +586,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')
-                ->input(Number::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -480,7 +605,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number" value="20">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->value('20')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->value('20')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -489,7 +620,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('amount', '20');
+        $formModel->setValue('amount', '20');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -498,11 +629,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number" value="20">
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->input(Number::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->render(),
+            "'value' must reflect the model value.",
         );
 
         // null value
-        $formModel->setPropertyValue('amount', null);
+        $formModel->setValue('amount', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -511,7 +647,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget($formModel, 'amount')->input(Number::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -524,7 +665,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -537,7 +684,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[amount]" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->id(null)->input(Number::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->id(null)
+                ->input(InputNumber::tag())
+                ->render(),
+            "'null' must omit 'id' and the label 'for'.",
         );
     }
 
@@ -550,7 +703,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-amount" type="number">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'amount')->input(Number::widget())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('amount')
+                ->input(InputNumber::tag())
+                ->name(null)
+                ->render(),
+            "'null' must omit the 'name' attribute.",
         );
     }
 }

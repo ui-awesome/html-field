@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Url;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Url};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputUrl;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} hint rendering with {@see InputUrl}.
  */
-final class HintTest extends \PHPUnit\Framework\TestCase
+#[Group('url')]
+final class HintTest extends TestCase
 {
     public function testHint(): void
     {
@@ -24,7 +29,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->input(InputUrl::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -40,10 +50,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(Url::widget())
-                ->render()
+                ->input(InputUrl::tag())
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -59,7 +72,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintClass('value')
+                ->input(InputUrl::tag())
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -75,7 +94,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->hintContent('Hint')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->hintContent('Hint')
+                ->input(InputUrl::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -91,7 +116,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag()->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Block::DIV)
+                ->input(InputUrl::tag())
+                ->render(),
+            "Hint must render as '<div>'.",
         );
     }
 
@@ -105,7 +136,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag(false)->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(false)
+                ->input(InputUrl::tag())
+                ->render(),
+            'Hint tag must be omitted.',
         );
     }
 
@@ -119,7 +156,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Inline::SPAN)
+                ->input(InputUrl::tag())
+                ->render(),
+            'Hint must render as the given tag.',
         );
     }
 }

@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Time;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Time};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputTime;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see InputTime}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('time')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -20,7 +24,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="time">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->disableLabel()->input(Time::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(InputTime::tag())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -32,20 +42,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="time"></label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->enclosedByLabel(true)->input(Time::widget())->render()
-        );
-    }
-
-    public function testLabelContent(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label for="basicform-label">Label</label>
-            <input id="basicform-label" name="BasicForm[label]" type="time">
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'label')->input(Time::widget())->label('Label')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->enclosedByLabel(true)
+                ->input(InputTime::tag())
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -58,10 +61,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="time">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Time::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputTime::tag())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -74,7 +80,32 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="time">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Time::widget())->labelClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputTime::tag())
+                ->labelClass('value')
+                ->render(),
+            "Label 'class' must be serialized.",
+        );
+    }
+
+    public function testLabelContent(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-label">Label</label>
+            <input id="basicform-label" name="BasicForm[label]" type="time">
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputTime::tag())
+                ->label('Label')
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -87,7 +118,13 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-label" name="BasicForm[label]" type="time">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')->input(Time::widget())->labelFor('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(InputTime::tag())
+                ->labelFor('value')
+                ->render(),
+            "'for' must use the given value.",
         );
     }
 }

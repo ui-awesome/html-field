@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Color;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Color};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputColor;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} error rendering with {@see InputColor}.
  */
-final class ErrorTest extends \PHPUnit\Framework\TestCase
+#[Group('color')]
+final class ErrorTest extends TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('color', 'Error');
+
+        $formModel->addError('color', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +33,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->input(InputColor::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('color', 'Error');
+
+        $formModel->addError('color', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,14 +58,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'color')->errorAttributes(['class' => 'value'])->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->errorAttributes(['class' => 'value'])
+                ->input(InputColor::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('color', 'Error');
+
+        $formModel->addError('color', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -65,7 +84,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'color')->errorClass('value')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->errorClass('value')
+                ->input(InputColor::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
@@ -81,14 +106,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'color')->errorContent('Error')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('color')
+                ->errorContent('Error')
+                ->input(InputColor::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('color', 'Error');
+
+        $formModel->addError('color', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -100,14 +132,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'color')->errorTag()->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->errorTag(Block::DIV)
+                ->input(InputColor::tag())
+                ->render(),
+            "Error must render as '<div>'.",
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('color', 'Error');
+
+        $formModel->addError('color', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -117,14 +156,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'color')->errorTag(false)->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->errorTag(false)
+                ->input(InputColor::tag())
+                ->render(),
+            'Error tag must be omitted.',
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('color', 'Error');
+
+        $formModel->addError('color', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -134,15 +180,22 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'color')->errorTag('span')->input(Color::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->errorTag(Inline::SPAN)
+                ->input(InputColor::tag())
+                ->render(),
+            'Error must render as the given tag.',
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('color', 'Error - 1');
-        $formModel->addPropertyError('color', 'Error - 2');
+
+        $formModel->addError('color', 'Error - 1');
+        $formModel->addError('color', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -155,7 +208,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'color')->input(Color::widget())->showAllErrors()->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('color')
+                ->input(InputColor::tag())
+                ->showAllErrors()
+                ->render(),
+            'All errors must be rendered.',
         );
     }
 }

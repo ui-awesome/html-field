@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Select};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{Optgroup, Option, Select};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see Select}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('select')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -19,15 +24,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select class="value" id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->attributes(['class' => 'value'])
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+                ->input(self::select())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -38,15 +50,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select class="value" id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->class('value')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+                ->input(self::select())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -57,15 +76,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+                ->input(self::select())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -76,15 +102,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerClass('value')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+                ->input(self::select())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -95,15 +128,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->containerTag()
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->containerTag(Block::DIV)
+                ->input(self::select())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -113,14 +153,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerTag(false)
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+                ->input(self::select())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -131,15 +178,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <article>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->containerTag('article')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->containerTag(Block::ARTICLE)
+                ->input(self::select())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -150,15 +204,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="value">Fruits</label>
             <select id="value" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->id('value')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->render()
+                ->input(self::select())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -170,17 +231,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -192,17 +260,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -214,16 +289,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->inputContainerTag()
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -234,15 +316,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->inputContainerTag(false)
-                ->render()
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -254,16 +343,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <article>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
-                ->inputContainerTag('article')
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -274,17 +370,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <label for="basicform-fruits">Fruits</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -295,15 +398,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="value">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->name('value')
-                ->render()
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -315,15 +425,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             prefix
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->prefix('prefix')
-                ->render()
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -337,17 +454,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -361,17 +485,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -385,16 +516,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->prefix('prefix')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -406,16 +544,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             prefix
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -429,16 +574,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->prefix('prefix')
-                ->prefixTag('article')
-                ->render()
+                ->prefixTag(Block::ARTICLE)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -449,12 +601,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
+                ->render(),
+            'Default layout must be rendered.',
         );
     }
 
@@ -465,16 +626,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->suffix('suffix')
-                ->render()
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -485,20 +653,27 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -509,20 +684,27 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -533,19 +715,26 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div>
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->suffix('suffix')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -556,17 +745,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -577,17 +773,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->suffix('suffix')
-                ->suffixTag('span')
-                ->render()
+                ->suffixTag(Inline::SPAN)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -599,16 +802,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -619,12 +829,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1" selected>Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1" selected>
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')->input(Select::widget()->items([1 => 'Apple']))->value(1)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
+                ->value(1)
+                ->render(),
+            "'selected' must be serialized.",
         );
     }
 
@@ -633,98 +853,147 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // int value
-        $formModel->setPropertyValue('fruits', 1);
+        $formModel->setValue('fruits', 1);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1" selected>Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1" selected>
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(self::select())
+                ->render(),
+            "'int' value must select the matching option.",
         );
 
         // string value
-        $formModel->setPropertyValue('fruits', '1');
+        $formModel->setValue('fruits', '1');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1" selected>Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1" selected>
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(self::select())
+                ->render(),
+            "'string' value must select the matching option.",
         );
 
         // array value
-        $formModel->setPropertyValue('fruits', [2, 3]);
+        $formModel->setValue('fruits', [2, 3]);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-fruits">Fruits</label>
-            <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
-            <option value="2" selected>Banana</option>
-            <option value="3" selected>Orange</option>
-            <option value="4">Pineapple</option>
+            <select id="basicform-fruits" name="BasicForm[fruits]" multiple>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
+            <option value="2" selected>
+            Banana
+            </option>
+            <option value="3" selected>
+            Orange
+            </option>
+            <option value="4">
+            Pineapple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
                 ->input(
-                    Select::widget()
-                        ->items(
-                            [
-                                1 => 'Apple',
-                                2 => 'Banana',
-                                3 => 'Orange',
-                                4 => 'Pineapple',
-                            ]
-                        )
+                    Select::tag()
+                        ->multiple(true)
+                        ->options(
+                            Option::tag()->content('Select an option'),
+                            Option::tag()->content('Apple')->value(1),
+                            Option::tag()->content('Banana')->value(2),
+                            Option::tag()->content('Orange')->value(3),
+                            Option::tag()->content('Pineapple')->value(4),
+                        ),
                 )
-                ->render()
+                ->render(),
+            'Array value must select multiple options.',
         );
 
         // value not in items
-        $formModel->setPropertyValue('fruits', 5);
+        $formModel->setValue('fruits', 5);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(self::select())
+                ->render(),
+            'Unlisted value must select no option.',
         );
 
         // null value.
-        $formModel->setPropertyValue('fruits', null);
+        $formModel->setValue('fruits', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(self::select())
+                ->render(),
+            "'null' must select no option.",
         );
     }
 
@@ -735,15 +1004,62 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->value(null)
-                ->render()
+                ->render(),
+            "'null' must select no option.",
+        );
+    }
+
+    public function testValueWithOptgroup(): void
+    {
+        $formModel = new BasicForm();
+
+        $formModel->setValue('fruits', 'cat');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-fruits">Fruits</label>
+            <select id="basicform-fruits" name="BasicForm[fruits]">
+            <optgroup label="Pets">
+            <option value="dog">
+            Dog
+            </option>
+            <option value="cat" selected>
+            Cat
+            </option>
+            </optgroup>
+            </select>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(
+                    Select::tag()->optgroup(
+                        Optgroup::tag()
+                            ->label('Pets')
+                            ->options(
+                                Option::tag()->content('Dog')->value('dog'),
+                                Option::tag()->content('Cat')->value('cat'),
+                            ),
+                    ),
+                )
+                ->render(),
+            'Selected value must propagate to options inside an optgroup.',
         );
     }
 
@@ -754,12 +1070,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label>Fruits</label>
             <select name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')->id(null)->input(Select::widget()->items([1 => 'Apple']))->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->id(null)
+                ->input(self::select())
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -770,15 +1096,51 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'fruits')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::select())
                 ->name(null)
-                ->render()
+                ->render(),
+            "'name' must be omitted.",
+        );
+    }
+
+    public function testWithoutPrompt(): void
+    {
+        $output = Field::tag()
+            ->formModel(new BasicForm())
+            ->property('fruits')
+            ->input(
+                Select::tag()->option(
+                    Option::tag()->content('Apple')->value(1),
+                ),
+            )
+            ->value(1)
+            ->render();
+
+        self::assertStringNotContainsString('Select an option', $output, 'A null prompt must be omitted.');
+        self::assertStringContainsString(
+            '<option value="1" selected>',
+            $output,
+            'The matching option must remain selected without a prompt.',
+        );
+    }
+
+    private static function select(): Select
+    {
+        return Select::tag()->options(
+            Option::tag()->content('Select an option'),
+            Option::tag()->content('Apple')->value(1),
         );
     }
 }

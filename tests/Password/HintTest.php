@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Password;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Password};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputPassword;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} hint rendering with {@see InputPassword}.
  */
-final class HintTest extends \PHPUnit\Framework\TestCase
+#[Group('password')]
+final class HintTest extends TestCase
 {
     public function testHint(): void
     {
@@ -24,7 +29,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->input(InputPassword::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -40,10 +50,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(Password::widget())
-                ->render()
+                ->input(InputPassword::tag())
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -59,7 +72,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintClass('value')
+                ->input(InputPassword::tag())
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -75,7 +94,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'password')->hintContent('Hint')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->hintContent('Hint')
+                ->input(InputPassword::tag())
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -91,7 +116,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag()->input(Password::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Block::DIV)
+                ->input(InputPassword::tag())
+                ->render(),
+            "Hint must render as '<div>'.",
         );
     }
 
@@ -105,7 +136,8 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag(false)->input(Password::widget())->render()
+            Field::tag()->formModel(new BasicForm())->property('hint')->hintTag(false)->input(InputPassword::tag())->render(),
+            'Hint tag must be omitted.',
         );
     }
 
@@ -119,7 +151,13 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Inline::SPAN)
+                ->input(InputPassword::tag())
+                ->render(),
+            'Hint must render as the given tag.',
         );
     }
 }

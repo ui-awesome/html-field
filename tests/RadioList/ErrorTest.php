@@ -4,109 +4,108 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio, FormControl\Input\RadioList};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{ChoiceItem, RadioList};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} error rendering with {@see RadioList}.
  */
-final class ErrorTest extends \PHPUnit\Framework\TestCase
+#[Group('radiolist')]
+final class ErrorTest extends TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(self::radioList())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div class="value">
             Error
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
                 ->errorAttributes(['class' => 'value'])
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div class="value">
             Error
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
                 ->errorClass('value')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
@@ -116,140 +115,132 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->errorContent('Error')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->errorTag()
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->errorTag(Block::DIV)
+                ->input(self::radioList())
+                ->render(),
+            "Error must render as '<div>'.",
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
                 ->errorTag(false)
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            'Error tag must be omitted.',
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error');
+
+        $formModel->addError('agree', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->errorTag('span')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->errorTag(Inline::SPAN)
+                ->input(self::radioList())
+                ->render(),
+            'Error must render as the given tag.',
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('agree', 'Error - 1');
-        $formModel->addPropertyError('agree', 'Error - 2');
+
+        $formModel->addError('agree', 'Error - 1');
+        $formModel->addError('agree', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error - 1
@@ -257,16 +248,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(self::radioList())
                 ->showAllErrors()
-                ->render()
+                ->render(),
+            'All errors must be rendered.',
+        );
+    }
+
+    private static function radioList(): RadioList
+    {
+        return RadioList::tag()->items(
+            ChoiceItem::tag()->label('No')->value(0),
+            ChoiceItem::tag()->label('Yes')->value(1),
         );
     }
 }

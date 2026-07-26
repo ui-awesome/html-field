@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Url;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Url};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputUrl;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see InputUrl}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('url')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -21,7 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->attributes(['class' => 'value'])->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->attributes(['class' => 'value'])
+                ->input(InputUrl::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -34,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->class('value')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->class('value')
+                ->input(InputUrl::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -47,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Url::widget())
-                ->render()
+                ->input(InputUrl::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -63,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerClass('value')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->containerClass('value')
+                ->input(InputUrl::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -76,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerTag()->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->containerTag(Block::DIV)
+                ->input(InputUrl::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -87,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-url">Url</label>
             <input id="basicform-url" name="BasicForm[url]" type="url">
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerTag(false)->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->containerTag(false)
+                ->input(InputUrl::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -100,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'url')->containerTag('article')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputUrl::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -113,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="value" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->id('value')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->id('value')
+                ->input(InputUrl::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -128,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -147,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -166,7 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->inputContainerTag()->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -179,7 +241,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -194,7 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->inputContainerTag('article')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input must be wrapped in the given tag.',
         );
     }
 
@@ -209,10 +283,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -225,7 +302,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="value" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->name('value')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->name('value')
+                ->input(InputUrl::tag())
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -239,7 +322,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -255,12 +344,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -276,12 +368,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -297,7 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('prefix')->prefixTag()->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->prefix('prefix')
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -311,7 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('prefix')->prefixTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->prefix('prefix')
+                ->prefixTag(false)
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -325,7 +434,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->prefix('prefix')->prefixTag('span')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->prefix('prefix')
+                ->prefixTag(Inline::SPAN)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -338,7 +454,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->render(),
+            'Default field markup must be rendered.',
         );
     }
 
@@ -352,7 +473,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -368,12 +495,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -389,12 +519,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')
-                ->input(Url::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -410,7 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->suffixTag()->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->suffix('suffix')
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -424,7 +564,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->suffixTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->suffix('suffix')
+                ->suffixTag(false)
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -438,7 +585,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->suffix('suffix')->suffixTag('span')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->suffix('suffix')
+                ->suffixTag(Inline::SPAN)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -453,7 +607,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->template('<div>\n{field}\n</div>')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->template('<div>\n{field}\n</div>')
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -466,7 +626,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url" value="#000000">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->value('#000000')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->value('#000000')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -475,7 +641,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('url', '');
+        $formModel->setValue('url', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -484,10 +650,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->render(),
+            "Empty 'value' must be omitted.",
         );
 
-        $formModel->setPropertyValue('url', '#000000');
+        $formModel->setValue('url', '#000000');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -496,11 +667,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url" value="#000000">
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->render(),
+            "Model 'value' must be serialized.",
         );
 
         // null value
-        $formModel->setPropertyValue('url', null);
+        $formModel->setValue('url', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -509,7 +685,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget($formModel, 'url')->input(Url::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->render(),
+            "'null' 'value' must be omitted.",
         );
     }
 
@@ -522,7 +703,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->value(null)
+                ->render(),
+            "'value' must be omitted.",
         );
     }
 
@@ -535,7 +722,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[url]" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->id(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->id(null)
+                ->render(),
+            "'id' and the label 'for' must be omitted.",
         );
     }
 
@@ -548,7 +741,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-url" type="url">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'url')->input(Url::widget())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('url')
+                ->input(InputUrl::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }

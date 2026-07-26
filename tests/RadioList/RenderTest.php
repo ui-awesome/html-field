@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio, FormControl\Input\RadioList};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{ChoiceItem, RadioList};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see RadioList}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('radiolist')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -18,24 +23,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input class="value" id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input class="value" id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div class="value" id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->attributes(['class' => 'value'])
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -45,24 +47,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input class="value" id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input class="value" id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div class="value" id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->class('value')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -72,24 +71,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div class="value">
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerAttributes(['class' => 'value'])
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -99,24 +95,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div class="value">
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerClass('value')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -126,24 +119,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->containerTag()
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->containerTag(Block::DIV)
+                ->input(self::radioList())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -152,23 +142,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->containerTag(false)
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -178,24 +165,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <article>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->containerTag('article')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->containerTag(Block::ARTICLE)
+                ->input(self::radioList())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -205,24 +189,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="value-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="value-w0">No</label>
-            <input id="value-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="value-w1">Yes</label>
+            <div id="value">
+            <input id="value-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="value-0">No</label>
+            <input id="value-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="value-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->id('value')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->value(0)->label('No'),
-                            Radio::widget()->value(1)->label('Yes'),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -233,26 +214,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div class="value">
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -263,26 +241,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div class="value">
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -293,25 +268,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->inputContainerTag()
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -321,24 +293,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->inputContainerTag(false)
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -349,25 +318,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <article>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->inputContainerTag('article')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->inputContainerTag(Block::ARTICLE)
+                ->input(self::radioList())
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -377,26 +343,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <div>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <label>Agree</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -406,24 +369,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="value" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="value" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="value" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="value" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->value(0)->label('No'),
-                            Radio::widget()->value(1)->label('Yes'),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->name('value')
-                ->render()
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -434,24 +394,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             Prefix
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->prefix('Prefix')
-                ->render()
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -464,26 +421,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             prefix
             </div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -496,26 +450,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             prefix
             </div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -528,25 +479,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             prefix
             </div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->prefix('prefix')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -557,25 +505,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             prefix
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -586,25 +531,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <span>prefix</span>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->prefix('prefix')
-                ->prefixTag('span')
-                ->render()
+                ->prefixTag(Inline::SPAN)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -614,50 +556,20 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
-        );
-    }
-
-    public function testSuffix(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
-            </div>
-            suffix
-            </div>
-            HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
+                ->render(),
+            'Default layout must be rendered.',
         );
     }
 
@@ -667,29 +579,50 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
+        );
+    }
+
+    public function testSuffix(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label>Agree</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
+            </div>
+            suffix
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
+                ->suffix('suffix')->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -699,29 +632,26 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -731,28 +661,25 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             suffix
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->suffix('suffix')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -762,26 +689,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -791,26 +715,23 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->suffix('suffix')
-                ->suffixTag('span')
-                ->render()
+                ->suffixTag(Inline::SPAN)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -821,25 +742,22 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <div>
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -849,25 +767,24 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
+            <div id="basicform-agree">
             <input name="BasicForm[agree]" type="hidden" value="none">
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
+                    self::radioList()
                         ->uncheckedValue('none')
                 )
-                ->render()
+                ->render(),
+            'Hidden input must carry the unchecked value.',
         );
     }
 
@@ -877,24 +794,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1" checked>
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1" checked>
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->value(1)
-                ->render()
+                ->render(),
+            "'checked' must be serialized.",
         );
     }
 
@@ -903,107 +817,95 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // int values
-        $formModel->setPropertyValue('agree', 0);
+        $formModel->setValue('agree', 0);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0" checked>
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0" checked>
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(self::radioList())
+                ->render(),
+            "'int' value must check the matching item.",
         );
 
         // string values
-        $formModel->setPropertyValue('agree', '1');
+        $formModel->setValue('agree', '1');
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1" checked>
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1" checked>
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(self::radioList())
+                ->render(),
+            "'string' value must check the matching item.",
         );
 
         // value not in list
-        $formModel->setPropertyValue('agree', 7);
+        $formModel->setValue('agree', 7);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('agree')
+                ->input(self::radioList())
+                ->render(),
+            'Unlisted value must check no item.',
         );
 
         // null value
-        $formModel->setPropertyValue('fruits', null);
+        $formModel->setValue('fruits', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits]" type="radio" value="0">
-            <label for="basicform-fruits-w0">No</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits]" type="radio" value="1">
-            <label for="basicform-fruits-w1">Yes</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits]" type="radio" value="0">
+            <label for="basicform-fruits-0">No</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits]" type="radio" value="1">
+            <label for="basicform-fruits-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'fruits')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(self::radioList())
+                ->render(),
+            "'null' must check no item.",
         );
     }
 
@@ -1013,24 +915,21 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->value(null)
-                ->render()
+                ->render(),
+            "'null' must check no item.",
         );
     }
 
@@ -1048,16 +947,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
                 ->id(null)
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+                ->input(self::radioList())
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -1067,24 +963,29 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->name(null)
-                ->render()
+                ->render(),
+            "'name' must be omitted.",
+        );
+    }
+
+    private static function radioList(): RadioList
+    {
+        return RadioList::tag()->items(
+            ChoiceItem::tag()->label('No')->value(0),
+            ChoiceItem::tag()->label('Yes')->value(1),
         );
     }
 }

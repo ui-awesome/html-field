@@ -4,18 +4,46 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Select};
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use stdClass;
+use TypeError;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\BasicForm;
+use UIAwesome\Html\Form\Select;
+use UIAwesome\Html\Helper\Exception\Message;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} invalid value handling with the select control.
  */
-final class ExceptionTest extends \PHPUnit\Framework\TestCase
+#[Group('select')]
+final class ExceptionTest extends TestCase
 {
-    public function testValue(): void
+    public function testThrowInvalidArgumentExceptionForObjectValueWithinArray(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Select::class widget value can not be an object.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            Message::VALUE_SHOULD_BE_ARRAY_SCALAR_NULL_ENUM->getMessage('object'),
+        );
 
-        Field::widget(new BasicForm(), 'username')->input(Select::widget())->value(new \stdClass())->render();
+        Field::tag()
+            ->formModel(new BasicForm())
+            ->property('username')
+            ->input(Select::tag())
+            ->value([new stdClass()])
+            ->render();
+    }
+
+    public function testThrowTypeErrorForObjectValue(): void
+    {
+        $this->expectException(TypeError::class);
+
+        Field::tag()
+            ->formModel(new BasicForm())
+            ->property('username')
+            ->input(Select::tag())
+            ->value(new stdClass())
+            ->render();
     }
 }

@@ -4,37 +4,38 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\RadioList;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Radio, FormControl\Input\RadioList};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{ChoiceItem, RadioList};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see RadioList}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('radiolist')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->disableLabel()
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(self::radioList())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -44,22 +45,19 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <label for="basicform-agree-w0"><input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">No</label>
-            <label for="basicform-agree-w1"><input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">Yes</label>
+            <div id="basicform-agree">
+            <label for="basicform-agree-0"><input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">No</label>
+            <label for="basicform-agree-1"><input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'agree')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(self::radioList())
                 ->enclosedByLabel(true)
-                ->render()
+                ->render(),
+            'Label must enclose the control.',
         );
     }
 
@@ -69,24 +67,21 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>Label</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(self::radioList())
                 ->label('Label')
-                ->render()
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -96,24 +91,21 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label class="value">This is a label.</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(self::radioList())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -123,24 +115,21 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label class="value">This is a label.</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(
-                    RadioList::widget()
-                        ->items(
-                            Radio::widget()->label('No')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(self::radioList())
                 ->labelClass('value')
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -150,23 +139,34 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label>This is a label.</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label class="value" for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label class="value" for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
                 ->input(
-                    RadioList::widget()
+                    RadioList::tag()
                         ->items(
-                            Radio::widget()->label('No')->labelClass('value')->value(0),
-                            Radio::widget()->label('Yes')->value(1),
+                            ChoiceItem::tag()->label('No')->labelClass('value')->value(0),
+                            ChoiceItem::tag()->label('Yes')->value(1),
                         )
                 )
-                ->render()
+                ->render(),
+            "Item label 'class' must be serialized.",
+        );
+    }
+
+    private static function radioList(): RadioList
+    {
+        return RadioList::tag()->items(
+            ChoiceItem::tag()->label('No')->value(0),
+            ChoiceItem::tag()->label('Yes')->value(1),
         );
     }
 }

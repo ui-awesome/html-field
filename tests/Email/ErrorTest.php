@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Email;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Email};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputEmail;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} error rendering with {@see InputEmail}.
  */
-final class ErrorTest extends \PHPUnit\Framework\TestCase
+#[Group('email')]
+final class ErrorTest extends TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('email', 'Error');
+
+        $formModel->addError('email', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +33,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'email')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('email', 'Error');
+
+        $formModel->addError('email', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,14 +58,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'email')->errorAttributes(['class' => 'value'])->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->errorAttributes(['class' => 'value'])
+                ->input(InputEmail::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('email', 'Error');
+
+        $formModel->addError('email', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -65,7 +84,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'email')->errorClass('value')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->errorClass('value')
+                ->input(InputEmail::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
@@ -81,14 +106,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->errorContent('Error')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->errorContent('Error')
+                ->input(InputEmail::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('email', 'Error');
+
+        $formModel->addError('email', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -100,7 +132,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'email')->errorTag()->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->errorTag(Block::DIV)
+                ->input(InputEmail::tag())
+                ->render(),
+            "Error must render as '<div>'.",
         );
     }
 
@@ -113,14 +151,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->errorTag(false)->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->errorTag(false)
+                ->input(InputEmail::tag())
+                ->render(),
+            'Error tag must be omitted.',
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('email', 'Error');
+
+        $formModel->addError('email', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -130,15 +175,22 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'email')->errorTag('span')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->errorTag(Inline::SPAN)
+                ->input(InputEmail::tag())
+                ->render(),
+            'Error must render as the given tag.',
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('email', 'Error - 1');
-        $formModel->addPropertyError('email', 'Error - 2');
+
+        $formModel->addError('email', 'Error - 1');
+        $formModel->addError('email', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -151,7 +203,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'email')->input(Email::widget())->showAllErrors()->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->showAllErrors()
+                ->render(),
+            'All errors must be rendered.',
         );
     }
 }

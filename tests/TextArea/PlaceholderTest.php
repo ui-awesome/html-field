@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\TextArea;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\TextArea};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\TextArea;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} placeholder rendering with {@see TextArea}.
  */
-final class PlaceholderTest extends \PHPUnit\Framework\TestCase
+#[Group('textarea')]
+final class PlaceholderTest extends TestCase
 {
     public function testPlaceholder(): void
     {
@@ -18,10 +22,15 @@ final class PlaceholderTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <label for="basicform-placeholder">Placeholder</label>
-            <textarea id="basicform-placeholder" name="BasicForm[placeholder]" placeholder="This is a placeholder."></textarea>
+            <textarea id="basicform-placeholder" name="BasicForm[placeholder]" placeholder="This is a placeholder.">\n</textarea>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'placeholder')->input(TextArea::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('placeholder')
+                ->input(TextArea::tag())
+                ->render(),
+            "'placeholder' must be serialized.",
         );
     }
 }

@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\DatetimeLocal;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\DatetimeLocal};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputDateTimeLocal;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} error rendering with {@see InputDateTimeLocal}.
  */
-final class ErrorTest extends \PHPUnit\Framework\TestCase
+#[Group('datetimelocal')]
+final class ErrorTest extends TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('dateOfBirth', 'Error');
+
+        $formModel->addError('dateOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +33,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->input(DatetimeLocal::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('dateOfBirth', 'Error');
+
+        $formModel->addError('dateOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,17 +58,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
                 ->errorAttributes(['class' => 'value'])
-                ->input(DatetimeLocal::widget())
-                ->render()
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('dateOfBirth', 'Error');
+
+        $formModel->addError('dateOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -68,7 +84,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->errorClass('value')->input(DatetimeLocal::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->errorClass('value')
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
@@ -84,17 +106,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
                 ->errorContent('Error')
-                ->input(DatetimeLocal::widget())
-                ->render()
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('dateOfBirth', 'Error');
+
+        $formModel->addError('dateOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -106,14 +132,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->errorTag()->input(DatetimeLocal::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->errorTag(Block::DIV)
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            "Error must render as '<div>'.",
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('dateOfBirth', 'Error');
+
+        $formModel->addError('dateOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -123,14 +156,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->errorTag(false)->input(DatetimeLocal::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->errorTag(false)
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Error tag must be omitted.',
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('dateOfBirth', 'Error');
+
+        $formModel->addError('dateOfBirth', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -140,15 +180,22 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->errorTag('span')->input(DatetimeLocal::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->errorTag(Inline::SPAN)
+                ->input(InputDateTimeLocal::tag())
+                ->render(),
+            'Error must render as the given tag.',
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('dateOfBirth', 'Error - 1');
-        $formModel->addPropertyError('dateOfBirth', 'Error - 2');
+
+        $formModel->addError('dateOfBirth', 'Error - 1');
+        $formModel->addError('dateOfBirth', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -161,7 +208,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'dateOfBirth')->input(DatetimeLocal::widget())->showAllErrors()->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('dateOfBirth')
+                ->input(InputDateTimeLocal::tag())
+                ->showAllErrors()
+                ->render(),
+            'All errors must be rendered.',
         );
     }
 }

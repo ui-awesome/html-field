@@ -4,18 +4,34 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Password;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Password};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputPassword;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} value casting with {@see InputPassword}.
  */
-final class ExceptionTest extends \PHPUnit\Framework\TestCase
+#[Group('password')]
+final class ExceptionTest extends TestCase
 {
-    public function testValue(): void
+    public function testCastsIntegerValueToString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value must be a string or null value. The value is: integer.');
-
-        Field::widget(new BasicForm(), 'password')->input(Password::widget())->value(1)->render();
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-password">Password</label>
+            <input id="basicform-password" name="BasicForm[password]" type="password" value="1">
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->value(1)
+                ->render(),
+            "'value' must be cast to 'string' and serialized.",
+        );
     }
 }

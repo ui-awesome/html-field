@@ -4,18 +4,34 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Color;
 
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Color};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputColor;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} value casting with {@see InputColor}.
  */
-final class ExceptionTest extends \PHPUnit\Framework\TestCase
+#[Group('color')]
+final class ExceptionTest extends TestCase
 {
-    public function testValue(): void
+    public function testCastsIntegerValueToString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value must be a string or null value. The value is: integer.');
-
-        Field::widget(new BasicForm(), 'username')->input(Color::widget())->value(1)->render();
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-username">Username</label>
+            <input id="basicform-username" name="BasicForm[username]" type="color" value="1">
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->input(InputColor::tag())
+                ->value(1)
+                ->render(),
+            "'value' must be cast to 'string' and serialized.",
+        );
     }
 }

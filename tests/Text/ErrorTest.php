@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} error rendering with {@see \UIAwesome\Html\Form\InputText}.
  */
-final class ErrorTest extends \PHPUnit\Framework\TestCase
+#[Group('text')]
+final class ErrorTest extends TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('username', 'Error');
+
+        $formModel->addError('username', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +32,19 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'username')->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('username', 'Error');
+
+        $formModel->addError('username', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,14 +56,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'username')->errorAttributes(['class' => 'value'])->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->errorAttributes(['class' => 'value'])
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('username', 'Error');
+
+        $formModel->addError('username', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -65,7 +81,12 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'username')->errorClass('value')->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->errorClass('value')
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
@@ -81,14 +102,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->errorContent('Error')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->errorContent('Error')
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('username', 'Error');
+
+        $formModel->addError('username', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -100,14 +127,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'username')->errorTag()->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->errorTag(Block::DIV)
+                ->render(),
+            "Error must render as '<div>'.",
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('username', 'Error');
+
+        $formModel->addError('username', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -117,14 +150,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'username')->errorTag(false)->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->errorTag(false)
+                ->render(),
+            'Error tag must be omitted.',
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('username', 'Error');
+
+        $formModel->addError('username', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -134,15 +173,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'username')->errorTag('span')->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->errorTag(Inline::SPAN)
+                ->render(),
+            'Error must render as the given tag.',
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('username', 'Error - 1');
-        $formModel->addPropertyError('username', 'Error - 2');
+
+        $formModel->addError('username', 'Error - 1');
+        $formModel->addError('username', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -155,7 +200,12 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'username')->showAllErrors()->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('username')
+                ->showAllErrors()
+                ->render(),
+            'All errors must be rendered.',
         );
     }
 }

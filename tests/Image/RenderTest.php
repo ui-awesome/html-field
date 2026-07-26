@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Image;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Image};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, Form\InputImage};
+use UIAwesome\Html\Field\Tests\Support\Assert;
+use UIAwesome\Html\Interop\Block;
+use UIAwesome\Html\Interop\Inline;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see InputImage}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('image')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -21,7 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->attributes(['class' => 'value'])->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->attributes(['class' => 'value'])
+                ->input(InputImage::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -34,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->class('value')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->class('value')
+                ->input(InputImage::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -47,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Image::widget())
-                ->render()
+                ->input(InputImage::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -63,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->containerClass('value')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->containerClass('value')
+                ->input(InputImage::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -76,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('div')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::DIV)
+                ->input(InputImage::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -87,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="image">
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag(false)->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(false)
+                ->input(InputImage::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -100,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="image">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('article')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputImage::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -113,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="id" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->id('id')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->id('id')
+                ->input(InputImage::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -128,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -147,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -166,10 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
-                ->inputContainerTag()
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -182,7 +241,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->inputContainerTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->inputContainerTag(false)
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -197,7 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->inputContainerTag('article')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -212,10 +283,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -228,7 +302,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="name" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->name('name')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->name('name')
+                ->input(InputImage::tag())
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -242,7 +322,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -258,12 +344,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -279,12 +368,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -300,11 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -318,11 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -336,11 +434,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->prefix('prefix')
-                ->prefixTag('span')
-                ->render()
+                ->prefixTag(Inline::SPAN)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -353,7 +454,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->render(),
+            'Default field structure must be rendered.',
         );
     }
 
@@ -367,7 +473,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -383,12 +495,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -404,12 +519,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -425,11 +543,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -443,11 +564,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -461,11 +585,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <span>suffix</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->suffix('suffix')
-                ->suffixTag('span')
-                ->render()
+                ->suffixTag(Inline::SPAN)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -480,10 +607,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')
-                ->input(Image::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -496,7 +626,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image" src="my-file.jpg">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->value('my-file.jpg')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->value('my-file.jpg')
+                ->render(),
+            "'src' must be serialized.",
         );
     }
 
@@ -505,7 +641,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('image', 'my-file.jpg');
+        $formModel->setValue('image', 'my-file.jpg');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -514,11 +650,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image" src="my-file.jpg">
             </div>
             HTML,
-            Field::widget($formModel, 'image')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('image')
+                ->input(InputImage::tag())
+                ->render(),
+            "'src' must reflect the model value.",
         );
 
         // empty string value
-        $formModel->setPropertyValue('image', '');
+        $formModel->setValue('image', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -527,11 +668,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget($formModel, 'image')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('image')
+                ->input(InputImage::tag())
+                ->render(),
+            "Empty 'string' must omit the 'src' attribute.",
         );
 
         // null value
-        $formModel->setPropertyValue('image', null);
+        $formModel->setValue('image', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -540,7 +686,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget($formModel, 'image')->input(Image::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('image')
+                ->input(InputImage::tag())
+                ->render(),
+            "'null' must omit the 'src' attribute.",
         );
     }
 
@@ -553,7 +704,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Image::widget())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputImage::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'src' attribute.",
         );
     }
 
@@ -566,7 +723,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[image]" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->id(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->id(null)
+                ->render(),
+            "'null' must omit 'id' and the label 'for'.",
         );
     }
 
@@ -579,7 +742,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-image" type="image">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'image')->input(Image::widget())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('image')
+                ->input(InputImage::tag())
+                ->name(null)
+                ->render(),
+            "'null' must omit the 'name' attribute.",
         );
     }
 }

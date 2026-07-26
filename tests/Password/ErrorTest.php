@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Password;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Password};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputPassword;
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} error rendering with {@see InputPassword}.
  */
-final class ErrorTest extends \PHPUnit\Framework\TestCase
+#[Group('password')]
+final class ErrorTest extends TestCase
 {
     public function testError(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('password', 'Error');
+
+        $formModel->addError('password', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -27,14 +33,20 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'password')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorAttributes(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('password', 'Error');
+
+        $formModel->addError('password', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -46,17 +58,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'password')
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
                 ->errorAttributes(['class' => 'value'])
-                ->input(Password::widget())
-                ->render()
+                ->input(InputPassword::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
     public function testErrorClass(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('password', 'Error');
+
+        $formModel->addError('password', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -68,7 +84,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'password')->errorClass('value')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->errorClass('value')
+                ->input(InputPassword::tag())
+                ->render(),
+            "Error 'class' must be serialized.",
         );
     }
 
@@ -84,14 +106,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'password')->errorContent('Error')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('password')
+                ->errorContent('Error')
+                ->input(InputPassword::tag())
+                ->render(),
+            'Error content must be rendered.',
         );
     }
 
     public function testErrorTag(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('password', 'Error');
+
+        $formModel->addError('password', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -103,14 +132,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'password')->errorTag()->input(Password::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->errorTag(Block::DIV)
+                ->input(InputPassword::tag())
+                ->render(),
+            "Error must render as '<div>'.",
         );
     }
 
     public function testErrorTagWithFalseValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('password', 'Error');
+
+        $formModel->addError('password', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -120,14 +156,21 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             Error
             </div>
             HTML,
-            Field::widget($formModel, 'password')->errorTag(false)->input(Password::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->errorTag(false)
+                ->input(InputPassword::tag())
+                ->render(),
+            'Error tag must be omitted.',
         );
     }
 
     public function testErrorTagWithValue(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('password', 'Error');
+
+        $formModel->addError('password', 'Error');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -137,15 +180,22 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             <span>Error</span>
             </div>
             HTML,
-            Field::widget($formModel, 'password')->errorTag('span')->input(Password::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->errorTag(Inline::SPAN)
+                ->input(InputPassword::tag())
+                ->render(),
+            'Error must render as the given tag.',
         );
     }
 
     public function testShowAllErrors(): void
     {
         $formModel = new BasicForm();
-        $formModel->addPropertyError('password', 'Error - 1');
-        $formModel->addPropertyError('password', 'Error - 2');
+
+        $formModel->addError('password', 'Error - 1');
+        $formModel->addError('password', 'Error - 2');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -158,7 +208,13 @@ final class ErrorTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget($formModel, 'password')->input(Password::widget())->showAllErrors()->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('password')
+                ->input(InputPassword::tag())
+                ->showAllErrors()
+                ->render(),
+            'All errors must be rendered.',
         );
     }
 }

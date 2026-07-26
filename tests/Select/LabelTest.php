@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Select;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Select};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{Option, Select};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} label rendering with {@see Select}.
  */
-final class LabelTest extends \PHPUnit\Framework\TestCase
+#[Group('select')]
+final class LabelTest extends TestCase
 {
     public function testDisableLabel(): void
     {
@@ -18,16 +22,22 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <<<HTML
             <div>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->disableLabel()
-                ->input(Select::widget()
-                ->items([1 => 'Apple']))
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->notLabel()
+                ->input(self::select())
+                ->render(),
+            'Label must be omitted.',
         );
     }
 
@@ -38,15 +48,22 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="basicform-label">Label</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(self::select())
                 ->label('Label')
-                ->render()
+                ->render(),
+            'Label content must be rendered.',
         );
     }
 
@@ -57,15 +74,22 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <div>
             <label class="value" for="basicform-label">This is a label.</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(self::select())
                 ->labelAttributes(['class' => 'value'])
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -76,15 +100,22 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <div>
             <label class="value" for="basicform-label">This is a label.</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(self::select())
                 ->labelClass('value')
-                ->render()
+                ->render(),
+            "Label 'class' must be serialized.",
         );
     }
 
@@ -95,15 +126,30 @@ final class LabelTest extends \PHPUnit\Framework\TestCase
             <div>
             <label for="value">This is a label.</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'label')
-                ->input(Select::widget()->items([1 => 'Apple']))
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('label')
+                ->input(self::select())
                 ->labelFor('value')
-                ->render()
+                ->render(),
+            "'for' must use the given value.",
+        );
+    }
+
+    private static function select(): Select
+    {
+        return Select::tag()->options(
+            Option::tag()->content('Select an option'),
+            Option::tag()->content('Apple')->value(1),
         );
     }
 }

@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Text;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} hint rendering with {@see \UIAwesome\Html\Form\InputText}.
  */
-final class HintTest extends \PHPUnit\Framework\TestCase
+#[Group('text')]
+final class HintTest extends TestCase
 {
     public function testHint(): void
     {
@@ -24,7 +28,11 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -40,7 +48,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintAttributes(['class' => 'value'])->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintAttributes(['class' => 'value'])
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -56,7 +69,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintClass('value')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintClass('value')
+                ->render(),
+            "Hint 'class' must be serialized.",
         );
     }
 
@@ -72,7 +90,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->hintContent('Hint')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->hintContent('Hint')
+                ->render(),
+            'Hint content must be rendered.',
         );
     }
 
@@ -88,7 +111,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag()->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Block::DIV)
+                ->render(),
+            "Hint must render as '<div>'.",
         );
     }
 
@@ -102,7 +130,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             This is a hint.
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag(false)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(false)
+                ->render(),
+            'Hint tag must be omitted.',
         );
     }
 
@@ -116,7 +149,12 @@ final class HintTest extends \PHPUnit\Framework\TestCase
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'hint')->hintTag('span')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->hintTag(Inline::SPAN)
+                ->render(),
+            'Hint must render as the given tag.',
         );
     }
 }

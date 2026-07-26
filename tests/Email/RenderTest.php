@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace UIAwesome\Html\Field\Tests\Email;
 
-use PHPForge\Support\Assert;
-use UIAwesome\Html\{Field\Field, Field\Tests\Support\BasicForm, FormControl\Input\Email};
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\InputEmail;
+use UIAwesome\Html\Interop\Block;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * Unit tests for {@see Field} rendering with {@see InputEmail}.
  */
-final class RenderTest extends \PHPUnit\Framework\TestCase
+#[Group('email')]
+final class RenderTest extends TestCase
 {
     public function testAttributes(): void
     {
@@ -21,7 +26,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->attributes(['class' => 'value'])->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->attributes(['class' => 'value'])
+                ->input(InputEmail::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -34,7 +45,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input class="value" id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->class('value')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->class('value')
+                ->input(InputEmail::tag())
+                ->render(),
+            "'class' must be serialized.",
         );
     }
 
@@ -47,10 +64,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
                 ->containerAttributes(['class' => 'value'])
-                ->input(Email::widget())
-                ->render()
+                ->input(InputEmail::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -63,7 +83,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->containerClass('value')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->containerClass('value')
+                ->input(InputEmail::tag())
+                ->render(),
+            "Container 'class' must be serialized.",
         );
     }
 
@@ -76,7 +102,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag()->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::DIV)
+                ->input(InputEmail::tag())
+                ->render(),
+            "Container must render as '<div>'.",
         );
     }
 
@@ -87,7 +119,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <label for="basicform-username">Username</label>
             <input id="basicform-username" name="BasicForm[username]" type="email">
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag(false)->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(false)
+                ->input(InputEmail::tag())
+                ->render(),
+            'Container must be omitted.',
         );
     }
 
@@ -100,7 +138,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-username" name="BasicForm[username]" type="email">
             </article>
             HTML,
-            Field::widget(new BasicForm(), 'username')->containerTag('article')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('username')
+                ->containerTag(Block::ARTICLE)
+                ->input(InputEmail::tag())
+                ->render(),
+            'Container must render as the given tag.',
         );
     }
 
@@ -113,7 +157,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="id" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->id('id')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->id('id')
+                ->input(InputEmail::tag())
+                ->render(),
+            "'id' must propagate to the label 'for' and input.",
         );
     }
 
@@ -128,11 +178,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->inputContainerAttributes(['class' => 'value'])
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -147,11 +200,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->inputContainerClass('value')
-                ->inputContainerTag()
-                ->render()
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            "Input container 'class' must be serialized.",
         );
     }
 
@@ -166,10 +222,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
-                ->inputContainerTag()
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->inputContainerTag(Block::DIV)
+                ->render(),
+            'Input must be wrapped in the container tag.',
         );
     }
 
@@ -182,10 +241,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->inputContainerTag(false)
-                ->render()
+                ->render(),
+            'Input container must be omitted.',
         );
     }
 
@@ -200,10 +262,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
-                ->inputContainerTag('article')
-                ->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->inputContainerTag(Block::ARTICLE)
+                ->render(),
+            'Input container must render as the given tag.',
         );
     }
 
@@ -218,10 +283,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
-                ->render()
+                ->render(),
+            'Input template must reorder the parts.',
         );
     }
 
@@ -234,7 +302,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="name" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->name('name')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->name('name')
+                ->input(InputEmail::tag())
+                ->render(),
+            "'name' must be serialized.",
         );
     }
 
@@ -248,7 +322,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Email::widget())->prefix('Prefix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->prefix('Prefix')
+                ->render(),
+            'Prefix must precede the input.',
         );
     }
 
@@ -264,12 +344,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -285,12 +368,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->prefix('prefix')
                 ->prefixClass('value')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix 'class' must be serialized.",
         );
     }
 
@@ -306,11 +392,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->prefix('prefix')
-                ->prefixTag()
-                ->render()
+                ->prefixTag(Block::DIV)
+                ->render(),
+            "Prefix must render as '<div>'.",
         );
     }
 
@@ -324,11 +413,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->prefix('prefix')
                 ->prefixTag(false)
-                ->render()
+                ->render(),
+            'Prefix tag must be omitted.',
         );
     }
 
@@ -344,11 +436,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->prefix('prefix')
-                ->prefixTag('article')
-                ->render()
+                ->prefixTag(Block::ARTICLE)
+                ->render(),
+            'Prefix must render as the given tag.',
         );
     }
 
@@ -361,7 +456,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->render(),
+            'Default field structure must be rendered.',
         );
     }
 
@@ -375,7 +475,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Email::widget())->suffix('suffix')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->suffix('suffix')
+                ->render(),
+            'Suffix must follow the input.',
         );
     }
 
@@ -391,12 +497,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -412,12 +521,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->suffix('suffix')
                 ->suffixClass('value')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix 'class' must be serialized.",
         );
     }
 
@@ -433,11 +545,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->suffix('suffix')
-                ->suffixTag()
-                ->render()
+                ->suffixTag(Block::DIV)
+                ->render(),
+            "Suffix must render as '<div>'.",
         );
     }
 
@@ -451,11 +566,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             suffix
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->suffix('suffix')
                 ->suffixTag(false)
-                ->render()
+                ->render(),
+            'Suffix tag must be omitted.',
         );
     }
 
@@ -471,11 +589,14 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </article>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->suffix('suffix')
-                ->suffixTag('article')
-                ->render()
+                ->suffixTag(Block::ARTICLE)
+                ->render(),
+            'Suffix must render as the given tag.',
         );
     }
 
@@ -490,10 +611,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             </div>
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')
-                ->input(Email::widget())
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
                 ->template('<div>\n{field}\n</div>')
-                ->render()
+                ->render(),
+            'Template must wrap the field.',
         );
     }
 
@@ -506,7 +630,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email" value="#000000">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Email::widget())->value('#000000')->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->value('#000000')
+                ->render(),
+            "'value' must be serialized.",
         );
     }
 
@@ -515,7 +645,7 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
         $formModel = new BasicForm();
 
         // string value
-        $formModel->setPropertyValue('email', '');
+        $formModel->setValue('email', '');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -524,10 +654,15 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget($formModel, 'email')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->render(),
+            "Empty 'string' must omit the 'value' attribute.",
         );
 
-        $formModel->setPropertyValue('email', '#000000');
+        $formModel->setValue('email', '#000000');
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -536,11 +671,16 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email" value="#000000">
             </div>
             HTML,
-            Field::widget($formModel, 'email')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->render(),
+            "'value' must be serialized.",
         );
 
         // null value
-        $formModel->setPropertyValue('email', null);
+        $formModel->setValue('email', null);
 
         Assert::equalsWithoutLE(
             <<<HTML
@@ -549,7 +689,12 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget($formModel, 'email')->input(Email::widget())->render()
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -562,7 +707,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-dateofbirth" name="BasicForm[dateOfBirth]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'dateOfBirth')->input(Email::widget())->value(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('dateOfBirth')
+                ->input(InputEmail::tag())
+                ->value(null)
+                ->render(),
+            "'null' must omit the 'value' attribute.",
         );
     }
 
@@ -575,7 +726,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input name="BasicForm[email]" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Email::widget())->id(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->id(null)
+                ->render(),
+            "'id' and 'for' must be omitted.",
         );
     }
 
@@ -588,7 +745,13 @@ final class RenderTest extends \PHPUnit\Framework\TestCase
             <input id="basicform-email" type="email">
             </div>
             HTML,
-            Field::widget(new BasicForm(), 'email')->input(Email::widget())->name(null)->render()
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->input(InputEmail::tag())
+                ->name(null)
+                ->render(),
+            "'name' must be omitted.",
         );
     }
 }
