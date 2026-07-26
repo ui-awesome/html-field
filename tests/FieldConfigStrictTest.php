@@ -41,6 +41,23 @@ final class FieldConfigStrictTest extends TestCase
         );
     }
 
+    #[DataProviderExternal(FieldConfigProvider::class, 'bindingOverrides')]
+    public function testAppliesEntriesOverridingTheModelBinding(
+        string $property,
+        string $control,
+        string $expected,
+    ): void {
+        Assert::equalsWithoutLE(
+            $expected,
+            Field::tag()
+                ->formModel(new ConfigForm())
+                ->property($property)
+                ->control($control)
+                ->render(),
+            'Config entries must override the derived binding state.',
+        );
+    }
+
     public function testAppliesEveryEntryWhenABareScalarPrecedesAPositionalList(): void
     {
         Assert::equalsWithoutLE(
@@ -74,6 +91,24 @@ final class FieldConfigStrictTest extends TestCase
             HTML,
             $build(new ConfigForm())->render(),
             'Every fluent order must produce the same markup.',
+        );
+    }
+
+    public function testOverridesTheFieldFluentValueWithAConfigEntry(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="configform-overridevalue">Override Value</label>
+            <input id="configform-overridevalue" name="ConfigForm[overrideValue]" type="text" value="custom-value">
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new ConfigForm())
+                ->property('overrideValue')
+                ->value('fluent-value')
+                ->render(),
+            'Config entries must outrank the field fluent state.',
         );
     }
 

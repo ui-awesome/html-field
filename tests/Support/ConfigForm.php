@@ -13,6 +13,11 @@ final class ConfigForm extends BaseFormModel
 {
     public string $name = '';
     public string $ordered = '';
+    public string $overrideChecked = '';
+    public string $overrideId = '';
+    public string $overrideName = '';
+    public string $overridePlaceholder = '';
+    public string $overrideValue = 'model-value';
     public string $textArea = '';
 
     /**
@@ -23,6 +28,11 @@ final class ConfigForm extends BaseFormModel
         return [
             'name' => $this->name,
             'ordered' => $this->ordered,
+            'overrideChecked' => $this->overrideChecked,
+            'overrideId' => $this->overrideId,
+            'overrideName' => $this->overrideName,
+            'overridePlaceholder' => $this->overridePlaceholder,
+            'overrideValue' => $this->overrideValue,
             'textArea' => $this->textArea,
         ];
     }
@@ -41,10 +51,33 @@ final class ConfigForm extends BaseFormModel
                 'maxlength' => 10,
                 'class' => ['custom-class'],
             ],
+            'overrideChecked' => [
+                'checked' => true,
+            ],
+            'overrideId' => [
+                'id' => 'custom-id',
+            ],
+            'overrideName' => [
+                'name' => 'custom-name',
+            ],
+            'overridePlaceholder' => [
+                'placeholder' => 'Custom placeholder.',
+            ],
+            'overrideValue' => [
+                'value' => 'custom-value',
+            ],
             'textArea' => [
                 'class' => ['custom-class'],
                 'rows' => 5,
             ],
         ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getPlaceholders(): array
+    {
+        return ['overridePlaceholder' => 'Model placeholder.'];
     }
 }

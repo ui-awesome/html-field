@@ -145,7 +145,9 @@ name, validation state, label, hint, and errors. See the usage guide for example
 Form model field configurations are applied through the core config applier in strict mode, once per render, against
 the control the field finally resolves — so the fluent call order never changes the outcome. An entry naming a method
 the resolved control does not expose throws `ConfigException` instead of being skipped, so typos such as `maxlenght`
-fail at render time. See the [upgrade guide](UPGRADE.md) for the supported entry shapes.
+fail at render time. The model binding runs first and the config last, so entries such as `value`, `id`, `name`,
+`checked`, and `placeholder` act as explicit per-property overrides rather than being silently overwritten. See the
+[upgrade guide](UPGRADE.md) for the precedence table and the supported entry shapes.
 
 ## Documentation
 

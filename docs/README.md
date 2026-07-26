@@ -96,6 +96,15 @@ the field context, so an error reports exactly which property and which control 
 `InvalidFieldConfig` is thrown before any call runs when an entry is indexed by a non-string or empty key, or passes
 its arguments as an associative array instead of a positional list.
 
+The field derives the control state from the model first and applies the field config last, so entries are explicit
+per-property overrides and are never silently discarded. Precedence runs model-derived binding < field fluent state
+(`Field::value()`) < field configuration, which means `['value' => 'admin']` outranks both the model value and
+`Field::value()`, and the same holds for `id`, `name`, `checked`, and `placeholder`.
+
+Artifacts derived from the control follow its final state: a `['id' => 'custom-id']` entry renders the label as
+`for="custom-id"`, and `aria-describedby` keeps pointing at the rendered hint element. Validation state classes are
+merged into `class` rather than replacing it, so a configured `class` always survives.
+
 Field configurations target the form control, not the `Field` itself. Configure field-level slots such as `template`
 or `containerTag` on the field or through a theme recipe.
 

@@ -328,8 +328,8 @@ abstract class AbstractField extends BaseTag
             return '';
         }
 
-        $widget = $this->applyFieldConfig($widget, $formModel, $property);
         $widget = $this->configureWidget($widget, $formModel, $property);
+        $widget = $this->applyFieldConfig($widget, $formModel, $property);
 
         return $this->renderOptionalTag(
             $this->containerAttributes,
@@ -364,6 +364,9 @@ abstract class AbstractField extends BaseTag
      * The field config is applied once per render, against the control the field ultimately renders, so the fluent
      * call order does not change the outcome. A call naming a method the control does not expose fails instead of
      * being skipped.
+     *
+     * The form model binding runs first and derives the control state, so field config entries act as explicit
+     * per-property overrides and are never silently discarded.
      *
      * @throws ConfigException If a call is unavailable, returns an incompatible control, fails during execution, or
      * the applier returns a component incompatible with the control.
@@ -659,6 +662,8 @@ abstract class AbstractField extends BaseTag
     /**
      * Renders the label, enclosing the control when configured.
      *
+     * The `for` attribute follows the control's final `id`, so a field config overriding it stays linked.
+     *
      * @return array{AttributesInterface&RenderableInterface, string} Control to render and the rendered label markup.
      */
     private function renderLabelTag(AttributesInterface&RenderableInterface $widget): array
@@ -667,7 +672,7 @@ abstract class AbstractField extends BaseTag
             return [$widget, ''];
         }
 
-        $id = $this->getAttribute('id');
+        $id = $widget->getAttribute('id');
         $for = $this->getLabelAttribute('for', is_string($id) ? $id : null);
 
         $for = is_string($for) ? $for : null;

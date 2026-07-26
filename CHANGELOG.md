@@ -32,3 +32,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: add `UPGRADE.md` and document the supported field config shapes and strict-mode failures.
 - fix: apply the field configuration once per render against the resolved control, removing fluent-order sensitivity where a replacement-control entry threw against the default control.
 - refactor: guard the form model binding with an `instanceof` check instead of `@var` narrowing, keeping the intrinsic binding type-safe under style fixers.
+- feat!: apply field configuration after model binding so explicit entries override derived `value`, `id`, `name`, `checked`, and `placeholder` state.
+- fix: derive the label `for` attribute from the control's final `id`, keeping it linked when a field configuration overrides the identifier.

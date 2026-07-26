@@ -17,6 +17,63 @@ use UIAwesome\Html\Form\TextArea;
 final class FieldConfigProvider
 {
     /**
+     * @return iterable<string, array{string, string, string}>
+     */
+    public static function bindingOverrides(): iterable
+    {
+        yield 'checked' => [
+            'overrideChecked',
+            'checkbox',
+            <<<HTML
+            <div>
+            <input id="configform-overridechecked" name="ConfigForm[overrideChecked]" type="checkbox" checked>
+            <label for="configform-overridechecked">Override Checked</label>
+            </div>
+            HTML,
+        ];
+        yield 'id' => [
+            'overrideId',
+            'text',
+            <<<HTML
+            <div>
+            <label for="custom-id">Override Id</label>
+            <input id="custom-id" name="ConfigForm[overrideId]" type="text">
+            </div>
+            HTML,
+        ];
+        yield 'name' => [
+            'overrideName',
+            'text',
+            <<<HTML
+            <div>
+            <label for="configform-overridename">Override Name</label>
+            <input id="configform-overridename" name="custom-name" type="text">
+            </div>
+            HTML,
+        ];
+        yield 'placeholder' => [
+            'overridePlaceholder',
+            'text',
+            <<<HTML
+            <div>
+            <label for="configform-overrideplaceholder">Override Placeholder</label>
+            <input id="configform-overrideplaceholder" name="ConfigForm[overridePlaceholder]" type="text" placeholder="Custom placeholder.">
+            </div>
+            HTML,
+        ];
+        yield 'value' => [
+            'overrideValue',
+            'text',
+            <<<HTML
+            <div>
+            <label for="configform-overridevalue">Override Value</label>
+            <input id="configform-overridevalue" name="ConfigForm[overrideValue]" type="text" value="custom-value">
+            </div>
+            HTML,
+        ];
+    }
+
+    /**
      * @return iterable<string, array{callable(ConfigForm): Field}>
      */
     public static function replacementControlOrders(): iterable
