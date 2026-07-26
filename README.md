@@ -140,6 +140,12 @@ the resolved model value to `Select::value()`.
 `CheckboxList`, `RadioList`, and `ChoiceItem` also come from `ui-awesome/html`; `Field` supplies their checked values,
 name, validation state, label, hint, and errors. See the usage guide for examples, slot contexts, and recipe methods.
 
+#### Strict field configurations
+
+Form model field configurations are applied to the form control through the core config applier in strict mode. An
+entry naming a method the control does not expose throws `ConfigException` instead of being skipped, so typos such as
+`maxlenght` fail at configuration time. See the [upgrade guide](UPGRADE.md) for the supported entry shapes.
+
 ## Documentation
 
 For detailed usage, testing, and quality workflows.

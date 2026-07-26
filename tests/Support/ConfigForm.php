@@ -12,25 +12,32 @@ use UIAwesome\FormModel\BaseFormModel;
 final class ConfigForm extends BaseFormModel
 {
     public string $name = '';
+    public string $ordered = '';
 
     /**
      * @return array<string, string>
      */
     public function __debugInfo(): array
     {
-        return ['name' => $this->name];
+        return [
+            'name' => $this->name,
+            'ordered' => $this->ordered,
+        ];
     }
 
     /**
-     * @return array<string, array<int|string, mixed>>
+     * @return array<string, array<string, mixed>>
      */
     public function getFieldConfigs(): array
     {
         return [
             'name' => [
-                0 => null,
                 'class' => ['custom-class form-control'],
                 'maxlength' => 10,
+            ],
+            'ordered' => [
+                'maxlength' => 10,
+                'class' => ['custom-class'],
             ],
         ];
     }

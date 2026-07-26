@@ -42,6 +42,22 @@ enum Message: string
     case CONTROL_TYPE_INVALID = 'Control type must be a non-empty string without whitespace or dots.';
 
     /**
+     * Error when a field config entry passes its arguments as an associative array.
+     *
+     * Format: 'Field config entry "%s" for property "%s" must use a positional argument list.'
+     */
+    case FIELD_CONFIG_ARGUMENTS_NOT_POSITIONAL = 'Field config entry "%s" for property "%s" must use a positional '
+        . 'argument list.';
+
+    /**
+     * Error when a field config entry is not indexed by a method name.
+     *
+     * Format: 'Field config for property "%s" must be indexed by non-empty method names.'
+     */
+    case FIELD_CONFIG_METHOD_NAME_INVALID = 'Field config for property "%s" must be indexed by non-empty method '
+        . 'names.';
+
+    /**
      * Error when a registered factory definition does not create a form control.
      *
      * Format: 'Factory for semantic component "%s" must return a form control; %s returned.'

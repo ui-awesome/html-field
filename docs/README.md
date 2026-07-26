@@ -61,6 +61,39 @@ $daisyUiField = Field::tag()->config($daisyUi)->control('email');
 Calls made after `config()` are local overrides. An explicit input configured before `config()` receives the generic
 `field.control` recipe; an input supplied afterward intentionally replaces the themed control.
 
+## Form model field configurations
+
+`FormModelInterface::getFieldConfig()` entries are converted into config calls and applied to the form control through
+the core config applier in strict mode. Entries are indexed by method name; a bare value becomes a single positional
+argument and a list becomes the ordered argument list.
+
+```php
+use UIAwesome\FormModel\Attribute\FieldConfig;
+
+final class LoginForm extends BaseFormModel
+{
+    #[FieldConfig(['class' => ['form-control'], 'maxlength' => 10])]
+    public string $email = '';
+}
+```
+
+Strict mode makes typos fail instead of rendering a control that silently ignores them. An entry naming a method the
+control does not expose throws `ConfigException`:
+
+```
+Config call 'maxlenght' from recipe 'field-config.email' is not a public instance method for component
+'field.control' (UIAwesome\Html\Form\InputText).
+```
+
+The recipe name traces the originating property, and the component identifier is the `field.control` slot derived from
+the field context, so an error reports exactly which property and which control rejected the call.
+
+`InvalidFieldConfig` is thrown before any call runs when an entry is indexed by a non-string or empty key, or passes
+its arguments as an associative array instead of a positional list.
+
+Field configurations target the form control, not the `Field` itself. Configure field-level slots such as `template`
+or `containerTag` on the field or through a theme recipe.
+
 ## Semantic control factory
 
 The default registry supports `checkbox`, `checkbox-list`, `email`, `password`, `radio`, `radio-list`, `select`,
