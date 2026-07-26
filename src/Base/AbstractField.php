@@ -520,8 +520,7 @@ abstract class AbstractField extends BaseTag
 
         $id = Naming::generateInputId($formModel->getModelName(), $property);
 
-        /** @var static $configured */
-        return SimpleFactory::configure(
+        $configured = SimpleFactory::configure(
             $this,
             [
                 'hintContent' => [$formModel->getHint($property)],
@@ -531,6 +530,18 @@ abstract class AbstractField extends BaseTag
                 'name' => [Naming::generateInputName($formModel->getModelName(), $property)],
             ],
         );
+
+        if (($configured instanceof $this) === false) {
+            throw new ConfigException(
+                ConfigMessage::CONFIG_RETURNED_INCOMPATIBLE_COMPONENT->getMessage(
+                    'field',
+                    get_debug_type($this),
+                    get_debug_type($configured),
+                ),
+            );
+        }
+
+        return $configured;
     }
 
     /**
