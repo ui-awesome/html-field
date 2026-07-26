@@ -38,6 +38,9 @@ final class ExceptionTest extends TestCase
     public function testThrowTypeErrorForObjectValue(): void
     {
         $this->expectException(TypeError::class);
+        $this->expectExceptionMessage(
+            'Argument #1 ($value) must be of type',
+        );
 
         Field::tag()
             ->formModel(new BasicForm())

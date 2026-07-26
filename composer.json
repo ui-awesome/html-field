@@ -26,7 +26,7 @@
         "ui-awesome/form-model": "^0.2",
         "ui-awesome/html": "^0.5@dev",
         "ui-awesome/html-attribute": "^0.6",
-        "ui-awesome/html-contracts": "^0.1",
+        "ui-awesome/html-contracts": "^0.3@dev",
         "ui-awesome/html-core": "^0.7@dev",
         "ui-awesome/html-helper": "^0.7",
         "ui-awesome/html-interop": "^0.4",

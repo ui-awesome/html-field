@@ -7,8 +7,8 @@ namespace UIAwesome\Html\Field\Tests;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, InputWidget, UnsupportedTag};
-use UIAwesome\Html\Form\{InputCheckbox, InputText};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, UnsupportedTag};
+use UIAwesome\Html\Form\{InputCheckbox, InputImage, InputText};
 
 /**
  * Unit tests for {@see Field} rendering with modernized control and container handling.
@@ -16,24 +16,6 @@ use UIAwesome\Html\Form\{InputCheckbox, InputText};
 #[Group('field')]
 final class ModernizationTest extends TestCase
 {
-    public function testEnclosesANonListControlWithoutUsingListConfiguration(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <label for="basicform-label"><control id="basicform-label" name="BasicForm[label]"></label>
-            </div>
-            HTML,
-            Field::tag()
-                ->formModel(new BasicForm())
-                ->property('label')
-                ->input(InputWidget::tag())
-                ->enclosedByLabel()
-                ->render(),
-            'Label must enclose the control.',
-        );
-    }
-
     public function testRendersEmptyWithoutFormModel(): void
     {
         self::assertSame(
@@ -80,24 +62,25 @@ final class ModernizationTest extends TestCase
         );
     }
 
-    public function testSetsValueAfterSkippingASourceSetterForANonStringValue(): void
+    public function testSkipsTheSourceSetterForANonStringValue(): void
     {
         $model = new BasicForm();
+
         $model->setValue('image', 10);
 
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <label for="basicform-image">Image</label>
-            <control id="basicform-image" name="BasicForm[image]" value="10">
+            <input id="basicform-image" name="BasicForm[image]" type="image">
             </div>
             HTML,
             Field::tag()
                 ->formModel($model)
                 ->property('image')
-                ->input(InputWidget::tag())
+                ->input(InputImage::tag())
                 ->render(),
-            "'value' must be cast to `string` and serialized.",
+            "A non-`string` value must omit the 'src' attribute.",
         );
     }
 

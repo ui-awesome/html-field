@@ -9,8 +9,15 @@ use Override;
 use UIAwesome\FormModel\FormModelInterface;
 use UIAwesome\Html\Attribute\Global\{HasClass, HasId};
 use UIAwesome\Html\Attribute\HasName;
-use UIAwesome\Html\Contracts\Attribute\AttributesInterface;
-use UIAwesome\Html\Contracts\Form\FormControlInterface;
+use UIAwesome\Html\Contracts\Attribute\{AttributesInterface, SrcInterface, ValueInterface};
+use UIAwesome\Html\Contracts\Element\ContentInterface;
+use UIAwesome\Html\Contracts\Form\{
+    CheckedStateInterface,
+    ChoiceListInterface,
+    FormControlInterface,
+    MultiValueInterface,
+    PlaceholderInterface,
+};
 use UIAwesome\Html\Contracts\RenderableInterface;
 use UIAwesome\Html\Core\Base\BaseTag;
 use UIAwesome\Html\Core\Config\{ComponentContext, Config};
@@ -27,7 +34,6 @@ use UIAwesome\Html\Field\Mixin\{
     HasInputTemplate,
     HasValidateClass,
 };
-use UIAwesome\Html\Form\{InputCheckbox, InputRadio, Select};
 use UIAwesome\Html\Helper\{Encode, Naming, Template};
 use UIAwesome\Html\Interop\{Block, Inline};
 use UIAwesome\Html\Mixin\{
@@ -351,6 +357,8 @@ abstract class AbstractField extends BaseTag
     /**
      * Applies form model field config entries to the control by calling matching methods.
      *
+     * Unsupported entries are skipped, and a call whose result is not a compatible control is discarded.
+     *
      * @param array<array-key, mixed> $definitions Method arguments indexed by control method name.
      */
     private function applyDefinitionsToWidget(
@@ -387,9 +395,9 @@ abstract class AbstractField extends BaseTag
 
         if (
             $this->value !== null
-            && method_exists($widget, 'checked') === false
-            && method_exists($widget, 'src') === false
-            && ($widget instanceof Select) === false
+            && ($widget instanceof CheckedStateInterface) === false
+            && ($widget instanceof SrcInterface) === false
+            && ($widget instanceof MultiValueInterface) === false
         ) {
             $attributes['value'] = $this->value;
         }
@@ -405,19 +413,13 @@ abstract class AbstractField extends BaseTag
         FormModelInterface $formModel,
         string $property,
     ): AttributesInterface&RenderableInterface {
-        if (method_exists($widget, 'placeholder')) {
-            $configured = $widget->placeholder($formModel->getPlaceholder($property));
-
-            if ($configured instanceof $widget) {
-                return $configured;
-            }
-        }
-
-        return $widget;
+        return $widget instanceof PlaceholderInterface
+            ? $widget->placeholder($formModel->getPlaceholder($property))
+            : $widget;
     }
 
     /**
-     * Applies the resolved value through the first control method supporting it.
+     * Applies the resolved value through the first control contract supporting it.
      */
     private function applyToValue(
         AttributesInterface&RenderableInterface $widget,
@@ -426,34 +428,29 @@ abstract class AbstractField extends BaseTag
     ): AttributesInterface&RenderableInterface {
         $value = $this->value ?? $formModel->getValue($property);
 
-        if ($widget instanceof Select) {
+        if ($widget instanceof MultiValueInterface) {
             /** @phpstan-ignore argument.type */
             return $widget->value($value);
         }
 
-        foreach (['checked', 'content', 'src', 'value'] as $method) {
-            if (method_exists($widget, $method) === false) {
-                continue;
+        if ($widget instanceof CheckedStateInterface) {
+            if ($widget->getAttribute('value') !== null || $widget instanceof ChoiceListInterface) {
+                /** @phpstan-ignore argument.type */
+                return $widget->checked($value);
             }
+        }
 
-            if (
-                $method === 'checked'
-                && $widget->getAttribute('value') === null
-                && (method_exists($widget, 'isList') === false || $widget->isList() !== true)
-            ) {
-                continue;
-            }
+        if ($widget instanceof ContentInterface && is_string($value)) {
+            return $widget->content($value);
+        }
 
-            if (($method === 'content' || $method === 'src') && is_string($value) === false) {
-                continue;
-            }
+        if ($widget instanceof SrcInterface && is_string($value)) {
+            return $widget->src($value);
+        }
 
-            /** @phpstan-ignore method.dynamicName */
-            $configured = $widget->{$method}($value);
-
-            if ($configured instanceof $widget) {
-                return $configured;
-            }
+        if ($widget instanceof ValueInterface) {
+            /** @phpstan-ignore argument.type */
+            return $widget->value($value);
         }
 
         return $widget;
@@ -582,7 +579,7 @@ abstract class AbstractField extends BaseTag
      */
     private function isListWidget(AttributesInterface&RenderableInterface $widget): bool
     {
-        return method_exists($widget, 'isList') && $widget->isList() === true;
+        return $widget instanceof ChoiceListInterface;
     }
 
     /**
@@ -680,15 +677,11 @@ abstract class AbstractField extends BaseTag
             ->for($for);
 
         if ($this->enclosedByLabel) {
-            if ($isList && method_exists($widget, 'enclosedByLabel')) {
-                $configured = $widget->enclosedByLabel();
-
-                if ($configured instanceof $widget) {
-                    return [$configured, $label->content($this->getLabel())->render()];
-                }
+            if ($widget instanceof ChoiceListInterface) {
+                return [$widget->enclosedByLabel(), $label->content($this->getLabel())->render()];
             }
 
-            $content = $widget instanceof InputCheckbox || $widget instanceof InputRadio
+            $content = $widget instanceof CheckedStateInterface
                 ? "\n{$widget->render()}\n" . Encode::content($this->getLabel()) . "\n"
                 : $widget->render();
 
@@ -763,7 +756,7 @@ abstract class AbstractField extends BaseTag
         $new = clone $this;
         $new->widget = $new->applyDefinitionsToWidget($widget, $new->getFieldConfig());
 
-        if ($widget instanceof InputCheckbox || $widget instanceof InputRadio) {
+        if ($widget instanceof CheckedStateInterface && ($widget instanceof ChoiceListInterface) === false) {
             $new->inputTemplate = "{input}\n{label}";
         }
 

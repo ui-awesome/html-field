@@ -16,10 +16,11 @@ use UIAwesome\Html\Core\Config\{
     Recipe,
 };
 use UIAwesome\Html\Core\Theme\ThemeInterface;
-use UIAwesome\Html\Field\Exception\InvalidControl;
+use UIAwesome\Html\Field\Exception\{InvalidControl, Message};
 use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, FieldTheme, InputWidget, RecordingTheme};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, FieldTheme, RecordingTheme};
+use UIAwesome\Html\Form\{InputHidden, InputText};
 
 /**
  * Unit tests for {@see Field} application-scoped config and semantic control integration.
@@ -31,17 +32,20 @@ final class FieldConfigTest extends TestCase
     {
         $theme = self::controlSlotTheme('custom', new Cookbook(new Call('class', 'custom-control')));
 
-        $output = Field::tag()
-            ->input(InputWidget::tag())
-            ->config(new Config($theme))
-            ->formModel(new BasicForm())
-            ->property('email')
-            ->render();
-
-        self::assertStringContainsString(
-            '<control class="custom-control"',
-            $output,
-            'An explicit input set before config must receive the generic control-slot recipe.',
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-email">Email</label>
+            <input class="custom-control" id="basicform-email" name="BasicForm[email]" type="text">
+            </div>
+            HTML,
+            Field::tag()
+                ->input(InputText::tag())
+                ->config(new Config($theme))
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->render(),
+            'An input set before config must receive the generic control-slot recipe.',
         );
     }
 
@@ -107,25 +111,25 @@ final class FieldConfigTest extends TestCase
     {
         $config = new Config(
             new FieldTheme('custom', self::slotClasses()),
-            factory: new ControlFactory(['email' => InputWidget::class]),
+            factory: new ControlFactory(['email' => InputHidden::class]),
         );
 
-        $output = Field::tag()
-            ->config($config)
-            ->control('email')
-            ->formModel(new BasicForm())
-            ->property('email')
-            ->render();
-
-        self::assertStringContainsString(
-            '<control class="control"',
-            $output,
-            'Field must create semantic controls through the factory carried by Config.',
-        );
-        self::assertStringNotContainsString(
-            'type="email"',
-            $output,
-            'The default registry must not replace the configured factory.',
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div class="container">
+            <div class="field">
+            <label class="label" for="basicform-email">Email</label>
+            <input class="control" id="basicform-email" name="BasicForm[email]" type="hidden">
+            </div>
+            </div>
+            HTML,
+            Field::tag()
+                ->config($config)
+                ->control('email')
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->render(),
+            'The default registry must not replace the factory carried by config.',
         );
     }
 
@@ -241,9 +245,15 @@ final class FieldConfigTest extends TestCase
         };
 
         $this->expectException(InvalidControl::class);
+        $this->expectExceptionMessage(
+            Message::INVALID_CONTROL_RETURNED->getMessage(
+                'field.control',
+                RenderableInterface::class . '@anonymous',
+            ),
+        );
 
         Field::tag()
-            ->input(InputWidget::tag())
+            ->input(InputText::tag())
             ->config(new Config($theme, $applier));
     }
 

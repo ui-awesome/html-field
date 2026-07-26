@@ -14,8 +14,7 @@ use UIAwesome\Html\Core\Theme\ThemeInterface;
 use UIAwesome\Html\Field\Exception\{ControlNotFound, InvalidControl, Message};
 use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Tests\Provider\ControlFactoryProvider;
-use UIAwesome\Html\Field\Tests\Support\InputWidget;
-use UIAwesome\Html\Form\InputEmail;
+use UIAwesome\Html\Form\{InputEmail, InputHidden};
 
 /**
  * Unit tests for the {@see ControlFactory} creating form controls from semantic component contexts.
@@ -53,7 +52,7 @@ final class ControlFactoryTest extends TestCase
         $definition = static function (ComponentContext $context) use (&$receivedContext): FormControlInterface {
             $receivedContext = $context;
 
-            return InputWidget::tag()->addAttribute('data-component', $context->component);
+            return InputHidden::tag()->addAttribute('data-component', $context->component);
         };
 
         $controlFactory = new ControlFactory(['custom' => $definition]);
@@ -95,10 +94,10 @@ final class ControlFactoryTest extends TestCase
 
     public function testOverridesADefaultControlThroughTheConstructor(): void
     {
-        $controlFactory = new ControlFactory(['email' => InputWidget::class]);
+        $controlFactory = new ControlFactory(['email' => InputHidden::class]);
 
         self::assertInstanceOf(
-            InputWidget::class,
+            InputHidden::class,
             $controlFactory->create(new ComponentContext('field.control.email')),
             'Constructor definitions must take precedence over defaults.',
         );
@@ -106,8 +105,8 @@ final class ControlFactoryTest extends TestCase
 
     public function testReplacesAControlWithAClassWithoutMutatingTheOriginalFactory(): void
     {
-        $factory = new ControlFactory(['editor' => InputWidget::class]);
-        $configured = $factory->with('email', InputWidget::class);
+        $factory = new ControlFactory(['editor' => InputHidden::class]);
+        $configured = $factory->with('email', InputHidden::class);
 
         self::assertInstanceOf(
             InputEmail::class,
@@ -115,12 +114,12 @@ final class ControlFactoryTest extends TestCase
             'Original factory must keep the default control.',
         );
         self::assertInstanceOf(
-            InputWidget::class,
+            InputHidden::class,
             $configured->create(new ComponentContext('field.control.email')),
             'Derived factory must use the replacement.',
         );
         self::assertInstanceOf(
-            InputWidget::class,
+            InputHidden::class,
             $configured->create(new ComponentContext('field.control.editor')),
             'Derived factory must keep prior registrations.',
         );
@@ -163,7 +162,7 @@ final class ControlFactoryTest extends TestCase
             Message::CONTROL_TYPE_INVALID->getMessage(),
         );
 
-        $controlFactory->with($type, InputWidget::class);
+        $controlFactory->with($type, InputHidden::class);
     }
 
     public function testThrowInvalidArgumentExceptionForNumericDefinitionKey(): void
@@ -173,7 +172,7 @@ final class ControlFactoryTest extends TestCase
             Message::CONTROL_TYPE_INVALID->getMessage(),
         );
 
-        new ControlFactory([InputWidget::class]);
+        new ControlFactory([InputHidden::class]);
     }
 
     public function testThrowInvalidControlWhenClosureDoesNotReturnFormControl(): void
