@@ -521,7 +521,7 @@ abstract class AbstractField extends BaseTag
         $id = Naming::generateInputId($formModel->getModelName(), $property);
 
         /** @var static $configured */
-        $configured = SimpleFactory::configure(
+        return SimpleFactory::configure(
             $this,
             [
                 'hintContent' => [$formModel->getHint($property)],
@@ -531,8 +531,6 @@ abstract class AbstractField extends BaseTag
                 'name' => [Naming::generateInputName($formModel->getModelName(), $property)],
             ],
         );
-
-        return $configured;
     }
 
     /**
