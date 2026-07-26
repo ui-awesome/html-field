@@ -25,7 +25,7 @@ public function getFieldConfigs(): array
 
 After, the same entry fails with a message naming the call, the recipe, the semantic component, and the control class.
 
-```
+```text
 Config call 'maxlenght' from recipe 'field-config.email' is not a public instance method for component
 'field.control' (UIAwesome\Html\Form\InputText).
 ```

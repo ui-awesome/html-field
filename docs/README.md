@@ -80,7 +80,7 @@ final class LoginForm extends BaseFormModel
 Strict mode makes typos fail instead of rendering a control that silently ignores them. An entry naming a method the
 control does not expose throws `ConfigException`:
 
-```
+```text
 Config call 'maxlenght' from recipe 'field-config.email' is not a public instance method for component
 'field.control' (UIAwesome\Html\Form\InputText).
 ```

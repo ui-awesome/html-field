@@ -359,7 +359,8 @@ abstract class AbstractField extends BaseTag
      *
      * A call naming a method the control does not expose fails instead of being skipped.
      *
-     * @throws ConfigException If a call is unavailable, returns an incompatible control, or fails during execution.
+     * @throws ConfigException If a call is unavailable, returns an incompatible control, fails during execution, or
+     * the applier returns a component incompatible with the control.
      * @throws InvalidFieldConfig If the field config shape cannot be converted into ordered config calls.
      */
     private function applyFieldConfig(
@@ -372,16 +373,29 @@ abstract class AbstractField extends BaseTag
             return $widget;
         }
 
-        /** @var AttributesInterface&RenderableInterface $configured */
-        return (new ConfigApplier())->apply(
+        $context = self::slotContext($this->configContext ?? new ComponentContext('field'), 'control');
+
+        $configured = (new ConfigApplier())->apply(
             $widget,
             new Recipe(
                 "field-config.{$property}",
                 self::toCookbook($formModel->getFieldConfig($property), $property),
             ),
-            self::slotContext($this->configContext ?? new ComponentContext('field'), 'control'),
+            $context,
             strict: true,
         );
+
+        if (($configured instanceof $widget) === false) {
+            throw new ConfigException(
+                ConfigMessage::CONFIG_RETURNED_INCOMPATIBLE_COMPONENT->getMessage(
+                    $context->component,
+                    get_debug_type($widget),
+                    get_debug_type($configured),
+                ),
+            );
+        }
+
+        return $configured;
     }
 
     /**
