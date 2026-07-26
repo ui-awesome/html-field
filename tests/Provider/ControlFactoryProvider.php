@@ -7,11 +7,13 @@ namespace UIAwesome\Html\Field\Tests\Provider;
 use stdClass;
 use UIAwesome\Html\Contracts\Form\FormControlInterface;
 use UIAwesome\Html\Form\{
+    CheckboxList,
     InputCheckbox,
     InputEmail,
     InputPassword,
     InputRadio,
     InputText,
+    RadioList,
     Select,
     TextArea,
 };
@@ -27,9 +29,11 @@ final class ControlFactoryProvider
     public static function defaultControls(): iterable
     {
         yield 'checkbox' => ['checkbox', InputCheckbox::class];
+        yield 'checkbox list' => ['checkbox-list', CheckboxList::class];
         yield 'email' => ['email', InputEmail::class];
         yield 'password' => ['password', InputPassword::class];
         yield 'radio' => ['radio', InputRadio::class];
+        yield 'radio list' => ['radio-list', RadioList::class];
         yield 'select' => ['select', Select::class];
         yield 'text' => ['text', InputText::class];
         yield 'textarea' => ['textarea', TextArea::class];

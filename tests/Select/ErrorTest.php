@@ -7,11 +7,12 @@ namespace UIAwesome\Html\Field\Tests\Select;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, SelectControl};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{Option, Select};
 use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * Unit tests for {@see Field} error rendering with {@see SelectControl}.
+ * Unit tests for {@see Field} error rendering with {@see Select}.
  */
 #[Group('select')]
 final class ErrorTest extends TestCase
@@ -27,8 +28,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div>
             Error
@@ -38,7 +43,7 @@ final class ErrorTest extends TestCase
             Field::tag()
                 ->formModel($formModel)
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Error content must be rendered.',
         );
@@ -55,8 +60,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div class="value">
             Error
@@ -67,7 +76,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('fruits')
                 ->errorAttributes(['class' => 'value'])
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "Error 'class' must be serialized.",
         );
@@ -84,8 +93,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div class="value">
             Error
@@ -96,7 +109,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('fruits')
                 ->errorClass('value')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "Error 'class' must be serialized.",
         );
@@ -109,8 +122,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div>
             Error
@@ -121,7 +138,7 @@ final class ErrorTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->errorContent('Error')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Error content must be rendered.',
         );
@@ -138,8 +155,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div>
             Error
@@ -150,8 +171,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('fruits')
                 ->errorTag(Block::DIV)
-                ->input(SelectControl::tag()
-                ->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "Error must render as '<div>'.",
         );
@@ -168,8 +188,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             Error
             </div>
@@ -178,7 +202,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('fruits')
                 ->errorTag(false)
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Error tag must be omitted.',
         );
@@ -195,8 +219,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <span>Error</span>
             </div>
@@ -205,7 +233,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('fruits')
                 ->errorTag(Inline::SPAN)
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Error must render as the given tag.',
         );
@@ -223,8 +251,12 @@ final class ErrorTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div>
             Error - 1
@@ -235,10 +267,18 @@ final class ErrorTest extends TestCase
             Field::tag()
                 ->formModel($formModel)
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->showAllErrors()
                 ->render(),
             'All errors must be rendered.',
+        );
+    }
+
+    private static function select(): Select
+    {
+        return Select::tag()->options(
+            Option::tag()->content('Select an option'),
+            Option::tag()->content('Apple')->value(1),
         );
     }
 }

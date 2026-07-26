@@ -12,11 +12,13 @@ use UIAwesome\Html\Core\Config\ComponentContext;
 use UIAwesome\Html\Core\Factory\ComponentFactoryInterface;
 use UIAwesome\Html\Field\Exception\{ControlNotFound, InvalidControl, Message};
 use UIAwesome\Html\Form\{
+    CheckboxList,
     InputCheckbox,
     InputEmail,
     InputPassword,
     InputRadio,
     InputText,
+    RadioList,
     Select,
     TextArea,
 };
@@ -143,9 +145,11 @@ final readonly class ControlFactory implements ComponentFactoryInterface
     {
         return [
             'checkbox' => InputCheckbox::class,
+            'checkbox-list' => CheckboxList::class,
             'email' => InputEmail::class,
             'password' => InputPassword::class,
             'radio' => InputRadio::class,
+            'radio-list' => RadioList::class,
             'select' => Select::class,
             'text' => InputText::class,
             'textarea' => TextArea::class,

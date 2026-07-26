@@ -6,18 +6,13 @@ namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use UIAwesome\{
-    Html\Field\Field,
-    Html\Field\Tests\Support\BasicForm,
-    Html\Field\Tests\Support\ChoiceItem,
-    Html\Field\Tests\Support\ChoiceList
-};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{CheckboxList, ChoiceItem};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * Unit tests for {@see Field} rendering with {@see ChoiceList}.
+ * Unit tests for {@see Field} rendering with {@see CheckboxList}.
  */
 #[Group('checkboxlist')]
 final class RenderTest extends TestCase
@@ -28,26 +23,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input class="value" id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input class="value" id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input class="value" id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div class="value" id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->attributes(['class' => 'value'])
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "'class' must be serialized.",
         );
@@ -59,25 +49,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div class="value" id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->class('value')
+                ->input(self::checkboxList())
                 ->render(),
             "'class' must be serialized.",
         );
@@ -89,26 +75,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div class="value">
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerAttributes(['class' => 'value'])
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Container 'class' must be serialized.",
         );
@@ -120,26 +101,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div class="value">
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerClass('value')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Container 'class' must be serialized.",
         );
@@ -151,26 +127,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerTag(Block::DIV)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Container must render as '<div>'.",
         );
@@ -181,25 +152,20 @@ final class RenderTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerTag(false)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Container must be omitted.',
         );
@@ -211,26 +177,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <article>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </article>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->containerTag(Block::ARTICLE)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Container must render as the given tag.',
         );
@@ -242,26 +203,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="value-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="value-w0">Apple</label>
-            <input id="value-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="value-w1">Banana</label>
-            <input id="value-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="value-w2">Orange</label>
+            <div id="value">
+            <input id="value-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="value-0">Apple</label>
+            <input id="value-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="value-1">Banana</label>
+            <input id="value-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="value-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->id('value')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "'id' must propagate to the label 'for' and input.",
         );
@@ -274,26 +230,21 @@ final class RenderTest extends TestCase
             <div>
             <div class="value">
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
                 ->render(),
@@ -308,26 +259,21 @@ final class RenderTest extends TestCase
             <div>
             <div class="value">
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
                 ->render(),
@@ -342,26 +288,21 @@ final class RenderTest extends TestCase
             <div>
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->inputContainerTag(Block::DIV)
                 ->render(),
             'Input must be wrapped in the container tag.',
@@ -374,25 +315,20 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->inputContainerTag(false)
                 ->render(),
             'Input container must be omitted.',
@@ -406,26 +342,21 @@ final class RenderTest extends TestCase
             <div>
             <article>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->inputContainerTag(Block::ARTICLE)
                 ->render(),
             'Input must be wrapped in the given tag.',
@@ -438,27 +369,22 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <div>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <label>Fruits</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->inputContainerTag(Block::DIV)
                 ->inputTemplate("{input}\n{label}")
                 ->render(),
@@ -472,25 +398,20 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="value[]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="value[]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="value[]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="value[]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="value[]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="value[]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->name('value')
                 ->render(),
             "'name' must use the given value.",
@@ -504,25 +425,20 @@ final class RenderTest extends TestCase
             <div>
             Prefix
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->prefix('Prefix')
                 ->render(),
             'Prefix must precede the input.',
@@ -538,25 +454,20 @@ final class RenderTest extends TestCase
             prefix
             </div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
@@ -574,25 +485,20 @@ final class RenderTest extends TestCase
             prefix
             </div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
@@ -610,25 +516,20 @@ final class RenderTest extends TestCase
             prefix
             </div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
                 ->render(),
@@ -643,25 +544,20 @@ final class RenderTest extends TestCase
             <div>
             prefix
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render(),
@@ -676,25 +572,20 @@ final class RenderTest extends TestCase
             <div>
             <span>prefix</span>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->prefix('prefix')
                 ->prefixTag(Inline::SPAN)
                 ->render(),
@@ -708,25 +599,20 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->render(),
             'Default structure must be rendered.',
         );
@@ -738,26 +624,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->suffix('suffix')
                 ->render(),
             'Suffix must follow the input.',
@@ -770,28 +651,23 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
@@ -806,28 +682,23 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div class="value">
             suffix
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
@@ -842,28 +713,23 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div>
             suffix
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
                 ->render(),
@@ -877,26 +743,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             suffix
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render(),
@@ -910,26 +771,21 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <span>suffix</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
                 ->render(),
@@ -944,26 +800,21 @@ final class RenderTest extends TestCase
             <div>
             <article>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </article>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->template('<article>\n{field}\n</article>')
                 ->render(),
             'Template must wrap the field.',
@@ -976,25 +827,22 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input name="BasicForm[fruits][]" type="hidden" value="0">
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input name="BasicForm[fruits]" type="hidden" value="0">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->value(1)->label('Apple'),
-                            ChoiceItem::checkbox()->value(2)->label('Banana'),
-                            ChoiceItem::checkbox()->value(3)->label('Orange'),
-                        )
+                    self::checkboxList()
                         ->uncheckedValue('0')
                 )
                 ->render(),
@@ -1008,25 +856,20 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1" checked>
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3" checked>
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1" checked>
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3" checked>
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->value([1, 3])
                 ->render(),
             "Matching values must set 'checked'.",
@@ -1044,25 +887,18 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2" checked>
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2" checked>
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Matching `int` must set 'checked'.",
         );
@@ -1074,25 +910,18 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2" checked>
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3" checked>
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2" checked>
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3" checked>
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Matching `string` values must set 'checked'.",
         );
@@ -1104,25 +933,18 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Unmatched value must not set 'checked'.",
         );
@@ -1134,25 +956,18 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Empty array must not set 'checked'.",
         );
@@ -1164,25 +979,18 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "`null` must not set 'checked'.",
         );
@@ -1194,25 +1002,20 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->value(null)
                 ->render(),
             "`null` must not set 'checked'.",
@@ -1235,16 +1038,11 @@ final class RenderTest extends TestCase
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->id(null)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "'id' and 'for' must be omitted.",
         );
@@ -1256,28 +1054,32 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
+                ->input(self::checkboxList())
                 ->name(null)
                 ->render(),
             "'name' must be omitted.",
+        );
+    }
+
+    private static function checkboxList(): CheckboxList
+    {
+        return CheckboxList::tag()->items(
+            ChoiceItem::tag()->label('Apple')->value(1),
+            ChoiceItem::tag()->label('Banana')->value(2),
+            ChoiceItem::tag()->label('Orange')->value(3),
         );
     }
 }

@@ -7,11 +7,12 @@ namespace UIAwesome\Html\Field\Tests\RadioList;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, ChoiceItem, ChoiceList};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{ChoiceItem, RadioList};
 use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * Unit tests for {@see Field} error rendering with {@see ChoiceList}.
+ * Unit tests for {@see Field} error rendering with {@see RadioList}.
  */
 #[Group('radiolist')]
 final class ErrorTest extends TestCase
@@ -26,11 +27,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error
@@ -40,13 +41,7 @@ final class ErrorTest extends TestCase
             Field::tag()
                 ->formModel($formModel)
                 ->property('agree')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             'Error content must be rendered.',
         );
@@ -62,11 +57,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div class="value">
             Error
@@ -77,13 +72,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('agree')
                 ->errorAttributes(['class' => 'value'])
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             "Error 'class' must be serialized.",
         );
@@ -99,11 +88,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div class="value">
             Error
@@ -114,13 +103,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('agree')
                 ->errorClass('value')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             "Error 'class' must be serialized.",
         );
@@ -132,11 +115,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error
@@ -147,13 +130,7 @@ final class ErrorTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('agree')
                 ->errorContent('Error')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             'Error content must be rendered.',
         );
@@ -169,11 +146,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error
@@ -184,13 +161,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('agree')
                 ->errorTag(Block::DIV)
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             "Error must render as '<div>'.",
         );
@@ -206,11 +177,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             Error
             </div>
@@ -219,13 +190,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('agree')
                 ->errorTag(false)
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             'Error tag must be omitted.',
         );
@@ -241,11 +206,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <span>Error</span>
             </div>
@@ -254,13 +219,7 @@ final class ErrorTest extends TestCase
                 ->formModel($formModel)
                 ->property('agree')
                 ->errorTag(Inline::SPAN)
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             'Error must render as the given tag.',
         );
@@ -277,11 +236,11 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">
-            <label for="basicform-agree-w0">No</label>
-            <input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">
-            <label for="basicform-agree-w1">Yes</label>
+            <div id="basicform-agree">
+            <input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">
+            <label for="basicform-agree-0">No</label>
+            <input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">
+            <label for="basicform-agree-1">Yes</label>
             </div>
             <div>
             Error - 1
@@ -292,16 +251,18 @@ final class ErrorTest extends TestCase
             Field::tag()
                 ->formModel($formModel)
                 ->property('agree')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->showAllErrors()
                 ->render(),
             'All errors must be rendered.',
+        );
+    }
+
+    private static function radioList(): RadioList
+    {
+        return RadioList::tag()->items(
+            ChoiceItem::tag()->label('No')->value(0),
+            ChoiceItem::tag()->label('Yes')->value(1),
         );
     }
 }

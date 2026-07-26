@@ -7,10 +7,11 @@ namespace UIAwesome\Html\Field\Tests\RadioList;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, ChoiceItem, ChoiceList};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{ChoiceItem, RadioList};
 
 /**
- * Unit tests for {@see Field} label rendering with {@see ChoiceList}.
+ * Unit tests for {@see Field} label rendering with {@see RadioList}.
  */
 #[Group('radiolist')]
 final class LabelTest extends TestCase
@@ -20,11 +21,11 @@ final class LabelTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
@@ -32,13 +33,7 @@ final class LabelTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('label')
                 ->notLabel()
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->render(),
             'Label must be omitted.',
         );
@@ -50,22 +45,16 @@ final class LabelTest extends TestCase
             <<<HTML
             <div>
             <label>Agree</label>
-            <div>
-            <label for="basicform-agree-w0"><input id="basicform-agree-w0" name="BasicForm[agree]" type="radio" value="0">No</label>
-            <label for="basicform-agree-w1"><input id="basicform-agree-w1" name="BasicForm[agree]" type="radio" value="1">Yes</label>
+            <div id="basicform-agree">
+            <label for="basicform-agree-0"><input id="basicform-agree-0" name="BasicForm[agree]" type="radio" value="0">No</label>
+            <label for="basicform-agree-1"><input id="basicform-agree-1" name="BasicForm[agree]" type="radio" value="1">Yes</label>
             </div>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('agree')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->enclosedByLabel(true)
                 ->render(),
             'Label must enclose the control.',
@@ -78,24 +67,18 @@ final class LabelTest extends TestCase
             <<<HTML
             <div>
             <label>Label</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('label')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->label('Label')
                 ->render(),
             'Label content must be rendered.',
@@ -108,24 +91,18 @@ final class LabelTest extends TestCase
             <<<HTML
             <div>
             <label class="value">This is a label.</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('label')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->labelAttributes(['class' => 'value'])
                 ->render(),
             "Label 'class' must be serialized.",
@@ -138,24 +115,18 @@ final class LabelTest extends TestCase
             <<<HTML
             <div>
             <label class="value">This is a label.</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('label')
-                ->input(
-                    ChoiceList::radio()
-                        ->items(
-                            ChoiceItem::radio()->label('No')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
-                        )
-                )
+                ->input(self::radioList())
                 ->labelClass('value')
                 ->render(),
             "Label 'class' must be serialized.",
@@ -168,11 +139,11 @@ final class LabelTest extends TestCase
             <<<HTML
             <div>
             <label>This is a label.</label>
-            <div>
-            <input id="basicform-label-w0" name="BasicForm[label]" type="radio" value="0">
-            <label class="value" for="basicform-label-w0">No</label>
-            <input id="basicform-label-w1" name="BasicForm[label]" type="radio" value="1">
-            <label for="basicform-label-w1">Yes</label>
+            <div id="basicform-label">
+            <input id="basicform-label-0" name="BasicForm[label]" type="radio" value="0">
+            <label class="value" for="basicform-label-0">No</label>
+            <input id="basicform-label-1" name="BasicForm[label]" type="radio" value="1">
+            <label for="basicform-label-1">Yes</label>
             </div>
             </div>
             HTML,
@@ -180,14 +151,22 @@ final class LabelTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('label')
                 ->input(
-                    ChoiceList::radio()
+                    RadioList::tag()
                         ->items(
-                            ChoiceItem::radio()->label('No')->labelClass('value')->value(0),
-                            ChoiceItem::radio()->label('Yes')->value(1),
+                            ChoiceItem::tag()->label('No')->labelClass('value')->value(0),
+                            ChoiceItem::tag()->label('Yes')->value(1),
                         )
                 )
                 ->render(),
             "Item label 'class' must be serialized.",
+        );
+    }
+
+    private static function radioList(): RadioList
+    {
+        return RadioList::tag()->items(
+            ChoiceItem::tag()->label('No')->value(0),
+            ChoiceItem::tag()->label('Yes')->value(1),
         );
     }
 }

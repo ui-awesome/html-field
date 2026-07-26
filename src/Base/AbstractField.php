@@ -9,7 +9,6 @@ use Override;
 use UIAwesome\FormModel\FormModelInterface;
 use UIAwesome\Html\Attribute\Global\{HasClass, HasId};
 use UIAwesome\Html\Attribute\HasName;
-use UIAwesome\Html\Attribute\Values\ElementAttribute;
 use UIAwesome\Html\Contracts\Attribute\AttributesInterface;
 use UIAwesome\Html\Contracts\Form\FormControlInterface;
 use UIAwesome\Html\Contracts\RenderableInterface;
@@ -28,7 +27,7 @@ use UIAwesome\Html\Field\Mixin\{
     HasInputTemplate,
     HasValidateClass,
 };
-use UIAwesome\Html\Form\{InputCheckbox, InputRadio};
+use UIAwesome\Html\Form\{InputCheckbox, InputRadio, Select};
 use UIAwesome\Html\Helper\{Encode, Naming, Template};
 use UIAwesome\Html\Interop\{Block, Inline};
 use UIAwesome\Html\Mixin\{
@@ -42,7 +41,6 @@ use UIAwesome\Html\Mixin\{
 use UIAwesome\Html\Phrasing\Label;
 use UnitEnum;
 
-use function array_key_exists;
 use function get_debug_type;
 use function implode;
 use function is_array;
@@ -95,6 +93,10 @@ abstract class AbstractField extends BaseTag
      */
     private string $property = '';
     /**
+     * Explicit field value used for model binding without becoming a control attribute.
+     */
+    private mixed $value = null;
+    /**
      * Form control rendered by the field, or `null` until a control is configured.
      */
     private (AttributesInterface&RenderableInterface)|null $widget = null;
@@ -123,7 +125,7 @@ abstract class AbstractField extends BaseTag
         $field->config = $config;
         $field->configContext = $context;
 
-        $field = $field->configureControlFromConfig();
+        $field = $field->configureControlFromConfig($config, $context);
 
         foreach (['hint', 'error', 'prefix', 'suffix'] as $slot) {
             $field = $field->applyConfig($config, self::slotContext($context, $slot));
@@ -138,7 +140,8 @@ abstract class AbstractField extends BaseTag
     /**
      * Selects a semantic control type and creates it through the field control factory.
      *
-     * The default registry supports `checkbox`, `email`, `password`, `radio`, `select`, `text`, and `textarea`.
+     * The default registry supports `checkbox`, `checkbox-list`, `email`, `password`, `radio`, `radio-list`, `select`,
+     * `text`, and `textarea`.
      *
      * When application config is present, its factory replaces the default registry and its recipe is applied to the
      * `field.control.<type>` context.
@@ -269,18 +272,22 @@ abstract class AbstractField extends BaseTag
     /**
      * Sets the field value applied to the form control.
      *
-     * An explicit value takes precedence over the value resolved from the form model.
+     * An explicit value takes precedence over the value resolved from the form model. The selected value remains
+     * separate from HTML attributes so checkbox and radio option values are preserved.
      *
      * Usage example:
      * ```php
      * $field = \UIAwesome\Html\Field\Field::tag()->value('admin');
      * ```
      *
-     * @param mixed $value Value serialized into the form control.
+     * @param mixed $value Selected value applied to the form control.
      */
     public function value(mixed $value): static
     {
-        return $this->addAttribute(ElementAttribute::VALUE, $value);
+        $new = clone $this;
+        $new->value = $value;
+
+        return $new;
     }
 
     /**
@@ -372,11 +379,22 @@ abstract class AbstractField extends BaseTag
     private function applyToAttributes(
         AttributesInterface&RenderableInterface $widget,
     ): AttributesInterface&RenderableInterface {
+        $attributes = $this->getAttributes();
+
         if ($this->hintContent !== '' && $this->hintId !== '') {
             $widget = $widget->addAttribute('aria-describedby', $this->hintId);
         }
 
-        return $widget->attributes($this->getAttributes());
+        if (
+            $this->value !== null
+            && method_exists($widget, 'checked') === false
+            && method_exists($widget, 'src') === false
+            && ($widget instanceof Select) === false
+        ) {
+            $attributes['value'] = $this->value;
+        }
+
+        return $widget->attributes($attributes);
     }
 
     /**
@@ -406,9 +424,14 @@ abstract class AbstractField extends BaseTag
         FormModelInterface $formModel,
         string $property,
     ): AttributesInterface&RenderableInterface {
-        $value = $this->getAttribute('value') ?? $formModel->getValue($property);
+        $value = $this->value ?? $formModel->getValue($property);
 
-        foreach (['content', 'checked', 'src', 'value'] as $method) {
+        if ($widget instanceof Select) {
+            /** @phpstan-ignore argument.type */
+            return $widget->value($value);
+        }
+
+        foreach (['checked', 'content', 'src', 'value'] as $method) {
             if (method_exists($widget, $method) === false) {
                 continue;
             }
@@ -429,10 +452,6 @@ abstract class AbstractField extends BaseTag
             $configured = $widget->{$method}($value);
 
             if ($configured instanceof $widget) {
-                if ($method === 'src' && array_key_exists('value', $this->getAttributes())) {
-                    $configured = $configured->removeAttribute('value');
-                }
-
                 return $configured;
             }
         }
@@ -443,18 +462,18 @@ abstract class AbstractField extends BaseTag
     /**
      * Creates a semantic control or applies the generic control-slot recipe to an explicitly supplied input.
      */
-    private function configureControlFromConfig(): static
+    private function configureControlFromConfig(Config $config, ComponentContext $configContext): static
     {
         if ($this->controlType !== null) {
             return $this->control($this->controlType);
         }
 
-        if ($this->widget === null || $this->config === null || $this->configContext === null) {
+        if ($this->widget === null) {
             return $this;
         }
 
-        $context = self::slotContext($this->configContext, 'control');
-        $widget = $this->config->apply($this->widget, $context);
+        $context = self::slotContext($configContext, 'control');
+        $widget = $config->apply($this->widget, $context);
 
         if (($widget instanceof AttributesInterface) === false || ($widget instanceof RenderableInterface) === false) {
             throw new InvalidControl($context->component, get_debug_type($widget));

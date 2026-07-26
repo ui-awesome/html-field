@@ -6,18 +6,13 @@ namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use UIAwesome\Html\{
-    Field\Field,
-    Field\Tests\Support\BasicForm,
-    Field\Tests\Support\ChoiceItem,
-    Field\Tests\Support\ChoiceList,
-};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{CheckboxList, ChoiceItem};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * Unit tests for {@see Field} hint rendering with {@see ChoiceList}.
+ * Unit tests for {@see Field} hint rendering with {@see CheckboxList}.
  */
 #[Group('checkboxlist')]
 final class HintTest extends TestCase
@@ -28,28 +23,23 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Hint</label>
-            <div>
-            <input id="basicform-hint-w0" name="BasicForm[hint][]" type="checkbox" value="1" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w0">Apple</label>
-            <input id="basicform-hint-w1" name="BasicForm[hint][]" type="checkbox" value="2" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w1">Banana</label>
-            <input id="basicform-hint-w2" name="BasicForm[hint][]" type="checkbox" value="3" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w2">Orange</label>
+            <div id="basicform-hint" aria-describedby="basicform-hint-help">
+            <input id="basicform-hint-0" name="BasicForm[hint][]" type="checkbox" value="1">
+            <label for="basicform-hint-0">Apple</label>
+            <input id="basicform-hint-1" name="BasicForm[hint][]" type="checkbox" value="2">
+            <label for="basicform-hint-1">Banana</label>
+            <input id="basicform-hint-2" name="BasicForm[hint][]" type="checkbox" value="3">
+            <label for="basicform-hint-2">Orange</label>
             </div>
             <div id="basicform-hint-help">
             This is a hint.
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
+                ->input(self::checkboxList())
                 ->render(),
             'Hint content must be rendered.',
         );
@@ -61,29 +51,24 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Hint</label>
-            <div>
-            <input id="basicform-hint-w0" name="BasicForm[hint][]" type="checkbox" value="1" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w0">Apple</label>
-            <input id="basicform-hint-w1" name="BasicForm[hint][]" type="checkbox" value="2" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w1">Banana</label>
-            <input id="basicform-hint-w2" name="BasicForm[hint][]" type="checkbox" value="3" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w2">Orange</label>
+            <div id="basicform-hint" aria-describedby="basicform-hint-help">
+            <input id="basicform-hint-0" name="BasicForm[hint][]" type="checkbox" value="1">
+            <label for="basicform-hint-0">Apple</label>
+            <input id="basicform-hint-1" name="BasicForm[hint][]" type="checkbox" value="2">
+            <label for="basicform-hint-1">Banana</label>
+            <input id="basicform-hint-2" name="BasicForm[hint][]" type="checkbox" value="3">
+            <label for="basicform-hint-2">Orange</label>
             </div>
             <div class="value" id="basicform-hint-help">
             This is a hint.
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintAttributes(['class' => 'value'])
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Hint 'class' must be serialized.",
         );
@@ -95,29 +80,24 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Hint</label>
-            <div>
-            <input id="basicform-hint-w0" name="BasicForm[hint][]" type="checkbox" value="1" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w0">Apple</label>
-            <input id="basicform-hint-w1" name="BasicForm[hint][]" type="checkbox" value="2" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w1">Banana</label>
-            <input id="basicform-hint-w2" name="BasicForm[hint][]" type="checkbox" value="3" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w2">Orange</label>
+            <div id="basicform-hint" aria-describedby="basicform-hint-help">
+            <input id="basicform-hint-0" name="BasicForm[hint][]" type="checkbox" value="1">
+            <label for="basicform-hint-0">Apple</label>
+            <input id="basicform-hint-1" name="BasicForm[hint][]" type="checkbox" value="2">
+            <label for="basicform-hint-1">Banana</label>
+            <input id="basicform-hint-2" name="BasicForm[hint][]" type="checkbox" value="3">
+            <label for="basicform-hint-2">Orange</label>
             </div>
             <div class="value" id="basicform-hint-help">
             This is a hint.
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintClass('value')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Hint 'class' must be serialized.",
         );
@@ -129,29 +109,24 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1" aria-describedby="basicform-fruits-help">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2" aria-describedby="basicform-fruits-help">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3" aria-describedby="basicform-fruits-help">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits" aria-describedby="basicform-fruits-help">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div id="basicform-fruits-help">
             Hint
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->hintContent('Hint')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Hint content must be rendered.',
         );
@@ -163,29 +138,24 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Hint</label>
-            <div>
-            <input id="basicform-hint-w0" name="BasicForm[hint][]" type="checkbox" value="1" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w0">Apple</label>
-            <input id="basicform-hint-w1" name="BasicForm[hint][]" type="checkbox" value="2" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w1">Banana</label>
-            <input id="basicform-hint-w2" name="BasicForm[hint][]" type="checkbox" value="3" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w2">Orange</label>
+            <div id="basicform-hint" aria-describedby="basicform-hint-help">
+            <input id="basicform-hint-0" name="BasicForm[hint][]" type="checkbox" value="1">
+            <label for="basicform-hint-0">Apple</label>
+            <input id="basicform-hint-1" name="BasicForm[hint][]" type="checkbox" value="2">
+            <label for="basicform-hint-1">Banana</label>
+            <input id="basicform-hint-2" name="BasicForm[hint][]" type="checkbox" value="3">
+            <label for="basicform-hint-2">Orange</label>
             </div>
             <div id="basicform-hint-help">
             This is a hint.
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintTag(Block::DIV)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Hint must render as '<div>'.",
         );
@@ -197,27 +167,22 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Hint</label>
-            <div>
-            <input id="basicform-hint-w0" name="BasicForm[hint][]" type="checkbox" value="1" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w0">Apple</label>
-            <input id="basicform-hint-w1" name="BasicForm[hint][]" type="checkbox" value="2" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w1">Banana</label>
-            <input id="basicform-hint-w2" name="BasicForm[hint][]" type="checkbox" value="3" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w2">Orange</label>
+            <div id="basicform-hint" aria-describedby="basicform-hint-help">
+            <input id="basicform-hint-0" name="BasicForm[hint][]" type="checkbox" value="1">
+            <label for="basicform-hint-0">Apple</label>
+            <input id="basicform-hint-1" name="BasicForm[hint][]" type="checkbox" value="2">
+            <label for="basicform-hint-1">Banana</label>
+            <input id="basicform-hint-2" name="BasicForm[hint][]" type="checkbox" value="3">
+            <label for="basicform-hint-2">Orange</label>
             </div>
             This is a hint.
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintTag(false)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Hint tag must be omitted.',
         );
@@ -229,29 +194,33 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Hint</label>
-            <div>
-            <input id="basicform-hint-w0" name="BasicForm[hint][]" type="checkbox" value="1" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w0">Apple</label>
-            <input id="basicform-hint-w1" name="BasicForm[hint][]" type="checkbox" value="2" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w1">Banana</label>
-            <input id="basicform-hint-w2" name="BasicForm[hint][]" type="checkbox" value="3" aria-describedby="basicform-hint-help">
-            <label for="basicform-hint-w2">Orange</label>
+            <div id="basicform-hint" aria-describedby="basicform-hint-help">
+            <input id="basicform-hint-0" name="BasicForm[hint][]" type="checkbox" value="1">
+            <label for="basicform-hint-0">Apple</label>
+            <input id="basicform-hint-1" name="BasicForm[hint][]" type="checkbox" value="2">
+            <label for="basicform-hint-1">Banana</label>
+            <input id="basicform-hint-2" name="BasicForm[hint][]" type="checkbox" value="3">
+            <label for="basicform-hint-2">Orange</label>
             </div>
             <span id="basicform-hint-help">This is a hint.</span>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('hint')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('hint')
                 ->hintTag(Inline::SPAN)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Hint must render as the given tag.',
+        );
+    }
+
+    private static function checkboxList(): CheckboxList
+    {
+        return CheckboxList::tag()->items(
+            ChoiceItem::tag()->label('Apple')->value(1),
+            ChoiceItem::tag()->label('Banana')->value(2),
+            ChoiceItem::tag()->label('Orange')->value(3),
         );
     }
 }

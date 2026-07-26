@@ -7,10 +7,11 @@ namespace UIAwesome\Html\Field\Tests\Select;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, SelectControl};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{Option, Select};
 
 /**
- * Unit tests for {@see Field} label rendering with {@see SelectControl}.
+ * Unit tests for {@see Field} label rendering with {@see Select}.
  */
 #[Group('select')]
 final class LabelTest extends TestCase
@@ -21,8 +22,12 @@ final class LabelTest extends TestCase
             <<<HTML
             <div>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -30,8 +35,7 @@ final class LabelTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('label')
                 ->notLabel()
-                ->input(SelectControl::tag()
-                ->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Label must be omitted.',
         );
@@ -44,15 +48,19 @@ final class LabelTest extends TestCase
             <div>
             <label for="basicform-label">Label</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('label')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->label('Label')
                 ->render(),
             'Label content must be rendered.',
@@ -66,15 +74,19 @@ final class LabelTest extends TestCase
             <div>
             <label class="value" for="basicform-label">This is a label.</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('label')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->labelAttributes(['class' => 'value'])
                 ->render(),
             "Label 'class' must be serialized.",
@@ -88,15 +100,19 @@ final class LabelTest extends TestCase
             <div>
             <label class="value" for="basicform-label">This is a label.</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('label')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->labelClass('value')
                 ->render(),
             "Label 'class' must be serialized.",
@@ -110,18 +126,30 @@ final class LabelTest extends TestCase
             <div>
             <label for="value">This is a label.</label>
             <select id="basicform-label" name="BasicForm[label]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('label')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->labelFor('value')
                 ->render(),
             "'for' must use the given value.",
+        );
+    }
+
+    private static function select(): Select
+    {
+        return Select::tag()->options(
+            Option::tag()->content('Select an option'),
+            Option::tag()->content('Apple')->value(1),
         );
     }
 }

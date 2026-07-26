@@ -6,8 +6,17 @@ namespace UIAwesome\Html\Field\Tests;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use UIAwesome\Html\Core\Config\{Call, ComponentContext, Config, Cookbook, Recipe};
+use UIAwesome\Html\Contracts\RenderableInterface;
+use UIAwesome\Html\Core\Config\{
+    Call,
+    ComponentContext,
+    Config,
+    ConfigApplierInterface,
+    Cookbook,
+    Recipe,
+};
 use UIAwesome\Html\Core\Theme\ThemeInterface;
+use UIAwesome\Html\Field\Exception\InvalidControl;
 use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Field;
 use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, FieldTheme, InputWidget, RecordingTheme};
@@ -20,19 +29,7 @@ final class FieldConfigTest extends TestCase
 {
     public function testAppliesGenericControlSlotRecipeToAnExplicitInput(): void
     {
-        $theme = new class implements ThemeInterface {
-            public function getName(): string
-            {
-                return 'custom';
-            }
-
-            public function getRecipes(ComponentContext $context): iterable
-            {
-                if ($context->component === 'field.control') {
-                    yield new Recipe('custom.control', new Cookbook(new Call('class', 'custom-control')));
-                }
-            }
-        };
+        $theme = self::controlSlotTheme('custom', new Cookbook(new Call('class', 'custom-control')));
 
         $output = Field::tag()
             ->input(InputWidget::tag())
@@ -60,42 +57,18 @@ final class FieldConfigTest extends TestCase
             ->errorContent('Email error.');
 
         $flowbite = new Config(
-            new FieldTheme(
-                'flowbite',
-                [
-                    'field' => 'flowbite-field',
-                    'container' => 'flowbite-container',
-                    'label' => 'flowbite-label',
-                    'control' => 'flowbite-control',
-                    'hint' => 'flowbite-hint',
-                    'error' => 'flowbite-error',
-                    'prefix' => 'flowbite-prefix',
-                    'suffix' => 'flowbite-suffix',
-                ],
-            ),
+            new FieldTheme('flowbite', self::slotClasses('flowbite-')),
             factory: new ControlFactory(),
         );
         $daisyUi = new Config(
-            new FieldTheme(
-                'daisyui',
-                [
-                    'field' => 'daisyui-field',
-                    'container' => 'daisyui-container',
-                    'label' => 'daisyui-label',
-                    'control' => 'daisyui-control',
-                    'hint' => 'daisyui-hint',
-                    'error' => 'daisyui-error',
-                    'prefix' => 'daisyui-prefix',
-                    'suffix' => 'daisyui-suffix',
-                ],
-            ),
+            new FieldTheme('daisyui', self::slotClasses('daisyui-')),
             factory: new ControlFactory(),
         );
 
         $flowbiteOutput = $baseField->config($flowbite)->render();
         $daisyUiOutput = $baseField->config($daisyUi)->render();
 
-        foreach (['field', 'container', 'label', 'control', 'hint', 'error', 'prefix', 'suffix'] as $slot) {
+        foreach (array_keys(self::slotClasses()) as $slot) {
             self::assertStringContainsString(
                 "flowbite-{$slot}",
                 $flowbiteOutput,
@@ -127,6 +100,32 @@ final class FieldConfigTest extends TestCase
             'type="email"',
             $daisyUiOutput,
             'Factory must create an email control.',
+        );
+    }
+
+    public function testConfiguredFactoryReplacesTheDefaultFieldFactory(): void
+    {
+        $config = new Config(
+            new FieldTheme('custom', self::slotClasses()),
+            factory: new ControlFactory(['email' => InputWidget::class]),
+        );
+
+        $output = Field::tag()
+            ->config($config)
+            ->control('email')
+            ->formModel(new BasicForm())
+            ->property('email')
+            ->render();
+
+        self::assertStringContainsString(
+            '<control class="control"',
+            $output,
+            'Field must create semantic controls through the factory carried by Config.',
+        );
+        self::assertStringNotContainsString(
+            'type="email"',
+            $output,
+            'The default registry must not replace the configured factory.',
         );
     }
 
@@ -194,19 +193,7 @@ final class FieldConfigTest extends TestCase
     public function testSelectsAConfiguredSemanticControlAfterConfigIsApplied(): void
     {
         $config = new Config(
-            new FieldTheme(
-                'flowbite',
-                [
-                    'field' => 'field',
-                    'container' => 'container',
-                    'label' => 'label',
-                    'control' => 'control',
-                    'hint' => 'hint',
-                    'error' => 'error',
-                    'prefix' => 'prefix',
-                    'suffix' => 'suffix',
-                ],
-            ),
+            new FieldTheme('flowbite', self::slotClasses()),
             factory: new ControlFactory(),
         );
 
@@ -227,5 +214,81 @@ final class FieldConfigTest extends TestCase
                 ->render(),
             'A semantic control selected after config must use the configured factory and recipe.',
         );
+    }
+
+    public function testThrowInvalidControlForGenericRecipeReturningOnlyRenderable(): void
+    {
+        $theme = self::controlSlotTheme('invalid', new Cookbook());
+        $applier = new class implements ConfigApplierInterface {
+            public function apply(
+                object $component,
+                Recipe $recipe,
+                ComponentContext $context,
+                bool $strict = true,
+            ): object {
+                return new class implements RenderableInterface {
+                    public function __toString(): string
+                    {
+                        return $this->render();
+                    }
+
+                    public function render(): string
+                    {
+                        return '';
+                    }
+                };
+            }
+        };
+
+        $this->expectException(InvalidControl::class);
+
+        Field::tag()
+            ->input(InputWidget::tag())
+            ->config(new Config($theme, $applier));
+    }
+
+    private static function controlSlotTheme(string $name, Cookbook $cookbook): ThemeInterface
+    {
+        return new class ($name, $cookbook) implements ThemeInterface {
+            public function __construct(private readonly string $name, private readonly Cookbook $cookbook) {}
+
+            public function getName(): string
+            {
+                return $this->name;
+            }
+
+            public function getRecipes(ComponentContext $context): iterable
+            {
+                if ($context->component === 'field.control') {
+                    yield new Recipe("{$this->name}.control", $this->cookbook);
+                }
+            }
+        };
+    }
+
+    /**
+     * @return array{
+     *     field: string,
+     *     container: string,
+     *     label: string,
+     *     control: string,
+     *     hint: string,
+     *     error: string,
+     *     prefix: string,
+     *     suffix: string,
+     * } Slot class names indexed by slot name.
+     */
+    private static function slotClasses(string $prefix = ''): array
+    {
+        return [
+            'field' => "{$prefix}field",
+            'container' => "{$prefix}container",
+            'label' => "{$prefix}label",
+            'control' => "{$prefix}control",
+            'hint' => "{$prefix}hint",
+            'error' => "{$prefix}error",
+            'prefix' => "{$prefix}prefix",
+            'suffix' => "{$prefix}suffix",
+        ];
     }
 }

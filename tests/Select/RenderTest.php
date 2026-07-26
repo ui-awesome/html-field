@@ -7,11 +7,12 @@ namespace UIAwesome\Html\Field\Tests\Select;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, SelectControl};
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{Optgroup, Option, Select};
 use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * Unit tests for {@see Field} rendering with {@see SelectControl}.
+ * Unit tests for {@see Field} rendering with {@see Select}.
  */
 #[Group('select')]
 final class RenderTest extends TestCase
@@ -23,8 +24,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select class="value" id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -32,7 +37,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->attributes(['class' => 'value'])
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "'class' must be serialized.",
         );
@@ -45,8 +50,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select class="value" id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -54,7 +63,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->class('value')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "'class' must be serialized.",
         );
@@ -67,8 +76,12 @@ final class RenderTest extends TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -76,7 +89,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->containerAttributes(['class' => 'value'])
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "Container 'class' must be serialized.",
         );
@@ -89,8 +102,12 @@ final class RenderTest extends TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -98,7 +115,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->containerClass('value')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "Container 'class' must be serialized.",
         );
@@ -111,8 +128,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -120,7 +141,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->containerTag(Block::DIV)
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "Container must render as '<div>'.",
         );
@@ -132,15 +153,19 @@ final class RenderTest extends TestCase
             <<<HTML
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->containerTag(false)
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Container must be omitted.',
         );
@@ -153,8 +178,12 @@ final class RenderTest extends TestCase
             <article>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </article>
             HTML,
@@ -162,7 +191,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->containerTag(Block::ARTICLE)
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Container must render as the given tag.',
         );
@@ -175,8 +204,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="value">Fruits</label>
             <select id="value" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -184,7 +217,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->id('value')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "'id' must propagate to the label 'for' and input.",
         );
@@ -198,8 +231,12 @@ final class RenderTest extends TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
@@ -207,7 +244,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->inputContainerAttributes(['class' => 'value'])
                 ->inputContainerTag(Block::DIV)
                 ->render(),
@@ -223,8 +260,12 @@ final class RenderTest extends TestCase
             <div class="value">
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
@@ -232,7 +273,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->inputContainerClass('value')
                 ->inputContainerTag(Block::DIV)
                 ->render(),
@@ -248,8 +289,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
@@ -257,7 +302,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->inputContainerTag(Block::DIV)
                 ->render(),
             'Input must be wrapped in the container tag.',
@@ -271,15 +316,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->inputContainerTag(false)
                 ->render(),
             'Input container must be omitted.',
@@ -294,8 +343,12 @@ final class RenderTest extends TestCase
             <article>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </article>
             </div>
@@ -303,7 +356,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->inputContainerTag(Block::ARTICLE)
                 ->render(),
             'Input container must render as the given tag.',
@@ -317,8 +370,12 @@ final class RenderTest extends TestCase
             <div>
             <div>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <label for="basicform-fruits">Fruits</label>
             </div>
@@ -327,7 +384,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->inputTemplate('<div>\n{input}\n{label}\n</div>')
                 ->render(),
             'Input template must reorder the parts.',
@@ -341,15 +398,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="value">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->name('value')
                 ->render(),
             "'name' must be serialized.",
@@ -364,15 +425,19 @@ final class RenderTest extends TestCase
             prefix
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->prefix('prefix')
                 ->render(),
             'Prefix must precede the input.',
@@ -389,15 +454,19 @@ final class RenderTest extends TestCase
             </div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixAttributes(['class' => 'value'])
                 ->prefixTag(Block::DIV)
@@ -416,15 +485,19 @@ final class RenderTest extends TestCase
             </div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixClass('value')
                 ->prefixTag(Block::DIV)
@@ -443,15 +516,19 @@ final class RenderTest extends TestCase
             </div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixTag(Block::DIV)
                 ->render(),
@@ -467,15 +544,19 @@ final class RenderTest extends TestCase
             prefix
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixTag(false)
                 ->render(),
@@ -493,15 +574,19 @@ final class RenderTest extends TestCase
             </article>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->prefix('prefix')
                 ->prefixTag(Block::ARTICLE)
                 ->render(),
@@ -516,15 +601,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Default layout must be rendered.',
         );
@@ -537,8 +626,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             suffix
             </div>
@@ -546,7 +639,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->suffix('suffix')
                 ->render(),
             'Suffix must follow the input.',
@@ -560,8 +653,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div class="value">
             suffix
@@ -571,7 +668,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixAttributes(['class' => 'value'])
                 ->suffixTag(Block::DIV)
@@ -587,8 +684,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div class="value">
             suffix
@@ -598,7 +699,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixClass('value')
                 ->suffixTag(Block::DIV)
@@ -614,8 +715,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <div>
             suffix
@@ -625,7 +730,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixTag(Block::DIV)
                 ->render(),
@@ -640,8 +745,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             suffix
             </div>
@@ -649,7 +758,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixTag(false)
                 ->render(),
@@ -664,8 +773,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             <span>suffix</span>
             </div>
@@ -673,7 +786,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->suffix('suffix')
                 ->suffixTag(Inline::SPAN)
                 ->render(),
@@ -689,8 +802,12 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             </div>
@@ -698,7 +815,7 @@ final class RenderTest extends TestCase
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->template('<div>\n{field}\n</div>')
                 ->render(),
             'Template must wrap the field.',
@@ -712,15 +829,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1" selected>Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1" selected>
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->value(1)
                 ->render(),
             "'selected' must be serialized.",
@@ -739,15 +860,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1" selected>Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1" selected>
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel($formModel)
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "'int' value must select the matching option.",
         );
@@ -760,15 +885,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1" selected>Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1" selected>
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel($formModel)
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "'string' value must select the matching option.",
         );
@@ -780,12 +909,22 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label for="basicform-fruits">Fruits</label>
-            <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
-            <option value="2" selected>Banana</option>
-            <option value="3" selected>Orange</option>
-            <option value="4">Pineapple</option>
+            <select id="basicform-fruits" name="BasicForm[fruits]" multiple>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
+            <option value="2" selected>
+            Banana
+            </option>
+            <option value="3" selected>
+            Orange
+            </option>
+            <option value="4">
+            Pineapple
+            </option>
             </select>
             </div>
             HTML,
@@ -793,15 +932,15 @@ final class RenderTest extends TestCase
                 ->formModel($formModel)
                 ->property('fruits')
                 ->input(
-                    SelectControl::tag()
-                        ->items(
-                            [
-                                1 => 'Apple',
-                                2 => 'Banana',
-                                3 => 'Orange',
-                                4 => 'Pineapple',
-                            ]
-                        )
+                    Select::tag()
+                        ->multiple(true)
+                        ->options(
+                            Option::tag()->content('Select an option'),
+                            Option::tag()->content('Apple')->value(1),
+                            Option::tag()->content('Banana')->value(2),
+                            Option::tag()->content('Orange')->value(3),
+                            Option::tag()->content('Pineapple')->value(4),
+                        ),
                 )
                 ->render(),
             'Array value must select multiple options.',
@@ -815,15 +954,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel($formModel)
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             'Unlisted value must select no option.',
         );
@@ -836,15 +979,19 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel($formModel)
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "'null' must select no option.",
         );
@@ -857,18 +1004,62 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits" name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->value(null)
                 ->render(),
             "'null' must select no option.",
+        );
+    }
+
+    public function testValueWithOptgroup(): void
+    {
+        $formModel = new BasicForm();
+
+        $formModel->setValue('fruits', 'cat');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-fruits">Fruits</label>
+            <select id="basicform-fruits" name="BasicForm[fruits]">
+            <optgroup label="Pets">
+            <option value="dog">
+            Dog
+            </option>
+            <option value="cat" selected>
+            Cat
+            </option>
+            </optgroup>
+            </select>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel($formModel)
+                ->property('fruits')
+                ->input(
+                    Select::tag()->optgroup(
+                        Optgroup::tag()
+                            ->label('Pets')
+                            ->options(
+                                Option::tag()->content('Dog')->value('dog'),
+                                Option::tag()->content('Cat')->value('cat'),
+                            ),
+                    ),
+                )
+                ->render(),
+            'Selected value must propagate to options inside an optgroup.',
         );
     }
 
@@ -879,8 +1070,12 @@ final class RenderTest extends TestCase
             <div>
             <label>Fruits</label>
             <select name="BasicForm[fruits]">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
@@ -888,7 +1083,7 @@ final class RenderTest extends TestCase
                 ->formModel(new BasicForm())
                 ->property('fruits')
                 ->id(null)
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->render(),
             "'id' and 'for' must be omitted.",
         );
@@ -901,18 +1096,51 @@ final class RenderTest extends TestCase
             <div>
             <label for="basicform-fruits">Fruits</label>
             <select id="basicform-fruits">
-            <option>Select an option</option>
-            <option value="1">Apple</option>
+            <option>
+            Select an option
+            </option>
+            <option value="1">
+            Apple
+            </option>
             </select>
             </div>
             HTML,
             Field::tag()
                 ->formModel(new BasicForm())
                 ->property('fruits')
-                ->input(SelectControl::tag()->items([1 => 'Apple']))
+                ->input(self::select())
                 ->name(null)
                 ->render(),
             "'name' must be omitted.",
+        );
+    }
+
+    public function testWithoutPrompt(): void
+    {
+        $output = Field::tag()
+            ->formModel(new BasicForm())
+            ->property('fruits')
+            ->input(
+                Select::tag()->option(
+                    Option::tag()->content('Apple')->value(1),
+                ),
+            )
+            ->value(1)
+            ->render();
+
+        self::assertStringNotContainsString('Select an option', $output, 'A null prompt must be omitted.');
+        self::assertStringContainsString(
+            '<option value="1" selected>',
+            $output,
+            'The matching option must remain selected without a prompt.',
+        );
+    }
+
+    private static function select(): Select
+    {
+        return Select::tag()->options(
+            Option::tag()->content('Select an option'),
+            Option::tag()->content('Apple')->value(1),
         );
     }
 }

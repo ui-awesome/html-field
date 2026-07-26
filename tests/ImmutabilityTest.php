@@ -51,5 +51,14 @@ final class ImmutabilityTest extends TestCase
             $configured->input(InputText::tag()),
             'Input must yield a new instance.',
         );
+        self::assertNotSame(
+            $configured,
+            $configured->value('configured'),
+            'Value must yield a new instance.',
+        );
+        self::assertNull(
+            $configured->value('configured')->getAttribute('value'),
+            'The selected field value must stay outside the HTML attribute bag.',
+        );
     }
 }

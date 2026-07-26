@@ -131,9 +131,14 @@ echo Field::tag()
     ->render();
 ```
 
-The default registry supports `checkbox`, `email`, `password`, `radio`, `select`, `text`, and `textarea`.
-Registrations are immutable — derive a factory with `with()` to replace or extend them. See the usage guide for the
-slot contexts and recipe methods.
+The default registry supports `checkbox`, `checkbox-list`, `email`, `password`, `radio`, `radio-list`, `select`,
+`text`, and `textarea`. Registrations are immutable — derive a factory with `with()` to replace or extend them.
+
+`Select` and its typed `Option` objects come from `ui-awesome/html`: compose the control there and the field passes
+the resolved model value to `Select::value()`.
+
+`CheckboxList`, `RadioList`, and `ChoiceItem` also come from `ui-awesome/html`; `Field` supplies their checked values,
+name, validation state, label, hint, and errors. See the usage guide for examples, slot contexts, and recipe methods.
 
 ## Documentation
 

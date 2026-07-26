@@ -601,6 +601,25 @@ final class RenderTest extends TestCase
         );
     }
 
+    public function testValueDoesNotReplaceTheOptionValue(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <input id="basicform-agree" name="BasicForm[agree]" type="checkbox" value="yes">
+            <label for="basicform-agree">Agree</label>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputCheckbox::tag()->value('yes'))
+                ->value('no')
+                ->render(),
+            "The field selection must not replace the checkbox's option value.",
+        );
+    }
+
     public function testValueWithFormModel(): void
     {
         $formModel = new BasicForm();

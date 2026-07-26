@@ -636,6 +636,25 @@ final class RenderTest extends TestCase
         );
     }
 
+    public function testValueDoesNotReplaceTheOptionValue(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <input id="basicform-agree" name="BasicForm[agree]" type="radio" value="yes">
+            <label for="basicform-agree">Agree</label>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->input(InputRadio::tag()->value('yes'))
+                ->value('no')
+                ->render(),
+            "The field selection must not replace the radio's option value.",
+        );
+    }
+
     public function testValueWithFormModel(): void
     {
         $formModel = new BasicForm();

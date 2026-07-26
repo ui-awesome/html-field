@@ -63,8 +63,8 @@ Calls made after `config()` are local overrides. An explicit input configured be
 
 ## Semantic control factory
 
-The default registry supports `checkbox`, `email`, `password`, `radio`, `select`, `text`, and `textarea`. It can also
-be used independently:
+The default registry supports `checkbox`, `checkbox-list`, `email`, `password`, `radio`, `radio-list`, `select`,
+`text`, and `textarea`. It can also be used independently:
 
 ```php
 use UIAwesome\Html\Core\Config\ComponentContext;
@@ -72,6 +72,55 @@ use UIAwesome\Html\Field\Factory\ControlFactory;
 
 $control = (new ControlFactory())->create(new ComponentContext('field.control.email'));
 ```
+
+### Select options
+
+Compose `Select`, `Option`, and `Optgroup` with the typed API from `ui-awesome/html`. `Field` resolves the model value
+and delegates option selection to `Select::value()`:
+
+```php
+use UIAwesome\Html\Form\{Option, Select};
+
+$select = Select::tag()->options(
+    Option::tag()->content('Select a country'),
+    Option::tag()->content('Spain')->value('es'),
+    Option::tag()->content('United States')->value('us'),
+);
+
+echo Field::tag()
+    ->config($config)
+    ->input($select)
+    ->formModel($form)
+    ->property('country')
+    ->render();
+```
+
+Use `Select::multiple(true)` with an array model value for multiple selection. Options nested in an `Optgroup` receive
+the same resolved value automatically.
+
+### Choice lists
+
+Checkbox and radio lists and their typed items are reusable controls from `ui-awesome/html`. `Field` supplies model
+binding, validation state, the group label, hint, and errors:
+
+```php
+use UIAwesome\Html\Form\{CheckboxList, ChoiceItem};
+
+$list = CheckboxList::tag()->items(
+    ChoiceItem::tag()->label('Email')->value('email'),
+    ChoiceItem::tag()->label('SMS')->value('sms'),
+);
+
+echo Field::tag()
+    ->config($config)
+    ->input($list)
+    ->formModel($form)
+    ->property('channels')
+    ->render();
+```
+
+Attributes configured on a choice list belong to its container. Use `itemAttributes()` for attributes that must be
+copied to every checkbox or radio input.
 
 Registrations are immutable. Derive a new factory to replace a default control or register an external control that
 implements `FormControlInterface`:

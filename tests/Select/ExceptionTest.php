@@ -7,8 +7,12 @@ namespace UIAwesome\Html\Field\Tests\Select;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use TypeError;
 use UIAwesome\Html\Field\Field;
-use UIAwesome\Html\Field\Tests\Support\{BasicForm, SelectControl};
+use UIAwesome\Html\Field\Tests\Support\BasicForm;
+use UIAwesome\Html\Form\Select;
+use UIAwesome\Html\Helper\Exception\Message;
 
 /**
  * Unit tests for {@see Field} invalid value handling with the select control.
@@ -16,18 +20,30 @@ use UIAwesome\Html\Field\Tests\Support\{BasicForm, SelectControl};
 #[Group('select')]
 final class ExceptionTest extends TestCase
 {
-    public function testThrowInvalidArgumentExceptionForObjectValue(): void
+    public function testThrowInvalidArgumentExceptionForObjectValueWithinArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Select control values cannot be arbitrary objects.',
+            Message::VALUE_SHOULD_BE_ARRAY_SCALAR_NULL_ENUM->getMessage('object'),
         );
 
         Field::tag()
             ->formModel(new BasicForm())
             ->property('username')
-            ->input(SelectControl::tag())
-            ->value(new \stdClass())
+            ->input(Select::tag())
+            ->value([new stdClass()])
+            ->render();
+    }
+
+    public function testThrowTypeErrorForObjectValue(): void
+    {
+        $this->expectException(TypeError::class);
+
+        Field::tag()
+            ->formModel(new BasicForm())
+            ->property('username')
+            ->input(Select::tag())
+            ->value(new stdClass())
             ->render();
     }
 }

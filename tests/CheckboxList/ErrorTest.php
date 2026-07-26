@@ -6,18 +6,13 @@ namespace UIAwesome\Html\Field\Tests\CheckboxList;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use UIAwesome\Html\{
-    Field\Field,
-    Field\Tests\Support\BasicForm,
-    Field\Tests\Support\ChoiceItem,
-    Field\Tests\Support\ChoiceList,
-};
-use UIAwesome\Html\Field\Tests\Support\Assert;
-use UIAwesome\Html\Interop\Block;
-use UIAwesome\Html\Interop\Inline;
+use UIAwesome\Html\Field\Field;
+use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm};
+use UIAwesome\Html\Form\{CheckboxList, ChoiceItem};
+use UIAwesome\Html\Interop\{Block, Inline};
 
 /**
- * Unit tests for {@see Field} error rendering with {@see ChoiceList}.
+ * Unit tests for {@see Field} error rendering with {@see CheckboxList}.
  */
 #[Group('checkboxlist')]
 final class ErrorTest extends TestCase
@@ -32,13 +27,13 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div>
             Error
@@ -46,14 +41,7 @@ final class ErrorTest extends TestCase
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Error content must be rendered.',
         );
@@ -69,13 +57,13 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div class="value">
             Error
@@ -84,14 +72,7 @@ final class ErrorTest extends TestCase
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
                 ->errorAttributes(['class' => 'value'])
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Error 'class' must be serialized.",
         );
@@ -107,13 +88,13 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div class="value">
             Error
@@ -122,14 +103,7 @@ final class ErrorTest extends TestCase
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
                 ->errorClass('value')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Error 'class' must be serialized.",
         );
@@ -141,29 +115,24 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div>
             Error
             </div>
             </div>
             HTML,
-            Field::tag()->formModel(new BasicForm())->property('fruits')
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('fruits')
                 ->errorContent('Error')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Error content must be rendered.',
         );
@@ -179,13 +148,13 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div>
             Error
@@ -194,14 +163,7 @@ final class ErrorTest extends TestCase
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
                 ->errorTag(Block::DIV)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             "Error must render as '<div>'.",
         );
@@ -217,27 +179,20 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             Error
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
                 ->errorTag(false)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Error tag must be omitted.',
         );
@@ -253,27 +208,20 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <span>Error</span>
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
                 ->errorTag(Inline::SPAN)
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->render(),
             'Error must render as the given tag.',
         );
@@ -290,13 +238,13 @@ final class ErrorTest extends TestCase
             <<<HTML
             <div>
             <label>Fruits</label>
-            <div>
-            <input id="basicform-fruits-w0" name="BasicForm[fruits][]" type="checkbox" value="1">
-            <label for="basicform-fruits-w0">Apple</label>
-            <input id="basicform-fruits-w1" name="BasicForm[fruits][]" type="checkbox" value="2">
-            <label for="basicform-fruits-w1">Banana</label>
-            <input id="basicform-fruits-w2" name="BasicForm[fruits][]" type="checkbox" value="3">
-            <label for="basicform-fruits-w2">Orange</label>
+            <div id="basicform-fruits">
+            <input id="basicform-fruits-0" name="BasicForm[fruits][]" type="checkbox" value="1">
+            <label for="basicform-fruits-0">Apple</label>
+            <input id="basicform-fruits-1" name="BasicForm[fruits][]" type="checkbox" value="2">
+            <label for="basicform-fruits-1">Banana</label>
+            <input id="basicform-fruits-2" name="BasicForm[fruits][]" type="checkbox" value="3">
+            <label for="basicform-fruits-2">Orange</label>
             </div>
             <div>
             Error - 1
@@ -305,17 +253,19 @@ final class ErrorTest extends TestCase
             </div>
             HTML,
             Field::tag()->formModel($formModel)->property('fruits')
-                ->input(
-                    ChoiceList::checkbox()
-                        ->items(
-                            ChoiceItem::checkbox()->label('Apple')->value(1),
-                            ChoiceItem::checkbox()->label('Banana')->value(2),
-                            ChoiceItem::checkbox()->label('Orange')->value(3),
-                        )
-                )
+                ->input(self::checkboxList())
                 ->showAllErrors()
                 ->render(),
             'All errors must be rendered.',
+        );
+    }
+
+    private static function checkboxList(): CheckboxList
+    {
+        return CheckboxList::tag()->items(
+            ChoiceItem::tag()->label('Apple')->value(1),
+            ChoiceItem::tag()->label('Banana')->value(2),
+            ChoiceItem::tag()->label('Orange')->value(3),
         );
     }
 }
