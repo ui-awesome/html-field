@@ -19,3 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat: add `Message` enum centralizing exception message templates.
 - chore: require the `ui-awesome/html-core ^0.7` and `ui-awesome/html ^0.5` development lines.
 - test: normalize the test suite with full-HTML assertions, failure messages, and external data providers.
+- test: assert exception messages in the remaining `InvalidControl` and `TypeError` expectation tests.
+- chore: remove the empty `tests/Control/` directory.
+- refactor: replace `method_exists()` capability checks in `AbstractField` with `ui-awesome/html-contracts` interfaces.
+- chore: require the `ui-awesome/html-contracts ^0.2` development line.
+- test: replace the `InputWidget` stub with real `ui-awesome/html` controls across the suite.
