@@ -373,7 +373,7 @@ abstract class AbstractField extends BaseTag
         }
 
         /** @var AttributesInterface&RenderableInterface $configured */
-        $configured = (new ConfigApplier())->apply(
+        return (new ConfigApplier())->apply(
             $widget,
             new Recipe(
                 "field-config.{$property}",
@@ -382,8 +382,6 @@ abstract class AbstractField extends BaseTag
             self::slotContext($this->configContext ?? new ComponentContext('field'), 'control'),
             strict: true,
         );
-
-        return $configured;
     }
 
     /**
