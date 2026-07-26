@@ -77,8 +77,13 @@ final class LoginForm extends BaseFormModel
 }
 ```
 
+The field config is applied when the field renders, against the control the field finally resolves, exactly once per
+render. Because the resolved control is what gets configured, `control()` and `input()` may appear anywhere in the
+fluent chain: entries valid only on a replacement control, such as `rows` for `TextArea`, are checked against that
+replacement and never against the default `text` control.
+
 Strict mode makes typos fail instead of rendering a control that silently ignores them. An entry naming a method the
-control does not expose throws `ConfigException`:
+resolved control does not expose throws `ConfigException` at render time:
 
 ```text
 Config call 'maxlenght' from recipe 'field-config.email' is not a public instance method for component

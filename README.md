@@ -142,9 +142,10 @@ name, validation state, label, hint, and errors. See the usage guide for example
 
 #### Strict field configurations
 
-Form model field configurations are applied to the form control through the core config applier in strict mode. An
-entry naming a method the control does not expose throws `ConfigException` instead of being skipped, so typos such as
-`maxlenght` fail at configuration time. See the [upgrade guide](UPGRADE.md) for the supported entry shapes.
+Form model field configurations are applied through the core config applier in strict mode, once per render, against
+the control the field finally resolves — so the fluent call order never changes the outcome. An entry naming a method
+the resolved control does not expose throws `ConfigException` instead of being skipped, so typos such as `maxlenght`
+fail at render time. See the [upgrade guide](UPGRADE.md) for the supported entry shapes.
 
 ## Documentation
 

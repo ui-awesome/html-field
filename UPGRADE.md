@@ -7,8 +7,12 @@
 `FormModelInterface::getFieldConfig()` entries are converted into `UIAwesome\Html\Core\Config\Call` objects and applied
 to the form control through `UIAwesome\Html\Core\Config\ConfigApplier` in strict mode.
 
-An entry naming a method the control does not expose now throws `UIAwesome\Html\Core\Exception\ConfigException`
-instead of being skipped silently. Typos surface at configuration time.
+The field config is applied when the field renders, against the control the field finally resolves, exactly once per
+render. Selecting a control with `control()` or `input()` before or after `formModel()` and `property()` produces the
+same markup, so the fluent call order never changes the outcome.
+
+An entry naming a method the resolved control does not expose now throws
+`UIAwesome\Html\Core\Exception\ConfigException` instead of being skipped silently. Typos surface at render time.
 
 Before, the entry was ignored and the control rendered without it.
 
@@ -30,7 +34,16 @@ Config call 'maxlenght' from recipe 'field-config.email' is not a public instanc
 'field.control' (UIAwesome\Html\Form\InputText).
 ```
 
-Fix the method name, or move the entry to a control that exposes it.
+Fix the method name, or select a control that exposes it. Entries valid only on a replacement control, such as `rows`
+for `TextArea` or `multiple` for `Select`, are checked against the replacement rather than the default `text` control.
+
+```php
+echo Field::tag()
+    ->formModel($form)
+    ->property('biography')
+    ->control('textarea')
+    ->render();
+```
 
 Names with a trailing parenthesis pair, such as `class()`, are not normalized and fail for the same reason. Use the
 canonical method name `class`.

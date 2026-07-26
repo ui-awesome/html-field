@@ -314,6 +314,9 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the field, or an empty string until the form model, property, and control are configured.
+     *
+     * @throws ConfigException If the form model field config cannot be applied to the resolved control.
+     * @throws InvalidFieldConfig If the form model field config shape is not supported.
      */
     protected function run(): string
     {
@@ -325,6 +328,7 @@ abstract class AbstractField extends BaseTag
             return '';
         }
 
+        $widget = $this->applyFieldConfig($widget, $formModel, $property);
         $widget = $this->configureWidget($widget, $formModel, $property);
 
         return $this->renderOptionalTag(
@@ -355,9 +359,11 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
-     * Applies the form model field config to the control through the core config applier in strict mode.
+     * Applies the form model field config to the resolved control through the core config applier in strict mode.
      *
-     * A call naming a method the control does not expose fails instead of being skipped.
+     * The field config is applied once per render, against the control the field ultimately renders, so the fluent
+     * call order does not change the outcome. A call naming a method the control does not expose fails instead of
+     * being skipped.
      *
      * @throws ConfigException If a call is unavailable, returns an incompatible control, fails during execution, or
      * the applier returns a component incompatible with the control.
@@ -365,14 +371,9 @@ abstract class AbstractField extends BaseTag
      */
     private function applyFieldConfig(
         AttributesInterface&RenderableInterface $widget,
+        FormModelInterface $formModel,
+        string $property,
     ): AttributesInterface&RenderableInterface {
-        $formModel = $this->formModel;
-        $property = $this->property;
-
-        if ($formModel === null || $property === '') {
-            return $widget;
-        }
-
         $context = self::slotContext($this->configContext ?? new ComponentContext('field'), 'control');
 
         $configured = (new ConfigApplier())->apply(
@@ -503,8 +504,6 @@ abstract class AbstractField extends BaseTag
      * Configures the field from the form model once both the model and the property are set.
      *
      * @throws AttributeNotSet If the property does not exist in the form model.
-     * @throws ConfigException If the field config cannot be applied to the control.
-     * @throws InvalidFieldConfig If the field config shape is not supported.
      */
     private function configureFromFormModel(): static
     {
@@ -532,10 +531,6 @@ abstract class AbstractField extends BaseTag
                 'name' => [Naming::generateInputName($formModel->getModelName(), $property)],
             ],
         );
-
-        if ($configured->widget !== null) {
-            $configured->widget = $configured->applyFieldConfig($configured->widget);
-        }
 
         return $configured;
     }
@@ -787,12 +782,12 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
-     * Stores a form control and applies any already resolved form model field config.
+     * Stores a form control, switching the input template for controls rendered before their label.
      */
     private function withWidget(AttributesInterface&RenderableInterface $widget): static
     {
         $new = clone $this;
-        $new->widget = $new->applyFieldConfig($widget);
+        $new->widget = $widget;
 
         if ($widget instanceof CheckedStateInterface && ($widget instanceof ChoiceListInterface) === false) {
             $new->inputTemplate = "{input}\n{label}";

@@ -58,6 +58,25 @@ final class FieldConfigStrictTest extends TestCase
         );
     }
 
+    /**
+     * @param callable(ConfigForm): Field $build Fluent chain ordering under test.
+     */
+    #[DataProviderExternal(FieldConfigProvider::class, 'replacementControlOrders')]
+    public function testAppliesReplacementControlEntriesRegardlessOfFluentOrder(callable $build): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="configform-textarea">Text Area</label>
+            <textarea class="custom-class" id="configform-textarea" name="ConfigForm[textArea]" rows="5">
+            </textarea>
+            </div>
+            HTML,
+            $build(new ConfigForm())->render(),
+            'Every fluent order must produce the same markup.',
+        );
+    }
+
     public function testReportsTheControlSlotContextInheritedFromTheConfiguredFieldContext(): void
     {
         $this->expectException(ConfigException::class);
@@ -74,7 +93,8 @@ final class FieldConfigStrictTest extends TestCase
             ->input(InputText::tag())
             ->config(new Config(new RecordingTheme()), new ComponentContext('custom-field'))
             ->formModel(new InvalidConfigForm())
-            ->property('unknownMethod');
+            ->property('unknownMethod')
+            ->render();
     }
 
     public function testThrowConfigExceptionWhenFieldConfigNamesAnUnknownControlMethod(): void
@@ -91,7 +111,26 @@ final class FieldConfigStrictTest extends TestCase
 
         Field::tag()
             ->formModel(new InvalidConfigForm())
-            ->property('unknownMethod');
+            ->property('unknownMethod')
+            ->render();
+    }
+
+    public function testThrowConfigExceptionWhenTheDefaultControlDoesNotExposeAReplacementOnlyMethod(): void
+    {
+        $this->expectException(ConfigException::class);
+        $this->expectExceptionMessage(
+            ConfigMessage::CONFIG_CALL_METHOD_NOT_AVAILABLE->getMessage(
+                'rows',
+                'field-config.textArea',
+                'field.control',
+                InputText::class,
+            ),
+        );
+
+        Field::tag()
+            ->formModel(new ConfigForm())
+            ->property('textArea')
+            ->render();
     }
 
     public function testThrowConfigExceptionWhenTheSelectedControlDoesNotExposeAConfiguredMethod(): void
@@ -109,7 +148,8 @@ final class FieldConfigStrictTest extends TestCase
         Field::tag()
             ->formModel(new ConfigForm())
             ->property('name')
-            ->control('select');
+            ->control('select')
+            ->render();
     }
 
     public function testThrowConfigExceptionWhenTheSuppliedInputDoesNotExposeAConfiguredMethod(): void
@@ -127,7 +167,8 @@ final class FieldConfigStrictTest extends TestCase
         Field::tag()
             ->formModel(new ConfigForm())
             ->property('name')
-            ->input(Select::tag());
+            ->input(Select::tag())
+            ->render();
     }
 
     #[DataProviderExternal(FieldConfigProvider::class, 'unsupportedShapes')]
@@ -138,6 +179,7 @@ final class FieldConfigStrictTest extends TestCase
 
         Field::tag()
             ->formModel(new InvalidConfigForm())
-            ->property($property);
+            ->property($property)
+            ->render();
     }
 }

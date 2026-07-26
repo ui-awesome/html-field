@@ -13,6 +13,7 @@ final class ConfigForm extends BaseFormModel
 {
     public string $name = '';
     public string $ordered = '';
+    public string $textArea = '';
 
     /**
      * @return array<string, string>
@@ -22,6 +23,7 @@ final class ConfigForm extends BaseFormModel
         return [
             'name' => $this->name,
             'ordered' => $this->ordered,
+            'textArea' => $this->textArea,
         ];
     }
 
@@ -38,6 +40,10 @@ final class ConfigForm extends BaseFormModel
             'ordered' => [
                 'maxlength' => 10,
                 'class' => ['custom-class'],
+            ],
+            'textArea' => [
+                'class' => ['custom-class'],
+                'rows' => 5,
             ],
         ];
     }
