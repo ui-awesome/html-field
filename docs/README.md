@@ -78,6 +78,9 @@ carrier during rendering, never to the field, and merge under field-local state 
   the template derived from the control type.
 - Label text is the exception: the form model label counts as field-local state, so a themed `label()` call only
   renders when the model label resolves to an empty string.
+- Label suppression is one-way: `notLabel()` takes no argument and only disables rendering, so a label suppressed
+  by a theme recipe cannot be re-enabled locally. Use a theme without the suppressing recipe when the label must
+  render.
 - Layout recipes may only name label, input-container, input-template, and enclosed-by-label methods; in strict mode
   any other call throws `ConfigException`.
 - State set through the generic `field` slot, such as `inputContainerClass`, is applied to the field at `config()`
