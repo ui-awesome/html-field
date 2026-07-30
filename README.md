@@ -113,8 +113,8 @@ echo Field::tag()
 #### Semantic control factory
 
 `Field` selects controls through `ControlFactory` and applies application-scoped recipes to the field, container,
-label, control, hint, error, prefix, and suffix contexts. The package does not select a theme: replace `$theme` with
-any `ThemeInterface` implementation, such as a Flowbite or DaisyUI theme.
+control-specific input container and label, control, hint, error, prefix, and suffix contexts. The package does not
+select a theme: replace `$theme` with any `ThemeInterface` implementation, such as `Bootstrap5Theme` or `TailwindTheme`.
 
 ```php
 use UIAwesome\Html\Core\Config\Config;
@@ -147,7 +147,7 @@ the control the field finally resolves — so the fluent call order never change
 the resolved control does not expose throws `ConfigException` instead of being skipped, so typos such as `maxlenght`
 fail at render time. The model binding runs first and the config last, so entries such as `value`, `id`, `name`,
 `checked`, and `placeholder` act as explicit per-property overrides rather than being silently overwritten. See the
-[upgrade guide](UPGRADE.md) for the precedence table and the supported entry shapes.
+[upgrade guide](UPGRADE.md) for the precedence rules and supported entry shapes.
 
 ## Documentation
 

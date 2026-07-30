@@ -6,6 +6,8 @@ namespace UIAwesome\Html\Field\Tests;
 
 use PHPUnit\Framework\Attributes\{DataProviderExternal, Group};
 use PHPUnit\Framework\TestCase;
+use UIAwesome\FormModel\Attribute\FieldConfig;
+use UIAwesome\FormModel\BaseFormModel;
 use UIAwesome\Html\Core\Config\{ComponentContext, Config};
 use UIAwesome\Html\Core\Exception\{ConfigException, Message as ConfigMessage};
 use UIAwesome\Html\Field\Exception\InvalidFieldConfig;
@@ -38,6 +40,24 @@ final class FieldConfigStrictTest extends TestCase
                 ->control('textarea')
                 ->render(),
             'Both entry shapes must reach a control other than the default one.',
+        );
+    }
+
+    public function testAppliesCanonicalAttributeConfigurationFromFormModel(): void
+    {
+        $formModel = new class extends BaseFormModel {
+            #[FieldConfig(['class' => ['canonical-class']])]
+            public string $email = '';
+        };
+
+        self::assertStringContainsString(
+            '<input class="canonical-class"',
+            Field::tag()
+                ->formModel($formModel)
+                ->property('email')
+                ->control('email')
+                ->render(),
+            'A canonical form-model attribute entry must configure the resolved field control.',
         );
     }
 

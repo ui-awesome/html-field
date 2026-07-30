@@ -34,3 +34,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - refactor: guard the form model binding with an `instanceof` check instead of `@var` narrowing, keeping the intrinsic binding type-safe under style fixers.
 - feat!: apply field configuration after model binding so explicit entries override derived `value`, `id`, `name`, `checked`, and `placeholder` state.
 - fix: derive the label `for` attribute from the control's final `id`, keeping it linked when a field configuration overrides the identifier.
+- feat: resolve control-specific input-container and label layout slots for semantic controls.

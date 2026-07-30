@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use TypeError;
 use UIAwesome\Html\Field\Mixin\HasInputContainer;
+use UIAwesome\Html\Interop\Block;
+use UnitEnum;
 
 use function is_string;
 
@@ -81,6 +83,32 @@ final class HasInputContainerTest extends TestCase
             $instance,
             $instance->inputContainerTag(false),
             'A new instance must be returned.',
+        );
+    }
+
+    public function testTagTracksExplicitValuesAgainstTheNullDefault(): void
+    {
+        $instance = new class {
+            use HasInputContainer;
+
+            public function getInputContainerTag(): false|UnitEnum|null
+            {
+                return $this->inputContainerTag;
+            }
+        };
+
+        self::assertNull(
+            $instance->getInputContainerTag(),
+            'Default must be `null`.',
+        );
+        self::assertFalse(
+            $instance->inputContainerTag(false)->getInputContainerTag(),
+            'Explicit `false` must be stored.',
+        );
+        self::assertSame(
+            Block::DIV,
+            $instance->inputContainerTag(Block::DIV)->getInputContainerTag(),
+            'Enum tag must be stored.',
         );
     }
 

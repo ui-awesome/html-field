@@ -24,6 +24,7 @@ use UIAwesome\Html\Core\Config\{Call, ComponentContext, Config, ConfigApplier, C
 use UIAwesome\Html\Core\Exception\{ConfigException, Message as ConfigMessage};
 use UIAwesome\Html\Core\Factory\SimpleFactory;
 use UIAwesome\Html\Core\Html;
+use UIAwesome\Html\Field\ControlLayout;
 use UIAwesome\Html\Field\Exception\{AttributeNotSet, InvalidControl, InvalidFieldConfig};
 use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Mixin\{
@@ -110,8 +111,15 @@ abstract class AbstractField extends BaseTag
     /**
      * Applies application-scoped recipes to the field and each semantic slot.
      *
-     * Slot contexts inherit the field qualifiers and use `field.container`, `field.label`, `field.control.*`,
-     * `field.hint`, `field.error`, `field.prefix`, and `field.suffix` component identifiers by default.
+     * Slot contexts inherit the field qualifiers and use `field.container`, `field.control.*`, `field.hint`,
+     * `field.error`, `field.prefix`, and `field.suffix` component identifiers by default. The `field.label`,
+     * `field.input-container.*`, and `field.label.*` layout slots resolve during rendering against a
+     * {@see ControlLayout} carrier for the final semantic control, so field-local fluent state overrides them.
+     *
+     * Usage example:
+     * ```php
+     * $field = \UIAwesome\Html\Field\Field::tag()->config($config);
+     * ```
      *
      * @param Config $config Application-scoped config service.
      * @param ComponentContext $context Base field context whose qualifiers are inherited by every slot.
@@ -124,8 +132,10 @@ abstract class AbstractField extends BaseTag
     {
         $field = $this->applyConfig($config, $context);
 
-        foreach (['container', 'label'] as $slot) {
-            $field = $field->applyConfig($config, self::slotContext($context, $slot));
+        $field = $field->applyConfig($config, self::slotContext($context, 'container'));
+
+        if ($field === $this) {
+            $field = clone $this;
         }
 
         $field->config = $config;
@@ -151,6 +161,11 @@ abstract class AbstractField extends BaseTag
      *
      * When application config is present, its factory replaces the default registry and its recipe is applied to the
      * `field.control.<type>` context.
+     *
+     * Usage example:
+     * ```php
+     * $field = \UIAwesome\Html\Field\Field::tag()->control('email');
+     * ```
      *
      * @param string $type Semantic control type without the `field.control.` prefix.
      *
@@ -299,7 +314,7 @@ abstract class AbstractField extends BaseTag
     /**
      * Returns the default configuration applied when the field is created.
      *
-     * @return array<string, mixed> Default container tag, control, and templates indexed by configuration method.
+     * @return array<string, mixed> Default container tag, control, and field template indexed by configuration method.
      */
     #[Override]
     protected function loadDefault(): array
@@ -307,7 +322,6 @@ abstract class AbstractField extends BaseTag
         return [
             'containerTag' => [Block::DIV],
             'control' => ['text'],
-            'inputTemplate' => ["{label}\n{input}"],
             'template' => ["{prefix}\n{field}\n{suffix}\n{hint}\n{error}"],
         ];
     }
@@ -317,29 +331,40 @@ abstract class AbstractField extends BaseTag
      *
      * @throws ConfigException If the form model field config cannot be applied to the resolved control.
      * @throws InvalidFieldConfig If the form model field config shape is not supported.
+     *
+     * @return string Rendered field markup, or an empty string for an incomplete configuration.
      */
     protected function run(): string
     {
-        $formModel = $this->formModel;
-        $property = $this->property;
-        $widget = $this->widget;
+        $field = $this->resolveControlLayout();
+
+        $formModel = $field->formModel;
+        $property = $field->property;
+        $widget = $field->widget;
 
         if ($formModel === null || $property === '' || $widget === null) {
             return '';
         }
 
-        $widget = $this->configureWidget($widget, $formModel, $property);
-        $widget = $this->applyFieldConfig($widget, $formModel, $property);
+        $widget = $field->configureWidget($widget, $formModel, $property);
+        $widget = $field->applyFieldConfig($widget, $formModel, $property);
 
-        return $this->renderOptionalTag(
-            $this->containerAttributes,
-            $this->renderField($widget, $formModel, $property),
-            $this->containerTag,
+        return $field->renderOptionalTag(
+            $field->containerAttributes,
+            $field->renderField($widget, $formModel, $property),
+            $field->containerTag,
         );
     }
 
     /**
      * Applies recipes to the field while preserving the fluent component type.
+     *
+     * @param Config $config Application-scoped config service providing the theme recipes.
+     * @param ComponentContext $context Semantic slot context resolved against the theme.
+     *
+     * @throws ConfigException If the config returns a component incompatible with the field.
+     *
+     * @return static Field configured by the matching theme recipes.
      */
     private function applyConfig(Config $config, ComponentContext $context): static
     {
@@ -368,9 +393,15 @@ abstract class AbstractField extends BaseTag
      * The form model binding runs first and derives the control state, so field config entries act as explicit
      * per-property overrides and are never silently discarded.
      *
+     * @param AttributesInterface&RenderableInterface $widget Resolved form control receiving the field config.
+     * @param FormModelInterface $formModel Form model providing the per-property field config.
+     * @param string $property Name of the form model property owning the field config.
+     *
      * @throws ConfigException If a call is unavailable, returns an incompatible control, fails during execution, or
      * the applier returns a component incompatible with the control.
      * @throws InvalidFieldConfig If the field config shape cannot be converted into ordered config calls.
+     *
+     * @return AttributesInterface&RenderableInterface Control configured by the field config entries.
      */
     private function applyFieldConfig(
         AttributesInterface&RenderableInterface $widget,
@@ -404,6 +435,10 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Transfers the field attributes to the control and links the hint through `aria-describedby`.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control receiving the field attributes.
+     *
+     * @return AttributesInterface&RenderableInterface Control carrying the transferred attributes.
      */
     private function applyToAttributes(
         AttributesInterface&RenderableInterface $widget,
@@ -428,6 +463,12 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Applies the form model placeholder to controls supporting it.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control receiving the placeholder.
+     * @param FormModelInterface $formModel Form model providing the placeholder text.
+     * @param string $property Name of the form model property represented by the field.
+     *
+     * @return AttributesInterface&RenderableInterface Control with the placeholder applied when supported.
      */
     private function applyToPlaceholder(
         AttributesInterface&RenderableInterface $widget,
@@ -441,6 +482,12 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Applies the resolved value through the first control contract supporting it.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control receiving the resolved value.
+     * @param FormModelInterface $formModel Form model providing the property value.
+     * @param string $property Name of the form model property represented by the field.
+     *
+     * @return AttributesInterface&RenderableInterface Control with the value applied through its first contract.
      */
     private function applyToValue(
         AttributesInterface&RenderableInterface $widget,
@@ -479,6 +526,13 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Creates a semantic control or applies the generic control-slot recipe to an explicitly supplied input.
+     *
+     * @param Config $config Application-scoped config service providing the theme recipes.
+     * @param ComponentContext $configContext Base field context whose qualifiers are inherited by the control slot.
+     *
+     * @throws InvalidControl If the factory, recipe, or applier returns an incompatible control.
+     *
+     * @return static Field carrying the configured control.
      */
     private function configureControlFromConfig(Config $config, ComponentContext $configContext): static
     {
@@ -491,6 +545,7 @@ abstract class AbstractField extends BaseTag
         }
 
         $context = self::slotContext($configContext, 'control');
+
         $widget = $config->apply($this->widget, $context);
 
         if (($widget instanceof AttributesInterface) === false || ($widget instanceof RenderableInterface) === false) {
@@ -507,6 +562,9 @@ abstract class AbstractField extends BaseTag
      * Configures the field from the form model once both the model and the property are set.
      *
      * @throws AttributeNotSet If the property does not exist in the form model.
+     * @throws ConfigException If the derived binding returns a component incompatible with the field.
+     *
+     * @return static Field configured with the model-derived `id`, `name`, `label`, and hint state.
      */
     private function configureFromFormModel(): static
     {
@@ -549,6 +607,12 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Applies attributes, placeholder, value, and validation state classes to the control.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control being prepared for rendering.
+     * @param FormModelInterface $formModel Form model providing values and validation state.
+     * @param string $property Name of the form model property represented by the field.
+     *
+     * @return AttributesInterface&RenderableInterface Control carrying attributes, value, and validation classes.
      */
     private function configureWidget(
         AttributesInterface&RenderableInterface $widget,
@@ -572,6 +636,12 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Returns the first property error, or every error joined by line breaks.
+     *
+     * @param FormModelInterface $formModel Form model providing the validation errors.
+     * @param string $property Name of the form model property represented by the field.
+     * @param bool $showAllErrors Whether to join every error instead of returning the first one.
+     *
+     * @return string Property errors, or an empty string without validation errors.
      */
     private function getPropertyError(
         FormModelInterface $formModel,
@@ -585,6 +655,10 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Determines whether the control renders a list of options.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control to inspect.
+     *
+     * @return bool Whether the control renders a list of options.
      */
     private function isListWidget(AttributesInterface&RenderableInterface $widget): bool
     {
@@ -593,6 +667,11 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the error section, falling back to the configured error content.
+     *
+     * @param FormModelInterface $formModel Form model providing the validation errors.
+     * @param string $property Name of the form model property represented by the field.
+     *
+     * @return string Rendered error section, or an empty string without content.
      */
     private function renderErrorTag(FormModelInterface $formModel, string $property): string
     {
@@ -607,6 +686,12 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the field template and strips blank lines left by empty sections.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Resolved form control rendered in the `{field}` section.
+     * @param FormModelInterface $formModel Form model providing hint and error state.
+     * @param string $property Name of the form model property represented by the field.
+     *
+     * @return string Rendered field template without blank lines left by empty sections.
      */
     private function renderField(
         AttributesInterface&RenderableInterface $widget,
@@ -629,6 +714,8 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the hint section.
+     *
+     * @return string Rendered hint section, or an empty string without content.
      */
     private function renderHintTag(): string
     {
@@ -637,6 +724,10 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the label and control through the input template, enclosed by the input container.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control rendered in the `{input}` section.
+     *
+     * @return string Rendered label and control enclosed by the input container.
      */
     private function renderInputField(AttributesInterface&RenderableInterface $widget): string
     {
@@ -645,7 +736,7 @@ abstract class AbstractField extends BaseTag
         $rendered = Template::render(
             $this->inputTemplate,
             [
-                '{input}' => $this->enclosedByLabel && $this->isListWidget($widget) === false
+                '{input}' => $this->enclosedByLabel === true && $this->isListWidget($widget) === false
                     ? ''
                     : $widget->render(),
                 '{label}' => $label,
@@ -655,7 +746,7 @@ abstract class AbstractField extends BaseTag
         return $this->renderOptionalTag(
             $this->inputContainerAttributes,
             $rendered,
-            $this->inputContainerTag,
+            $this->inputContainerTag ?? false,
         );
     }
 
@@ -663,6 +754,8 @@ abstract class AbstractField extends BaseTag
      * Renders the label, enclosing the control when configured.
      *
      * The `for` attribute follows the control's final `id`, so a field config overriding it stays linked.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control the label is linked to.
      *
      * @return array{AttributesInterface&RenderableInterface, string} Control to render and the rendered label markup.
      */
@@ -687,7 +780,7 @@ abstract class AbstractField extends BaseTag
             ->attributes($this->getLabelAttributes())
             ->for($for);
 
-        if ($this->enclosedByLabel) {
+        if ($this->enclosedByLabel === true) {
             if ($widget instanceof ChoiceListInterface) {
                 return [$widget->enclosedByLabel(), $label->content($this->getLabel())->render()];
             }
@@ -706,6 +799,11 @@ abstract class AbstractField extends BaseTag
      * Encloses content in a tag, returning the content untouched for empty content or a disabled tag.
      *
      * @param array<array-key, mixed> $attributes Attribute values indexed by attribute name.
+     * @param string $content Content enclosed by the tag.
+     * @param false|UnitEnum $tag Tag enclosing the content, or `false` to return the content untouched.
+     * @param string|null $id Identifier applied to the tag, or `null` to omit it.
+     *
+     * @return string Enclosed content, or the content untouched for empty content or a disabled tag.
      */
     private function renderOptionalTag(
         array $attributes,
@@ -730,6 +828,8 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the prefix section.
+     *
+     * @return string Rendered prefix section, or an empty string without content.
      */
     private function renderPrefixTag(): string
     {
@@ -738,6 +838,8 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Renders the suffix section.
+     *
+     * @return string Rendered suffix section, or an empty string without content.
      */
     private function renderSuffixTag(): string
     {
@@ -745,7 +847,44 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
+     * Merges the themed layout resolved by {@see ControlLayout::resolve()} under field-local state.
+     *
+     * @throws ConfigException If a layout recipe cannot be applied or returns an incompatible carrier.
+     *
+     * @return static Field with the themed layout merged under field-local state.
+     */
+    private function resolveControlLayout(): static
+    {
+        if ($this->config === null) {
+            return $this;
+        }
+
+        $layout = ControlLayout::resolve(
+            $this->config,
+            $this->configContext ?? new ComponentContext('field'),
+            $this->controlType,
+        );
+
+        $field = clone $this;
+
+        $field->enclosedByLabel = $layout->mergeEnclosedByLabel($this->enclosedByLabel);
+        $field->inputContainerAttributes = $layout->mergeInputContainerAttributes($this->inputContainerAttributes);
+        $field->inputContainerTag = $layout->mergeInputContainerTag($this->inputContainerTag);
+        $field->inputTemplate = $layout->mergeInputTemplate($this->inputTemplate, $this->inputTemplateConfigured);
+        $field->label = $layout->mergeLabel($this->label);
+        $field->labelAttributes = $layout->mergeLabelAttributes($this->labelAttributes);
+        $field->notLabel = $layout->mergeNotLabel($this->notLabel);
+
+        return $field;
+    }
+
+    /**
      * Derives a semantic slot context while preserving every field qualifier and metadata value.
+     *
+     * @param ComponentContext $context Base field context whose qualifiers are copied to the slot.
+     * @param string $slot Slot name appended to the base component identifier.
+     *
+     * @return ComponentContext Derived slot context.
      */
     private static function slotContext(ComponentContext $context, string $slot): ComponentContext
     {
@@ -769,6 +908,8 @@ abstract class AbstractField extends BaseTag
      * @param string $property Name of the form model property owning the field config.
      *
      * @throws InvalidFieldConfig If an entry is not indexed by a method name or passes named arguments.
+     *
+     * @return Cookbook Ordered config calls converted from the field config entries.
      */
     private static function toCookbook(array $fieldConfig, string $property): Cookbook
     {
@@ -796,15 +937,22 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
-     * Stores a form control, switching the input template for controls rendered before their label.
+     * Stores a form control and selects its default input template unless one was explicitly configured.
+     *
+     * @param AttributesInterface&RenderableInterface $widget Form control stored on the field.
+     *
+     * @return static Field carrying the control and its input template.
      */
     private function withWidget(AttributesInterface&RenderableInterface $widget): static
     {
         $new = clone $this;
         $new->widget = $widget;
 
-        if ($widget instanceof CheckedStateInterface && ($widget instanceof ChoiceListInterface) === false) {
-            $new->inputTemplate = "{input}\n{label}";
+        if ($new->inputTemplateConfigured === false) {
+            $new->inputTemplate = $widget instanceof CheckedStateInterface
+                && ($widget instanceof ChoiceListInterface) === false
+                    ? "{input}\n{label}"
+                    : "{label}\n{input}";
         }
 
         return $new;
