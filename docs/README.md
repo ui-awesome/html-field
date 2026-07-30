@@ -7,7 +7,8 @@ This library provides a way to generate `HTML` code for various types of form fi
 
 `Field::config()` applies application-scoped recipes to every semantic field slot and retains the config for controls
 selected later. `Field::control()` creates the requested semantic control through the config factory and applies its
-`field.control.<type>` recipe.
+`field.control.<type>` recipe. Control-specific input-container and label recipes are resolved during rendering from
+the final semantic control type, so replacing a control cannot retain the previous type's layout.
 
 ```php
 <?php

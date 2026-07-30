@@ -12,7 +12,11 @@ trait HasInputTemplate
     /**
      * Template arranging the `{label}` and `{input}` parts of the field.
      */
-    protected string $inputTemplate = '';
+    protected string $inputTemplate = "{label}\n{input}";
+    /**
+     * Whether the input template was explicitly configured.
+     */
+    protected bool $inputTemplateConfigured = false;
 
     /**
      * Sets the input rendering template.
@@ -28,6 +32,7 @@ trait HasInputTemplate
     {
         $new = clone $this;
         $new->inputTemplate = $value;
+        $new->inputTemplateConfigured = true;
 
         return $new;
     }

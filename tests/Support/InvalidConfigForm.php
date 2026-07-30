@@ -15,7 +15,12 @@ final class InvalidConfigForm extends BaseFormModel
     public string $namedArguments = '';
     public string $nonStringMethodName = '';
     public string $unknownMethod = '';
-    private string $numericMethodName = '0';
+    /**
+     * Numeric-string method name that PHP converts to an integer array key.
+     *
+     * @phpstan-ignore property.unusedType (The integer type documents the generated array key.)
+     */
+    private int|string $numericMethodName = '0';
 
     /**
      * @return array<string, string>
@@ -31,7 +36,10 @@ final class InvalidConfigForm extends BaseFormModel
     }
 
     /**
-     * @return array<string, array<string, mixed>>
+     * @return array<string, array<array-key, mixed>>
+     *
+     * @phpstan-ignore method.childReturnType, method.childReturnType
+     * (This fixture deliberately violates both inherited form-model contracts.)
      */
     public function getFieldConfigs(): array
     {

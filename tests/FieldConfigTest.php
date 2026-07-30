@@ -162,6 +162,25 @@ final class FieldConfigTest extends TestCase
         );
     }
 
+    public function testPreservesExplicitInputTemplateWhenControlIsReplaced(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-agree">Agree</label>
+            <input id="basicform-agree" name="BasicForm[agree]" type="checkbox">
+            </div>
+            HTML,
+            Field::tag()
+                ->inputTemplate("{label}\n{input}")
+                ->control('checkbox')
+                ->formModel(new BasicForm())
+                ->property('agree')
+                ->render(),
+            'Replacing a control must preserve an explicitly configured input template.',
+        );
+    }
+
     public function testPropagatesFieldContextToEverySemanticSlot(): void
     {
         $theme = new RecordingTheme();
@@ -174,7 +193,11 @@ final class FieldConfigTest extends TestCase
             metadata: ['layout' => 'stacked'],
         );
 
-        Field::tag()->config(new Config($theme), $context);
+        Field::tag()
+            ->config(new Config($theme), $context)
+            ->formModel(new BasicForm())
+            ->property('email')
+            ->render();
 
         self::assertSame(
             [
@@ -182,12 +205,12 @@ final class FieldConfigTest extends TestCase
                 'field.container',
                 'field.label',
                 'field.control.text',
-                'field.input-container.text',
-                'field.label.text',
                 'field.hint',
                 'field.error',
                 'field.prefix',
                 'field.suffix',
+                'field.input-container.text',
+                'field.label.text',
             ],
             array_map(
                 static fn(ComponentContext $resolvedContext): string => $resolvedContext->component,
@@ -223,6 +246,54 @@ final class FieldConfigTest extends TestCase
                 'Metadata must propagate to every slot.',
             );
         }
+    }
+
+    public function testRebuildsControlSpecificLayoutWhenControlIsReplaced(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <div class="text-container">
+            <label class="text-label" for="basicform-email">Email</label>
+            <input class="text-input" id="basicform-email" name="BasicForm[email]" type="text">
+            </div>
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->config(new Config(self::controlLayoutTheme()))
+                ->control('checkbox')
+                ->control('text')
+                ->render(),
+            'Replacing a control must rebuild its control-specific layout slots.',
+        );
+    }
+
+    public function testResetsControlSpecificLayoutWhenInputIsReplacedAfterConfig(): void
+    {
+        $field = Field::tag()
+            ->formModel(new BasicForm())
+            ->property('email')
+            ->config(new Config(self::controlLayoutTheme()));
+
+        $expected = <<<HTML
+            <div>
+            <label class="generic-label" for="basicform-email">Email</label>
+            <input id="basicform-email" name="BasicForm[email]" type="text">
+            </div>
+            HTML;
+
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->input(InputText::tag())->render(),
+            'An explicit input must clear the default text control layout.',
+        );
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->control('checkbox')->input(InputText::tag())->render(),
+            'An explicit input must clear the previously selected control layout.',
+        );
     }
 
     public function testSelectsAConfiguredSemanticControlAfterConfigIsApplied(): void
@@ -301,11 +372,17 @@ final class FieldConfigTest extends TestCase
                 $calls = match ($context->component) {
                     'field.label' => [new Call('labelClass', 'generic-label')],
                     'field.control.checkbox' => [new Call('class', 'checkbox-input')],
+                    'field.control.text' => [new Call('class', 'text-input')],
                     'field.input-container.checkbox' => [
                         new Call('inputContainerClass', 'checkbox-container'),
                         new Call('inputContainerTag', Block::DIV),
                     ],
+                    'field.input-container.text' => [
+                        new Call('inputContainerClass', 'text-container'),
+                        new Call('inputContainerTag', Block::DIV),
+                    ],
                     'field.label.checkbox' => [new Call('labelClass', 'checkbox-label', true)],
+                    'field.label.text' => [new Call('labelClass', 'text-label', true)],
                     default => [],
                 };
 

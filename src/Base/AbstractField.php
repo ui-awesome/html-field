@@ -182,12 +182,6 @@ abstract class AbstractField extends BaseTag
         $new = $this->withWidget($control);
         $new->controlType = $type;
 
-        if ($this->config !== null) {
-            foreach (["input-container.{$type}", "label.{$type}"] as $slot) {
-                $new = $new->applyConfig($this->config, self::slotContext($baseContext, $slot));
-            }
-        }
-
         return $new;
     }
 
@@ -306,7 +300,7 @@ abstract class AbstractField extends BaseTag
     /**
      * Returns the default configuration applied when the field is created.
      *
-     * @return array<string, mixed> Default container tag, control, and templates indexed by configuration method.
+     * @return array<string, mixed> Default container tag, control, and field template indexed by configuration method.
      */
     #[Override]
     protected function loadDefault(): array
@@ -314,7 +308,6 @@ abstract class AbstractField extends BaseTag
         return [
             'containerTag' => [Block::DIV],
             'control' => ['text'],
-            'inputTemplate' => ["{label}\n{input}"],
             'template' => ["{prefix}\n{field}\n{suffix}\n{hint}\n{error}"],
         ];
     }
@@ -327,21 +320,23 @@ abstract class AbstractField extends BaseTag
      */
     protected function run(): string
     {
-        $formModel = $this->formModel;
-        $property = $this->property;
-        $widget = $this->widget;
+        $field = $this->configureControlLayout();
+
+        $formModel = $field->formModel;
+        $property = $field->property;
+        $widget = $field->widget;
 
         if ($formModel === null || $property === '' || $widget === null) {
             return '';
         }
 
-        $widget = $this->configureWidget($widget, $formModel, $property);
-        $widget = $this->applyFieldConfig($widget, $formModel, $property);
+        $widget = $field->configureWidget($widget, $formModel, $property);
+        $widget = $field->applyFieldConfig($widget, $formModel, $property);
 
-        return $this->renderOptionalTag(
-            $this->containerAttributes,
-            $this->renderField($widget, $formModel, $property),
-            $this->containerTag,
+        return $field->renderOptionalTag(
+            $field->containerAttributes,
+            $field->renderField($widget, $formModel, $property),
+            $field->containerTag,
         );
     }
 
@@ -508,6 +503,25 @@ abstract class AbstractField extends BaseTag
         $new->controlType = null;
 
         return $new;
+    }
+
+    /**
+     * Applies layout recipes for the final semantic control without retaining their state on the field.
+     */
+    private function configureControlLayout(): static
+    {
+        if ($this->config === null || $this->controlType === null) {
+            return $this;
+        }
+
+        $field = $this;
+        $baseContext = $this->configContext ?? new ComponentContext('field');
+
+        foreach (["input-container.{$this->controlType}", "label.{$this->controlType}"] as $slot) {
+            $field = $field->applyConfig($this->config, self::slotContext($baseContext, $slot));
+        }
+
+        return $field;
     }
 
     /**
@@ -803,15 +817,18 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
-     * Stores a form control, switching the input template for controls rendered before their label.
+     * Stores a form control and selects its default input template unless one was explicitly configured.
      */
     private function withWidget(AttributesInterface&RenderableInterface $widget): static
     {
         $new = clone $this;
         $new->widget = $widget;
 
-        if ($widget instanceof CheckedStateInterface && ($widget instanceof ChoiceListInterface) === false) {
-            $new->inputTemplate = "{input}\n{label}";
+        if ($new->inputTemplateConfigured === false) {
+            $new->inputTemplate = $widget instanceof CheckedStateInterface
+                && ($widget instanceof ChoiceListInterface) === false
+                    ? "{input}\n{label}"
+                    : "{label}\n{input}";
         }
 
         return $new;
