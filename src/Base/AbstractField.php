@@ -800,7 +800,7 @@ abstract class AbstractField extends BaseTag
      *
      * @param array<array-key, mixed> $attributes Attribute values indexed by attribute name.
      * @param string $content Content enclosed by the tag.
-     * @param UnitEnum|false $tag Tag enclosing the content, or `false` to return the content untouched.
+     * @param false|UnitEnum $tag Tag enclosing the content, or `false` to return the content untouched.
      * @param string|null $id Identifier applied to the tag, or `null` to omit it.
      *
      * @return string Enclosed content, or the content untouched for empty content or a disabled tag.
