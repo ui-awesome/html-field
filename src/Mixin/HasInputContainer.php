@@ -18,9 +18,10 @@ trait HasInputContainer
      */
     private array $inputContainerAttributes = [];
     /**
-     * Tag enclosing the form control, or `false` to render the control without a container.
+     * Tag enclosing the form control, `false` to render the control without a container, or `null` when not
+     * configured.
      */
-    private false|UnitEnum $inputContainerTag = false;
+    private false|UnitEnum|null $inputContainerTag = null;
 
     /**
      * Sets the input container tag attributes.

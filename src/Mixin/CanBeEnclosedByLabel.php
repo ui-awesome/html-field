@@ -10,9 +10,9 @@ namespace UIAwesome\Html\Field\Mixin;
 trait CanBeEnclosedByLabel
 {
     /**
-     * Whether the label encloses the form control.
+     * Whether the label encloses the form control, or `null` when not configured.
      */
-    protected bool $enclosedByLabel = false;
+    protected bool|null $enclosedByLabel = null;
 
     /**
      * Sets whether the label encloses the form control.

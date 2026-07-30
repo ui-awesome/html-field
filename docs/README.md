@@ -7,8 +7,9 @@ This library provides a way to generate `HTML` code for various types of form fi
 
 `Field::config()` applies application-scoped recipes to every semantic field slot and retains the config for controls
 selected later. `Field::control()` creates the requested semantic control through the config factory and applies its
-`field.control.<type>` recipe. Control-specific input-container and label recipes are resolved during rendering from
-the final semantic control type, so replacing a control cannot retain the previous type's layout.
+`field.control.<type>` recipe. The `field.label`, `field.input-container.<type>`, and `field.label.<type>` recipes
+resolve during rendering against a `ControlLayout` carrier built from the final semantic control type, so replacing a
+control cannot retain the previous type's layout and field-local fluent state always overrides themed layout values.
 
 ```php
 <?php
@@ -36,9 +37,9 @@ context.
 | ------------------------------ | ------------------------------------------- | ----------------------------------------------------------------------- |
 | `field`                        | `Field`                                     | `template`, `inputTemplate`, `inputContainerTag`, `inputContainerClass` |
 | `field.container`              | `Field`                                     | `containerTag`, `containerAttributes`, `containerClass`                 |
-| `field.input-container.<type>` | `Field`                                     | `inputContainerTag`, `inputContainerAttributes`, `inputContainerClass`  |
-| `field.label`                  | `Field`                                     | `labelAttributes`, `labelClass`                                         |
-| `field.label.<type>`           | `Field`                                     | control-specific `labelAttributes`, `labelClass`                        |
+| `field.input-container.<type>` | `ControlLayout` carrier                     | `inputContainerTag`, `inputContainerAttributes`, `inputContainerClass`  |
+| `field.label`                  | `ControlLayout` carrier                     | `labelAttributes`, `labelClass`                                         |
+| `field.label.<type>`           | `ControlLayout` carrier                     | control-specific `labelAttributes`, `labelClass`                        |
 | `field.control.<type>`         | Created form control                        | `attributes`, `class`, and control-specific methods                     |
 | `field.control`                | Explicit input configured before `config()` | `attributes`, `class`                                                   |
 | `field.hint`                   | `Field`                                     | `hintTag`, `hintAttributes`, `hintClass`                                |
@@ -63,6 +64,25 @@ $tailwindField = Field::tag()->config($tailwind)->control('email');
 
 Calls made after `config()` are local overrides. An explicit input configured before `config()` receives the generic
 `field.control` recipe; an input supplied afterward intentionally replaces the themed control.
+
+### Layout precedence
+
+The `field.label`, `field.input-container.<type>`, and `field.label.<type>` recipes are applied to a `ControlLayout`
+carrier during rendering, never to the field, and merge under field-local state per attribute key:
+
+- Themed layout resolves from the final semantic control type. Replacing a control rebuilds the carrier and an
+  explicit `input()` drops the control-specific recipes, keeping only the generic `field.label` recipe.
+- Field-local fluent state wins over themed layout regardless of whether the call happens before or after `config()`.
+  A local `labelClass()` replaces a themed label class instead of appending to it, `inputContainerTag(false)`
+  suppresses a themed input container, and a local `inputTemplate()` outranks a themed template, which itself outranks
+  the template derived from the control type.
+- Label text is the exception: the form model label counts as field-local state, so a themed `label()` call only
+  renders when the model label resolves to an empty string.
+- Layout recipes may only name label, input-container, input-template, and enclosed-by-label methods; in strict mode
+  any other call throws `ConfigException`.
+- State set through the generic `field` slot, such as `inputContainerClass`, is applied to the field at `config()`
+  time and counts as field-local. Configure input-container state either in the `field` slot or in the typed slots,
+  not both.
 
 ## Form model field configurations
 

@@ -19,7 +19,7 @@ final class CanBeEnclosedByLabelTest extends TestCase
         $instance = new class {
             use CanBeEnclosedByLabel;
 
-            public function isEnclosedByLabel(): bool
+            public function isEnclosedByLabel(): bool|null
             {
                 return $this->enclosedByLabel;
             }
@@ -35,6 +35,27 @@ final class CanBeEnclosedByLabelTest extends TestCase
         self::assertTrue(
             $configured->isEnclosedByLabel(),
             'Flag must be enabled on the derived instance.',
+        );
+    }
+
+    public function testTracksExplicitValuesAgainstTheNullDefault(): void
+    {
+        $instance = new class {
+            use CanBeEnclosedByLabel;
+
+            public function isEnclosedByLabel(): bool|null
+            {
+                return $this->enclosedByLabel;
+            }
+        };
+
+        self::assertNull(
+            $instance->isEnclosedByLabel(),
+            'Default must be `null`.',
+        );
+        self::assertFalse(
+            $instance->enclosedByLabel(false)->isEnclosedByLabel(),
+            'Explicit `false` must be stored.',
         );
     }
 }

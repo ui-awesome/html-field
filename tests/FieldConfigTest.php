@@ -203,12 +203,12 @@ final class FieldConfigTest extends TestCase
             [
                 'field',
                 'field.container',
-                'field.label',
                 'field.control.text',
                 'field.hint',
                 'field.error',
                 'field.prefix',
                 'field.suffix',
+                'field.label',
                 'field.input-container.text',
                 'field.label.text',
             ],

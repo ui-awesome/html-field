@@ -49,6 +49,16 @@ values. Labels and `aria-describedby` references follow the control's final stat
 For checkbox and radio controls, a configured option `value` is applied after the checked comparison. Set `checked`
 explicitly when configuration must override the model selection.
 
+### Layout precedence
+
+The `field.label`, `field.input-container.<type>`, and `field.label.<type>` recipes are applied during rendering to a
+`ControlLayout` carrier built from the final semantic control type. The carrier merges under field-local state per
+attribute key, so fluent calls such as `inputContainerTag(false)`, `labelClass('local', true)`, or `inputTemplate()`
+override themed layout values whether they run before or after `config()`.
+
+Layout recipes may only name label, input-container, input-template, and enclosed-by-label methods. In strict mode a
+recipe naming any other method throws `ConfigException`; move such calls to the `field` or `field.container` slots.
+
 ### Supported shapes
 
 Configuration keys must be non-empty method names. Values may be a single value or a positional argument list:
