@@ -21,6 +21,7 @@ use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Field;
 use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, FieldTheme, RecordingTheme};
 use UIAwesome\Html\Form\{InputHidden, InputText};
+use UIAwesome\Html\Interop\Block;
 
 /**
  * Unit tests for {@see Field} application-scoped config and semantic control integration.
@@ -28,6 +29,34 @@ use UIAwesome\Html\Form\{InputHidden, InputText};
 #[Group('config')]
 final class FieldConfigTest extends TestCase
 {
+    public function testAppliesControlSpecificLayoutSlotsRegardlessOfFluentOrder(): void
+    {
+        $config = new Config(self::controlLayoutTheme());
+        $field = Field::tag()
+            ->formModel(new BasicForm())
+            ->property('agree');
+
+        $expected = <<<HTML
+            <div>
+            <div class="checkbox-container">
+            <input class="checkbox-input" id="basicform-agree" name="BasicForm[agree]" type="checkbox">
+            <label class="checkbox-label" for="basicform-agree">Agree</label>
+            </div>
+            </div>
+            HTML;
+
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->config($config)->control('checkbox')->render(),
+            'A control selected after config must receive its specific layout slots.',
+        );
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->control('checkbox')->config($config)->render(),
+            'A control selected before config must receive its specific layout slots.',
+        );
+    }
+
     public function testAppliesGenericControlSlotRecipeToAnExplicitInput(): void
     {
         $theme = self::controlSlotTheme('custom', new Cookbook(new Call('class', 'custom-control')));
@@ -153,6 +182,8 @@ final class FieldConfigTest extends TestCase
                 'field.container',
                 'field.label',
                 'field.control.text',
+                'field.input-container.text',
+                'field.label.text',
                 'field.hint',
                 'field.error',
                 'field.prefix',
@@ -255,6 +286,34 @@ final class FieldConfigTest extends TestCase
         Field::tag()
             ->input(InputText::tag())
             ->config(new Config($theme, $applier));
+    }
+
+    private static function controlLayoutTheme(): ThemeInterface
+    {
+        return new class implements ThemeInterface {
+            public function getName(): string
+            {
+                return 'layout';
+            }
+
+            public function getRecipes(ComponentContext $context): iterable
+            {
+                $calls = match ($context->component) {
+                    'field.label' => [new Call('labelClass', 'generic-label')],
+                    'field.control.checkbox' => [new Call('class', 'checkbox-input')],
+                    'field.input-container.checkbox' => [
+                        new Call('inputContainerClass', 'checkbox-container'),
+                        new Call('inputContainerTag', Block::DIV),
+                    ],
+                    'field.label.checkbox' => [new Call('labelClass', 'checkbox-label', true)],
+                    default => [],
+                };
+
+                if ($calls !== []) {
+                    yield new Recipe("layout.{$context->component}", new Cookbook(...$calls));
+                }
+            }
+        };
     }
 
     private static function controlSlotTheme(string $name, Cookbook $cookbook): ThemeInterface

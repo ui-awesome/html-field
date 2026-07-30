@@ -31,31 +31,33 @@ echo Field::tag()
 The base context defaults to `field`. Its variant, size, scheme, states, and metadata are copied to every derived slot
 context.
 
-| Context                | Recipe target                               | Typical calls                                                           |
-| ---------------------- | ------------------------------------------- | ----------------------------------------------------------------------- |
-| `field`                | `Field`                                     | `template`, `inputTemplate`, `inputContainerTag`, `inputContainerClass` |
-| `field.container`      | `Field`                                     | `containerTag`, `containerAttributes`, `containerClass`                 |
-| `field.label`          | `Field`                                     | `labelAttributes`, `labelClass`                                         |
-| `field.control.<type>` | Created form control                        | `attributes`, `class`, and control-specific methods                     |
-| `field.control`        | Explicit input configured before `config()` | `attributes`, `class`                                                   |
-| `field.hint`           | `Field`                                     | `hintTag`, `hintAttributes`, `hintClass`                                |
-| `field.error`          | `Field`                                     | `errorTag`, `errorAttributes`, `errorClass`                             |
-| `field.prefix`         | `Field`                                     | `prefixTag`, `prefixAttributes`, `prefixClass`                          |
-| `field.suffix`         | `Field`                                     | `suffixTag`, `suffixAttributes`, `suffixClass`                          |
+| Context                        | Recipe target                               | Typical calls                                                           |
+| ------------------------------ | ------------------------------------------- | ----------------------------------------------------------------------- |
+| `field`                        | `Field`                                     | `template`, `inputTemplate`, `inputContainerTag`, `inputContainerClass` |
+| `field.container`              | `Field`                                     | `containerTag`, `containerAttributes`, `containerClass`                 |
+| `field.input-container.<type>` | `Field`                                     | `inputContainerTag`, `inputContainerAttributes`, `inputContainerClass`  |
+| `field.label`                  | `Field`                                     | `labelAttributes`, `labelClass`                                         |
+| `field.label.<type>`           | `Field`                                     | control-specific `labelAttributes`, `labelClass`                        |
+| `field.control.<type>`         | Created form control                        | `attributes`, `class`, and control-specific methods                     |
+| `field.control`                | Explicit input configured before `config()` | `attributes`, `class`                                                   |
+| `field.hint`                   | `Field`                                     | `hintTag`, `hintAttributes`, `hintClass`                                |
+| `field.error`                  | `Field`                                     | `errorTag`, `errorAttributes`, `errorClass`                             |
+| `field.prefix`                 | `Field`                                     | `prefixTag`, `prefixAttributes`, `prefixClass`                          |
+| `field.suffix`                 | `Field`                                     | `suffixTag`, `suffixAttributes`, `suffixClass`                          |
 
-Themes own these recipes. `html-field` only defines the semantic contexts, so switching from a Flowbite config to a
-DaisyUI config does not require a field subclass or package-level mutable state:
+Themes own these recipes. `html-field` only defines the semantic contexts, so switching from a Bootstrap 5 config to
+a Tailwind config does not require a field subclass or package-level mutable state:
 
 ```php
 use UIAwesome\Html\Core\Config\Config;
 use UIAwesome\Html\Field\Factory\ControlFactory;
 use UIAwesome\Html\Field\Field;
 
-$flowbite = new Config(theme: $flowbiteTheme, factory: new ControlFactory());
-$daisyUi = new Config(theme: $daisyUiTheme, factory: new ControlFactory());
+$bootstrap5 = new Config(theme: $bootstrap5Theme, factory: new ControlFactory());
+$tailwind = new Config(theme: $tailwindTheme, factory: new ControlFactory());
 
-$flowbiteField = Field::tag()->config($flowbite)->control('email');
-$daisyUiField = Field::tag()->config($daisyUi)->control('email');
+$bootstrap5Field = Field::tag()->config($bootstrap5)->control('email');
+$tailwindField = Field::tag()->config($tailwind)->control('email');
 ```
 
 Calls made after `config()` are local overrides. An explicit input configured before `config()` receives the generic

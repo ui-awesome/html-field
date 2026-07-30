@@ -15,6 +15,7 @@ final class InvalidConfigForm extends BaseFormModel
     public string $namedArguments = '';
     public string $nonStringMethodName = '';
     public string $unknownMethod = '';
+    private string $numericMethodName = '0';
 
     /**
      * @return array<string, string>
@@ -30,14 +31,14 @@ final class InvalidConfigForm extends BaseFormModel
     }
 
     /**
-     * @return array<string, array<int|string, mixed>>
+     * @return array<string, array<string, mixed>>
      */
     public function getFieldConfigs(): array
     {
         return [
             'emptyMethodName' => ['' => 'custom-class'],
             'namedArguments' => ['class' => ['value' => 'custom-class']],
-            'nonStringMethodName' => [0 => null],
+            'nonStringMethodName' => [$this->numericMethodName => null],
             'unknownMethod' => ['maxlenght' => 10],
         ];
     }

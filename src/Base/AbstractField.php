@@ -111,7 +111,8 @@ abstract class AbstractField extends BaseTag
      * Applies application-scoped recipes to the field and each semantic slot.
      *
      * Slot contexts inherit the field qualifiers and use `field.container`, `field.label`, `field.control.*`,
-     * `field.hint`, `field.error`, `field.prefix`, and `field.suffix` component identifiers by default.
+     * `field.input-container.*`, `field.label.*`, `field.hint`, `field.error`, `field.prefix`, and `field.suffix`
+     * component identifiers by default.
      *
      * @param Config $config Application-scoped config service.
      * @param ComponentContext $context Base field context whose qualifiers are inherited by every slot.
@@ -180,6 +181,12 @@ abstract class AbstractField extends BaseTag
 
         $new = $this->withWidget($control);
         $new->controlType = $type;
+
+        if ($this->config !== null) {
+            foreach (["input-container.{$type}", "label.{$type}"] as $slot) {
+                $new = $new->applyConfig($this->config, self::slotContext($baseContext, $slot));
+            }
+        }
 
         return $new;
     }
