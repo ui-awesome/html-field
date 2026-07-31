@@ -168,7 +168,6 @@ fail at render time. The model binding runs first and the config last, so entrie
 
 For detailed usage, testing, and quality workflows.
 
-- [Usage Guide](docs/README.md)
 - [Testing Guide](docs/testing.md)
 
 ## Package information
