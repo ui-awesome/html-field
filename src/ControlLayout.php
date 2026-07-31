@@ -149,7 +149,7 @@ final class ControlLayout
     }
 
     /**
-     * Returns the effective label suppression flag, disabled by either the field or a theme recipe.
+     * Returns the effective label suppression flag, preferring field-local state over the themed value.
      *
      * Usage example:
      * ```php
@@ -157,13 +157,13 @@ final class ControlLayout
      * $notLabel = $layout->mergeNotLabel(false);
      * ```
      *
-     * @param bool $local Field-local label suppression flag.
+     * @param bool|null $local Field-local label suppression flag, or `null` when not configured.
      *
-     * @return bool Effective label suppression flag.
+     * @return bool|null Effective label suppression flag, or `null` when neither side configures it.
      */
-    public function mergeNotLabel(bool $local): bool
+    public function mergeNotLabel(bool|null $local): bool|null
     {
-        return $local || $this->notLabel;
+        return $local ?? $this->notLabel;
     }
 
     /**

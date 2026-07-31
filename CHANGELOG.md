@@ -35,3 +35,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat!: apply field configuration after model binding so explicit entries override derived `value`, `id`, `name`, `checked`, and `placeholder` state.
 - fix: derive the label `for` attribute from the control's final `id`, keeping it linked when a field configuration overrides the identifier.
 - feat: resolve control-specific input-container and label layout slots for semantic controls.
+- feat: allow re-enabling a theme-suppressed label with `notLabel(false)`.

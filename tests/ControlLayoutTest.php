@@ -58,7 +58,7 @@ final class ControlLayoutTest extends TestCase
             'Themed attributes must fill only missing keys.',
         );
         self::assertTrue(
-            $layout->mergeNotLabel(false),
+            $layout->mergeNotLabel(null),
             'Themed suppression must disable the label.',
         );
     }
@@ -71,7 +71,8 @@ final class ControlLayoutTest extends TestCase
             ->inputContainerTag(Block::DIV)
             ->inputTemplate("{label}\n{input}")
             ->label('Themed label')
-            ->labelClass('themed-label');
+            ->labelClass('themed-label')
+            ->notLabel();
 
         self::assertFalse(
             $layout->mergeEnclosedByLabel(false),
@@ -101,6 +102,10 @@ final class ControlLayoutTest extends TestCase
             $layout->mergeLabelAttributes(['class' => 'local-label']),
             'Local class must replace the themed class for the same key.',
         );
+        self::assertFalse(
+            $layout->mergeNotLabel(false),
+            'Local `false` must re-enable the label.',
+        );
     }
 
     public function testMergeReturnsLocalStateFromAnEmptyCarrier(): void
@@ -125,9 +130,9 @@ final class ControlLayoutTest extends TestCase
             $layout->mergeLabel(''),
             'Empty carrier must keep the empty local label.',
         );
-        self::assertFalse(
-            $layout->mergeNotLabel(false),
-            'Empty carrier must keep the label enabled.',
+        self::assertNull(
+            $layout->mergeNotLabel(null),
+            'Empty carrier must keep the unset local flag.',
         );
     }
 
