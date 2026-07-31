@@ -55,10 +55,15 @@ echo Field::tag()
     ->formModel(new BasicForm())
     ->property('username')
     ->render();
-// <div>
-// <label for="basicform-username">Username</label>
-// <input id="basicform-username" name="BasicForm[username]" type="text">
-// </div>
+```
+
+Html output:
+
+```html
+<div>
+    <label for="basicform-username">Username</label>
+    <input id="basicform-username" name="BasicForm[username]" type="text">
+</div>
 ```
 
 #### Hints and validation errors
@@ -77,16 +82,21 @@ echo Field::tag()
     ->property('username')
     ->hintContent('Choose a unique username.')
     ->render();
-// <div>
-// <label for="basicform-username">Username</label>
-// <input id="basicform-username" name="BasicForm[username]" type="text" aria-describedby="basicform-username-help">
-// <div id="basicform-username-help">
-// Choose a unique username.
-// </div>
-// <div>
-// Username is required.
-// </div>
-// </div>
+```
+
+Html output:
+
+```html
+<div>
+    <label for="basicform-username">Username</label>
+    <input id="basicform-username" name="BasicForm[username]" type="text" aria-describedby="basicform-username-help">
+    <div id="basicform-username-help">
+      Choose a unique username.
+    </div>
+    <div>
+      Username is required.
+    </div>
+</div>
 ```
 
 #### Replace the control and style the container
@@ -104,10 +114,15 @@ echo Field::tag()
     ->input(InputEmail::tag())
     ->containerClass('form-group')
     ->render();
-// <div class="form-group">
-// <label for="basicform-username">Username</label>
-// <input id="basicform-username" name="BasicForm[username]" type="email">
-// </div>
+```
+
+Html output:
+
+```html
+<div class="form-group">
+    <label for="basicform-username">Username</label>
+    <input id="basicform-username" name="BasicForm[username]" type="email">
+</div>
 ```
 
 #### Semantic control factory

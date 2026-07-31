@@ -234,6 +234,29 @@ final class FieldLayoutPrecedenceTest extends TestCase
         );
     }
 
+    public function testPrefersLocalNotLabelOverThemedSuppression(): void
+    {
+        $config = new Config(
+            self::layoutTheme(['field.label.text' => [new Call('notLabel')]]),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-email">Email</label>
+            <input id="basicform-email" name="BasicForm[email]" type="text">
+            </div>
+            HTML,
+            Field::tag()
+                ->formModel(new BasicForm())
+                ->property('email')
+                ->config($config)
+                ->notLabel(false)
+                ->render(),
+            'Local `false` must re-enable the theme-suppressed label.',
+        );
+    }
+
     public function testPrefersTheModelLabelOverThemedLabelText(): void
     {
         $config = new Config(
