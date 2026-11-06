@@ -14,7 +14,7 @@ use UIAwesome\Html\Interop\Inline;
 final class ErrorProvider
 {
     /**
-     * @return array<string, array{string, Inline|false|null, string}>
+     * @return array<string, array{string, false|Inline|null, string}>
      */
     public static function allErrors(): array
     {
@@ -30,7 +30,7 @@ final class ErrorProvider
     }
 
     /**
-     * @return array<string, array{string, Inline|false|null, string, string|null}>
+     * @return array<string, array{string, false|Inline|null, string, string|null}>
      */
     public static function fallback(): array
     {
@@ -47,7 +47,7 @@ final class ErrorProvider
     }
 
     /**
-     * @return array<string, array{string, Inline|false|null, bool, string, string, string|null}>
+     * @return array<string, array{string, false|Inline|null, bool, string, string, string|null}>
      */
     public static function modelErrors(): array
     {
@@ -72,6 +72,7 @@ final class ErrorProvider
 
         return $cases;
     }
+
     /**
      * @return array<string, array{string}>
      */
@@ -90,7 +91,7 @@ final class ErrorProvider
     }
 
     /**
-     * @return array<string, array{Inline|false|null, string|null}>
+     * @return array<string, array{false|Inline|null, string|null}>
      */
     private static function tags(): array
     {
