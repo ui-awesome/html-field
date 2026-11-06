@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   quality:
-    uses: php-forge/actions/.github/workflows/quality.yml@7e505a901224dd878bbda274546f3a8594727dd9
+    uses: php-forge/actions/.github/workflows/quality.yml@72def618dcf8a77705c26faa53e9f8b1dc1f53bb # v3.0.1
     permissions:
       contents: read
     with:
