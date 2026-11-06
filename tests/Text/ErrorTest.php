@@ -6,7 +6,7 @@ namespace UIAwesome\Html\Field\Tests\Text;
 
 use Dom\{Attr, Element, HTMLCollection, HTMLDocument, NamedNodeMap, NodeList};
 use DOMDocument;
-use PHPUnit\Framework\Attributes\{DataProviderExternal, Group};
+use PHPUnit\Framework\Attributes\{DataProviderExternal, Group, RequiresPhp};
 use PHPUnit\Framework\TestCase;
 use UIAwesome\Html\Field\Field;
 use UIAwesome\Html\Field\Tests\Provider\ErrorProvider;
@@ -299,6 +299,7 @@ final class ErrorTest extends TestCase
         );
     }
 
+    #[RequiresPhp('>=8.4')]
     private static function assertErrorHtml5(string $rendered, string $expected, string|null $tag): void
     {
         self::assertTrue(
