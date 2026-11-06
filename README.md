@@ -59,6 +59,7 @@ echo Field::tag()
 
 Html output:
 
+<!-- prettier-ignore -->
 ```html
 <div>
     <label for="basicform-username">Username</label>
@@ -86,6 +87,7 @@ echo Field::tag()
 
 Html output:
 
+<!-- prettier-ignore -->
 ```html
 <div>
     <label for="basicform-username">Username</label>
@@ -118,6 +120,7 @@ echo Field::tag()
 
 Html output:
 
+<!-- prettier-ignore -->
 ```html
 <div class="form-group">
     <label for="basicform-username">Username</label>

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.1.1 Under development
 
+- chore: remove scaffold tooling and tailor HTML Field support metadata and checks to PHP Forge conventions.
+
 ## 0.1.0 July 31, 2026
 
 - feat: initial `ui-awesome/html-field` package structure.
