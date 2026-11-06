@@ -679,7 +679,7 @@ abstract class AbstractField extends BaseTag
 
         return $this->renderOptionalTag(
             $this->errorAttributes,
-            $error === '' ? $this->errorContent : $error,
+            $error === '' ? $this->errorContent : Encode::content($error),
             $this->errorTag,
         );
     }
