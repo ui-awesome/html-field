@@ -35,7 +35,7 @@ final class HintAssociationTest extends TestCase
                 ChoiceItem::tag()
                     ->label('First')
                     ->value(1),
-                )
+            )
             ->addAttribute('aria-describedby', 'external-hint');
 
         $name = $type === 'checkbox' ? 'BasicForm[hint][]' : 'BasicForm[hint]';
