@@ -161,7 +161,7 @@ final class HintAssociationTest extends TestCase
             ->notLabel()
             ->addAttribute('aria-describedby', $source === 'field' ? $description : 'external-hint');
 
-        $attribute = $description === '' ? '' : " {aria-describedby}=\"$description\"";
+        $attribute = $description === '' ? '' : " aria-describedby=\"$description\"";
 
         $html = $field->render();
 
