@@ -60,7 +60,7 @@ final class ValueBindingProvider
             true,
             null,
             ' value="yes"',
-            ''
+            '',
         ];
         yield 'populated model, false' => [
             'yes',
