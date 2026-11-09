@@ -108,6 +108,40 @@ final class FieldLayoutPrecedenceTest extends TestCase
         );
     }
 
+    public function testAppliesThemedTextEnclosureWithoutLosingLabelText(): void
+    {
+        $field = Field::tag()
+            ->formModel(new BasicForm())
+            ->property('email')
+            ->config(
+                new Config(
+                    self::layoutTheme(
+                        ['field.label.text' => [new Call('enclosedByLabel')]],
+                    ),
+                ),
+            );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-email">Email<input id="basicform-email" name="BasicForm[email]" type="text"></label>
+            </div>
+            HTML,
+            $field->render(),
+            'The existing layout service must preserve text when it encloses a text control.',
+        );
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-email">Email</label>
+            <input id="basicform-email" name="BasicForm[email]" type="text">
+            </div>
+            HTML,
+            $field->enclosedByLabel(false)->render(),
+            'Local enclosure disabling must still override the layout recipe.',
+        );
+    }
+
     public function testDoesNotRetainThemedLayoutOnTheFieldAfterRendering(): void
     {
         $field = Field::tag()
@@ -129,6 +163,80 @@ final class FieldLayoutPrecedenceTest extends TestCase
             HTML,
             $field->control('text')->render(),
             'Rendering must not leak themed layout into field-local state.',
+        );
+    }
+
+    public function testKeepsTheControlWhenLayoutSlotsEncloseAndSuppressItsLabel(): void
+    {
+        $field = Field::tag()
+            ->formModel(new BasicForm())
+            ->property('email')
+            ->config(
+                new Config(
+                    self::layoutTheme(
+                        [
+                            'field.label' => [new Call('notLabel')],
+                            'field.label.text' => [new Call('enclosedByLabel')],
+                        ],
+                    ),
+                ),
+            );
+
+        $expected = <<<HTML
+            <div>
+            <input id="basicform-email" name="BasicForm[email]" type="text">
+            </div>
+            HTML;
+
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->render(),
+            'Layout slots must not suppress the control with its label.',
+        );
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->render(),
+            'Layout resolution must remain repeatable.',
+        );
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <label for="basicform-email">Email<input id="basicform-email" name="BasicForm[email]" type="text"></label>
+            </div>
+            HTML,
+            $field->notLabel(false)->render(),
+            'Re-enabling the label must preserve both enclosure and text.',
+        );
+    }
+
+    public function testKeepsTheControlWhenLocalStateOmitsAThemedEnclosingLabel(): void
+    {
+        $field = Field::tag()
+            ->formModel(new BasicForm())
+            ->property('email')
+            ->config(
+                new Config(
+                    self::layoutTheme(
+                        ['field.label.text' => [new Call('enclosedByLabel')]],
+                    ),
+                ),
+            );
+
+        $expected = <<<HTML
+            <div>
+            <input id="basicform-email" name="BasicForm[email]" type="text">
+            </div>
+            HTML;
+
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->notLabel()->render(),
+            'Local label suppression must retain the control.',
+        );
+        Assert::equalsWithoutLE(
+            $expected,
+            $field->label('')->render(),
+            'An explicitly empty label must not invent text.',
         );
     }
 

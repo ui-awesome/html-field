@@ -39,7 +39,7 @@ final class LabelTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <label for="basicform-label"><textarea id="basicform-label" name="BasicForm[label]">\n</textarea></label>
+            <label for="basicform-label">This is a label.<textarea id="basicform-label" name="BasicForm[label]">\n</textarea></label>
             </div>
             HTML,
             Field::tag()

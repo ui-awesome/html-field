@@ -37,7 +37,7 @@ final class LabelTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <label for="basicform-label"><input id="basicform-label" name="BasicForm[label]" type="datetime"></label>
+            <label for="basicform-label">This is a label.<input id="basicform-label" name="BasicForm[label]" type="datetime"></label>
             </div>
             HTML,
             Field::tag()
