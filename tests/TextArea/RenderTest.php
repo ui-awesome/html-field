@@ -581,7 +581,7 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]" value="content">\ncontent\n</textarea>
+            <textarea id="basicform-content" name="BasicForm[content]" value="content">content</textarea>
             </div>
             HTML,
             Field::tag()
@@ -605,7 +605,7 @@ final class RenderTest extends TestCase
             <<<HTML
             <div>
             <label for="basicform-content">Content</label>
-            <textarea id="basicform-content" name="BasicForm[content]">\nxxxxxxxxxx\n</textarea>
+            <textarea id="basicform-content" name="BasicForm[content]">xxxxxxxxxx</textarea>
             </div>
             HTML,
             Field::tag()

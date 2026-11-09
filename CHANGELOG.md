@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - chore: remove scaffold tooling and tailor HTML Field support metadata and checks to PHP Forge conventions with tagged CI pins.
 - fix: encode model error text once and require html-helper `^0.7.3` for supported rendering paths.
+- fix: distinguish explicit `null` field values from model fallback and clear supported content without changing option values.
 
 ## 0.1.0 July 31, 2026
 

@@ -14,6 +14,7 @@ final class ConfigForm extends BaseFormModel
     public string $name = '';
     public string $ordered = '';
     public string $overrideChecked = '';
+    public string $overrideContent = 'model-content';
     public string $overrideId = '';
     public string $overrideName = '';
     public string $overridePlaceholder = '';
@@ -29,6 +30,7 @@ final class ConfigForm extends BaseFormModel
             'name' => $this->name,
             'ordered' => $this->ordered,
             'overrideChecked' => $this->overrideChecked,
+            'overrideContent' => $this->overrideContent,
             'overrideId' => $this->overrideId,
             'overrideName' => $this->overrideName,
             'overridePlaceholder' => $this->overridePlaceholder,
@@ -53,6 +55,9 @@ final class ConfigForm extends BaseFormModel
             ],
             'overrideChecked' => [
                 'checked' => true,
+            ],
+            'overrideContent' => [
+                'content' => '<b>configured & content</b>',
             ],
             'overrideId' => [
                 'id' => 'custom-id',
