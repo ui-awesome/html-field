@@ -132,7 +132,7 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label for="basicform-hint">Hint</label>
-            <textarea id="basicform-hint" name="BasicForm[hint]" aria-describedby="basicform-hint-help">\n</textarea>
+            <textarea id="basicform-hint" name="BasicForm[hint]">\n</textarea>
             This is a hint.
             </div>
             HTML,

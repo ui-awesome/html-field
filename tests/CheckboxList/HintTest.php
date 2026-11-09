@@ -167,7 +167,7 @@ final class HintTest extends TestCase
             <<<HTML
             <div>
             <label>Hint</label>
-            <div id="basicform-hint" aria-describedby="basicform-hint-help">
+            <div id="basicform-hint">
             <input id="basicform-hint-0" name="BasicForm[hint][]" type="checkbox" value="1">
             <label for="basicform-hint-0">Apple</label>
             <input id="basicform-hint-1" name="BasicForm[hint][]" type="checkbox" value="2">

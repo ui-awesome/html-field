@@ -70,6 +70,13 @@ Html output:
 #### Hints and validation errors
 
 Hints link to the input through `aria-describedby`; property errors render after the control.
+The automatic hint association requires nonempty content, a nonempty ID without HTML whitespace, an enabled
+container tag, and `{hint}` in the field template. Block and inline hint elements are supported; `hintTag(false)`
+renders bare content without adding a reference. `hintId()` determines the emitted ID, ahead of `hintAttributes()`.
+
+Existing control description tokens retain their first-occurrence order, with the hint ID appended only when
+absent. Explicit field attributes override this derived association, and the model's final field configuration
+overrides both. These overrides can replace or remove `aria-describedby`; the hint ID is not appended again.
 
 ```php
 use App\Model\BasicForm;
