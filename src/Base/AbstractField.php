@@ -746,14 +746,12 @@ abstract class AbstractField extends BaseTag
      */
     private function renderInputField(AttributesInterface&RenderableInterface $widget): string
     {
-        [$widget, $label] = $this->renderLabelTag($widget);
+        [$widget, $label, $inputEnclosed] = $this->renderLabelTag($widget);
 
         $rendered = Template::render(
             $this->inputTemplate,
             [
-                '{input}' => $this->enclosedByLabel === true && $this->isListWidget($widget) === false
-                    ? ''
-                    : $widget->render(),
+                '{input}' => $inputEnclosed ? '' : $widget->render(),
                 '{label}' => $label,
             ],
         );
@@ -772,12 +770,13 @@ abstract class AbstractField extends BaseTag
      *
      * @param AttributesInterface&RenderableInterface $widget Form control the label is linked to.
      *
-     * @return array{AttributesInterface&RenderableInterface, string} Control to render and the rendered label markup.
+     * @return array{AttributesInterface&RenderableInterface, string, bool} Control, label markup, and whether the
+     * label already contains the rendered control.
      */
     private function renderLabelTag(AttributesInterface&RenderableInterface $widget): array
     {
         if ($this->isLabel() === false) {
-            return [$widget, ''];
+            return [$widget, '', false];
         }
 
         $id = $widget->getAttribute('id');
@@ -797,17 +796,17 @@ abstract class AbstractField extends BaseTag
 
         if ($this->enclosedByLabel === true) {
             if ($widget instanceof ChoiceListInterface) {
-                return [$widget->enclosedByLabel(), $label->content($this->getLabel())->render()];
+                return [$widget->enclosedByLabel(), $label->content($this->getLabel())->render(), false];
             }
 
             $content = $widget instanceof CheckedStateInterface
                 ? "\n{$widget->render()}\n" . Encode::content($this->getLabel()) . "\n"
-                : $widget->render();
+                : Encode::content($this->getLabel()) . $widget->render();
 
-            return [$widget, $label->html($content)->render()];
+            return [$widget, $label->html($content)->render(), true];
         }
 
-        return [$widget, $label->content($this->getLabel())->render()];
+        return [$widget, $label->content($this->getLabel())->render(), false];
     }
 
     /**
