@@ -158,6 +158,14 @@ the resolved model value to `Select::value()`.
 `CheckboxList`, `RadioList`, and `ChoiceItem` also come from `ui-awesome/html`; `Field` supplies their checked values,
 name, validation state, label, hint, and errors. See the usage guide for examples, slot contexts, and recipe methods.
 
+#### Explicit field values
+
+Omitting `value()` keeps model fallback. Calling `value(null)` explicitly clears the bound value or selection instead
+of falling back to the model; checkbox and radio option values remain intact. For controls implementing
+`ClearableContentInterface`, including `TextArea`, explicit null also clears previously composed content.
+Other content implementations keep their existing contract. Non-null content binding retains its append behavior.
+Field values are immutable, and the form model's final field configuration still takes precedence.
+
 #### Strict field configurations
 
 Form model field configurations are applied through the core config applier in strict mode, once per render, against

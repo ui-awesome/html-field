@@ -10,7 +10,7 @@ use UIAwesome\FormModel\FormModelInterface;
 use UIAwesome\Html\Attribute\Global\{HasClass, HasId};
 use UIAwesome\Html\Attribute\HasName;
 use UIAwesome\Html\Contracts\Attribute\{AttributesInterface, SrcInterface, ValueInterface};
-use UIAwesome\Html\Contracts\Element\ContentInterface;
+use UIAwesome\Html\Contracts\Element\{ClearableContentInterface, ContentInterface};
 use UIAwesome\Html\Contracts\Form\{
     CheckedStateInterface,
     ChoiceListInterface,
@@ -103,6 +103,10 @@ abstract class AbstractField extends BaseTag
      * Explicit field value used for model binding without becoming a control attribute.
      */
     private mixed $value = null;
+    /**
+     * Whether `value()` was called, distinguishing an explicit `null` from model fallback.
+     */
+    private bool $valueConfigured = false;
     /**
      * Form control rendered by the field, or `null` until a control is configured.
      */
@@ -294,7 +298,9 @@ abstract class AbstractField extends BaseTag
      * Sets the field value applied to the form control.
      *
      * An explicit value takes precedence over the value resolved from the form model. The selected value remains
-     * separate from HTML attributes so checkbox and radio option values are preserved.
+     * separate from HTML attributes so checkbox and radio option values are preserved. An explicit `null` prevents
+     * model fallback and clears content on controls supporting that capability. The form model's final field config
+     * still takes precedence.
      *
      * Usage example:
      * ```php
@@ -307,6 +313,7 @@ abstract class AbstractField extends BaseTag
     {
         $new = clone $this;
         $new->value = $value;
+        $new->valueConfigured = true;
 
         return $new;
     }
@@ -450,7 +457,7 @@ abstract class AbstractField extends BaseTag
         }
 
         if (
-            $this->value !== null
+            $this->valueConfigured
             && ($widget instanceof CheckedStateInterface) === false
             && ($widget instanceof SrcInterface) === false
             && ($widget instanceof MultiValueInterface) === false
@@ -494,7 +501,7 @@ abstract class AbstractField extends BaseTag
         FormModelInterface $formModel,
         string $property,
     ): AttributesInterface&RenderableInterface {
-        $value = $this->value ?? $formModel->getValue($property);
+        $value = $this->valueConfigured ? $this->value : $formModel->getValue($property);
 
         if ($widget instanceof MultiValueInterface) {
             /** @phpstan-ignore argument.type */
@@ -502,10 +509,18 @@ abstract class AbstractField extends BaseTag
         }
 
         if ($widget instanceof CheckedStateInterface) {
-            if ($widget->getAttribute('value') !== null || $widget instanceof ChoiceListInterface) {
+            if (
+                $widget->getAttribute('value') !== null
+                || $widget instanceof ChoiceListInterface
+                || ($this->valueConfigured && $value === null)
+            ) {
                 /** @phpstan-ignore argument.type */
                 return $widget->checked($value);
             }
+        }
+
+        if ($widget instanceof ClearableContentInterface && $this->valueConfigured && $value === null) {
+            return $widget->clearContent();
         }
 
         if ($widget instanceof ContentInterface && is_string($value)) {
