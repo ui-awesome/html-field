@@ -116,7 +116,7 @@ final class FieldLayoutPrecedenceTest extends TestCase
             ->config(
                 new Config(
                     self::layoutTheme(
-                    ['field.label.text' => [new Call('enclosedByLabel')]],
+                        ['field.label.text' => [new Call('enclosedByLabel')]],
                     ),
                 ),
             );
@@ -217,10 +217,10 @@ final class FieldLayoutPrecedenceTest extends TestCase
             ->config(
                 new Config(
                     self::layoutTheme(
-                    ['field.label.text' => [new Call('enclosedByLabel')]],
+                        ['field.label.text' => [new Call('enclosedByLabel')]],
+                    ),
                 ),
-            ),
-        );
+            );
 
         $expected = <<<HTML
             <div>
