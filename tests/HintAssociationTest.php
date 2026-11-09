@@ -214,7 +214,7 @@ final class HintAssociationTest extends TestCase
             </div>
             HTML,
             $html,
-            'Automatic references require emitted content, a usable ID, a container, and the hint slot.',
+            'Automatic references require emitted content, a usable ID, a hint tag, and the hint slot.',
         );
 
         if (preg_split('/[\t\n\f\r ]/', $id) === [$id]) {
