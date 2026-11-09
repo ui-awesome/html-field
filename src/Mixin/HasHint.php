@@ -96,6 +96,10 @@ trait HasHint
     /**
      * Sets the hint tag `id` attribute.
      *
+     * Overrides the `id` in `hintAttributes()`. A nonempty ID without HTML whitespace is associated automatically
+     * only when a hint element is emitted through `{hint}`. Explicit field attributes and final model config retain
+     * precedence over the derived association.
+     *
      * Usage example:
      * ```php
      * $field = \UIAwesome\Html\Field\Field::tag()->hintId('username-help');
@@ -113,6 +117,8 @@ trait HasHint
 
     /**
      * Sets the hint tag.
+     *
+     * Disabling the tag preserves the hint content but does not add an automatic `aria-describedby` reference.
      *
      * Usage example:
      * ```php

@@ -35,7 +35,7 @@ use UIAwesome\Html\Field\Mixin\{
     HasInputTemplate,
     HasValidateClass,
 };
-use UIAwesome\Html\Helper\{Encode, Naming, Template};
+use UIAwesome\Html\Helper\{Attributes, Encode, Naming, Template};
 use UIAwesome\Html\Interop\{Block, Inline};
 use UIAwesome\Html\Mixin\{
     HasAttributes,
@@ -48,12 +48,18 @@ use UIAwesome\Html\Mixin\{
 use UIAwesome\Html\Phrasing\Label;
 use UnitEnum;
 
+use function array_filter;
 use function array_is_list;
+use function array_unique;
+use function explode;
 use function get_debug_type;
 use function implode;
 use function is_array;
 use function is_string;
+use function preg_match;
 use function preg_replace;
+use function str_contains;
+use function str_replace;
 
 /**
  * Provides the immutable base implementation for rendering a form model property as a complete field.
@@ -353,12 +359,14 @@ abstract class AbstractField extends BaseTag
             return '';
         }
 
-        $widget = $field->configureWidget($widget, $formModel, $property);
+        [$hint, $hintId] = $field->renderHintTag();
+
+        $widget = $field->configureWidget($widget, $formModel, $property, $hintId);
         $widget = $field->applyFieldConfig($widget, $formModel, $property);
 
         return $field->renderOptionalTag(
             $field->containerAttributes,
-            $field->renderField($widget, $formModel, $property),
+            $field->renderField($widget, $formModel, $property, $hint),
             $field->containerTag,
         );
     }
@@ -444,16 +452,37 @@ abstract class AbstractField extends BaseTag
      * Transfers the field attributes to the control and links the hint through `aria-describedby`.
      *
      * @param AttributesInterface&RenderableInterface $widget Form control receiving the field attributes.
+     * @param string|null $hintId ID of the emitted hint element, or `null` without an automatic association.
      *
      * @return AttributesInterface&RenderableInterface Control carrying the transferred attributes.
      */
     private function applyToAttributes(
         AttributesInterface&RenderableInterface $widget,
+        string|null $hintId,
     ): AttributesInterface&RenderableInterface {
         $attributes = $this->getAttributes();
 
-        if ($this->hintContent !== '' && $this->hintId !== '') {
-            $widget = $widget->addAttribute('aria-describedby', $this->hintId);
+        if ($hintId !== null) {
+            $description = Attributes::normalizeAttributes(
+                ['aria-describedby' => $widget->getAttribute('aria-describedby')],
+                false,
+            )['aria-describedby'] ?? '';
+
+            $tokens = explode(
+                ' ',
+                str_replace(
+                    ["\t", "\n", "\f", "\r"],
+                    ' ',
+                    is_string($description) ? $description : '',
+                ),
+            );
+
+            $tokens[] = $hintId;
+
+            $widget = $widget->addAttribute(
+                'aria-describedby',
+                implode(' ', array_unique(array_filter($tokens, static fn(string $token): bool => $token !== ''))),
+            );
         }
 
         if (
@@ -626,6 +655,7 @@ abstract class AbstractField extends BaseTag
      * @param AttributesInterface&RenderableInterface $widget Form control being prepared for rendering.
      * @param FormModelInterface $formModel Form model providing values and validation state.
      * @param string $property Name of the form model property represented by the field.
+     * @param string|null $hintId ID of the emitted hint element, or `null` without an automatic association.
      *
      * @return AttributesInterface&RenderableInterface Control carrying attributes, value, and validation classes.
      */
@@ -633,8 +663,9 @@ abstract class AbstractField extends BaseTag
         AttributesInterface&RenderableInterface $widget,
         FormModelInterface $formModel,
         string $property,
+        string|null $hintId,
     ): AttributesInterface&RenderableInterface {
-        $widget = $this->applyToAttributes($widget);
+        $widget = $this->applyToAttributes($widget, $hintId);
         $widget = $this->applyToPlaceholder($widget, $formModel, $property);
         $widget = $this->applyToValue($widget, $formModel, $property);
 
@@ -705,6 +736,7 @@ abstract class AbstractField extends BaseTag
      * @param AttributesInterface&RenderableInterface $widget Resolved form control rendered in the `{field}` section.
      * @param FormModelInterface $formModel Form model providing hint and error state.
      * @param string $property Name of the form model property represented by the field.
+     * @param string $hint Prepared hint markup substituted into the field template.
      *
      * @return string Rendered field template without blank lines left by empty sections.
      */
@@ -712,13 +744,14 @@ abstract class AbstractField extends BaseTag
         AttributesInterface&RenderableInterface $widget,
         FormModelInterface $formModel,
         string $property,
+        string $hint,
     ): string {
         $rendered = Template::render(
             $this->template,
             [
                 '{error}' => $this->renderErrorTag($formModel, $property),
                 '{field}' => $this->renderInputField($widget),
-                '{hint}' => $this->renderHintTag(),
+                '{hint}' => $hint,
                 '{prefix}' => $this->renderPrefixTag(),
                 '{suffix}' => $this->renderSuffixTag(),
             ],
@@ -728,13 +761,22 @@ abstract class AbstractField extends BaseTag
     }
 
     /**
-     * Renders the hint section.
+     * Renders the hint section and resolves an automatic association only for an emitted element.
      *
-     * @return string Rendered hint section, or an empty string without content.
+     * @return array{string, string|null} Hint markup and its usable ID when the template emits its container.
      */
-    private function renderHintTag(): string
+    private function renderHintTag(): array
     {
-        return $this->renderOptionalTag($this->hintAttributes, $this->hintContent, $this->hintTag, $this->hintId);
+        $hint = $this->renderOptionalTag($this->hintAttributes, $this->hintContent, $this->hintTag, $this->hintId);
+
+        $hintId = $this->hintContent !== ''
+            && $this->hintTag instanceof BackedEnum
+            && str_contains($this->template, '{hint}')
+            && preg_match('/\A[^\t\n\f\r ]+\z/', $this->hintId) === 1
+                ? $this->hintId
+                : null;
+
+        return [$hint, $hintId];
     }
 
     /**

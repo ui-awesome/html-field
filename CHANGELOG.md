@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: encode model error text once and require html-helper `^0.7.3` for supported rendering paths.
 - fix: distinguish explicit `null` field values from model fallback and clear supported content without changing option values.
 - fix: preserve escaped label text and render controls once when label enclosure is enabled or the label is omitted.
+- fix: merge hint description IDs only for emitted hint elements while preserving explicit field and model overrides.
 
 ## 0.1.0 July 31, 2026
 
