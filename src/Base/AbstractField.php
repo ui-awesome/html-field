@@ -126,11 +126,6 @@ abstract class AbstractField extends BaseTag
      * `field.input-container.*`, and `field.label.*` layout slots resolve during rendering against a
      * {@see ControlLayout} carrier for the final semantic control, so field-local fluent state overrides them.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->config($config);
-     * ```
-     *
      * @param Config $config Application-scoped config service.
      * @param ComponentContext $context Base field context whose qualifiers are inherited by every slot.
      *
@@ -172,11 +167,6 @@ abstract class AbstractField extends BaseTag
      * When application config is present, its factory replaces the default registry and its recipe is applied to the
      * `field.control.<type>` context.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->control('email');
-     * ```
-     *
      * @param string $type Semantic control type without the `field.control.` prefix.
      *
      * @throws InvalidControl If the configured factory or applier returns an incompatible control.
@@ -212,11 +202,6 @@ abstract class AbstractField extends BaseTag
     /**
      * Sets the form model used to configure and populate the field.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->formModel($formModel);
-     * ```
-     *
      * @param FormModelInterface $value Form model providing labels, hints, values, and per-property configuration.
      *
      * @throws AttributeNotSet If the configured property does not exist in the form model.
@@ -232,11 +217,6 @@ abstract class AbstractField extends BaseTag
     /**
      * Returns the configured form model.
      *
-     * Usage example:
-     * ```php
-     * $formModel = \UIAwesome\Html\Field\Field::tag()->formModel($formModel)->getFormModel();
-     * ```
-     *
      * @return FormModelInterface|null Configured form model, or `null` when none is set.
      */
     public function getFormModel(): FormModelInterface|null
@@ -246,11 +226,6 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Returns the configured form model property.
-     *
-     * Usage example:
-     * ```php
-     * $property = \UIAwesome\Html\Field\Field::tag()->property('username')->getProperty();
-     * ```
      *
      * @return string Name of the configured property, or an empty string when none is set.
      */
@@ -265,11 +240,6 @@ abstract class AbstractField extends BaseTag
      * The form model field config is applied to the replacement, and checkbox or radio controls switch the input
      * template to render the control before its label.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->input(\UIAwesome\Html\Form\InputEmail::tag());
-     * ```
-     *
      * @param AttributesInterface&RenderableInterface $widget Form control replacing the configured default.
      */
     public function input(AttributesInterface&RenderableInterface $widget): static
@@ -282,11 +252,6 @@ abstract class AbstractField extends BaseTag
 
     /**
      * Sets the form model property represented by the field.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->property('username');
-     * ```
      *
      * @param string $value Name of the form model property to render.
      *
@@ -307,11 +272,6 @@ abstract class AbstractField extends BaseTag
      * separate from HTML attributes so checkbox and radio option values are preserved. An explicit `null` prevents
      * model fallback and clears content on controls supporting that capability. The form model's final field config
      * still takes precedence.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->value('admin');
-     * ```
      *
      * @param mixed $value Selected value applied to the form control.
      */

@@ -8,11 +8,6 @@ use InvalidArgumentException;
 
 /**
  * Thrown when the configured form model property does not exist.
- *
- * Usage example:
- * ```php
- * throw new \UIAwesome\Html\Field\Exception\AttributeNotSet('email');
- * ```
  */
 final class AttributeNotSet extends InvalidArgumentException
 {

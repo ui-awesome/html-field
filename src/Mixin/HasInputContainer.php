@@ -26,11 +26,6 @@ trait HasInputContainer
     /**
      * Sets the input container tag attributes.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->inputContainerAttributes(['data-role' => 'control']);
-     * ```
-     *
      * @param mixed[] $values Attribute values indexed by attribute name.
      */
     public function inputContainerAttributes(array $values = []): static
@@ -43,11 +38,6 @@ trait HasInputContainer
 
     /**
      * Sets the input container tag `class` attribute.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->inputContainerClass('input-group');
-     * ```
      *
      * @param string|Stringable|UnitEnum|null $value CSS class to add, or `null` to keep the current class list.
      * @param bool $override Whether to replace the current class list instead of appending.
@@ -62,11 +52,6 @@ trait HasInputContainer
 
     /**
      * Sets the input container tag.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->inputContainerTag(\UIAwesome\Html\Interop\Block::DIV);
-     * ```
      *
      * @param false|UnitEnum $value Tag enclosing the form control, or `false` to render it without a container.
      */

@@ -36,11 +36,6 @@ trait HasError
     /**
      * Sets the error tag attributes.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->errorAttributes(['data-role' => 'error']);
-     * ```
-     *
      * @param mixed[] $values Attribute values indexed by attribute name.
      */
     public function errorAttributes(array $values): static
@@ -53,11 +48,6 @@ trait HasError
 
     /**
      * Sets the error tag `class` attribute.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->errorClass('is-invalid');
-     * ```
      *
      * @param string|Stringable|UnitEnum|null $value CSS class to add, or `null` to keep the current class list.
      * @param bool $override Whether to replace the current class list instead of appending.
@@ -75,11 +65,6 @@ trait HasError
      *
      * Values are HTML-encoded.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->errorContent('Review this value.');
-     * ```
-     *
      * @param string|Stringable ...$values Error text parts concatenated in order.
      */
     public function errorContent(string|Stringable ...$values): static
@@ -93,11 +78,6 @@ trait HasError
     /**
      * Sets the error tag.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->errorTag(\UIAwesome\Html\Interop\Inline::SPAN);
-     * ```
-     *
      * @param false|UnitEnum $value Tag enclosing the error content, or `false` to render the content without a tag.
      */
     public function errorTag(false|UnitEnum $value): static
@@ -110,11 +90,6 @@ trait HasError
 
     /**
      * Enables rendering of every property error instead of only the first one.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->showAllErrors();
-     * ```
      */
     public function showAllErrors(): static
     {

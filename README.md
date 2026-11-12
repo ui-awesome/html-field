@@ -166,6 +166,46 @@ the resolved model value to `Select::value()`.
 `CheckboxList`, `RadioList`, and `ChoiceItem` also come from `ui-awesome/html`; `Field` supplies their checked values,
 name, validation state, label, hint, and errors. See the usage guide for examples, slot contexts, and recipe methods.
 
+#### Theme component names
+
+`UIAwesome\Html\Field\Values\FieldComponentName` declares every component identifier the field emits with the default
+`field` base context and the default control registry: `field`, `field.container`, `field.control`, `field.hint`,
+`field.error`, `field.prefix`, `field.suffix`, `field.label`, and `field.control.<type>`,
+`field.input-container.<type>`, and `field.label.<type>` for each default control type. Match the backing values in a
+theme instead of retyping the strings:
+
+```php
+use UIAwesome\Html\Core\Config\{Call, ComponentContext, Cookbook, Recipe};
+use UIAwesome\Html\Core\Theme\ThemeInterface;
+use UIAwesome\Html\Field\Values\FieldComponentName;
+
+final class AppTheme implements ThemeInterface
+{
+    public function getName(): string
+    {
+        return 'app';
+    }
+
+    public function getRecipes(ComponentContext $context): iterable
+    {
+        $calls = match ($context->component) {
+            FieldComponentName::FIELD_CONTAINER->value => [new Call('containerClass', 'mb-3')],
+            FieldComponentName::FIELD_CONTROL_EMAIL->value => [new Call('class', 'form-control')],
+            FieldComponentName::FIELD_LABEL->value => [new Call('labelClass', 'form-label')],
+            default => [],
+        };
+
+        if ($calls !== []) {
+            yield new Recipe("app.{$context->component}", new Cookbook(...$calls));
+        }
+    }
+}
+```
+
+Identifiers built from a custom base context, such as `app.field`, or from control types registered through
+`ControlFactory::with()` are not declared and remain plain strings. The installed `ui-awesome/html-core` release accepts
+only strings in `ComponentContext`, so pass `FieldComponentName::FIELD->value` rather than the case itself.
+
 #### Explicit field values
 
 Omitting `value()` keeps model fallback. Calling `value(null)` explicitly clears the bound value or selection instead

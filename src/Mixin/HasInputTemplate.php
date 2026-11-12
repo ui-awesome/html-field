@@ -21,11 +21,6 @@ trait HasInputTemplate
     /**
      * Sets the input rendering template.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->inputTemplate("{input}\n{label}");
-     * ```
-     *
      * @param string $value Template arranging the `{label}` and `{input}` parts of the field.
      */
     public function inputTemplate(string $value): static
