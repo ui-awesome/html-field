@@ -12,7 +12,6 @@ use UIAwesome\Html\Field\Field;
 use UIAwesome\Html\Field\Tests\Provider\LabelEnclosureProvider;
 use UIAwesome\Html\Field\Tests\Support\{Assert, BasicForm, ConfigForm};
 use UIAwesome\Html\Form\{CheckboxList, ChoiceItem, InputText, RadioList};
-
 use function substr_count;
 
 /**
@@ -31,8 +30,12 @@ final class LabelEnclosureTest extends TestCase
         $input = $type === 'checkbox-list' ? CheckboxList::tag() : RadioList::tag();
 
         $input = $input->items(
-            ChoiceItem::tag()->label('A & B')->value(1),
-            ChoiceItem::tag()->label('Second')->value(2),
+            ChoiceItem::tag()
+                ->label('A & B')
+                ->value(1),
+            ChoiceItem::tag()
+                ->label('Second')
+                ->value(2),
         );
 
         $field = Field::tag()
@@ -98,14 +101,14 @@ final class LabelEnclosureTest extends TestCase
     public function testEnclosedTextIsEscapedWithoutLosingLiteralEntities(string $type, string $control): void
     {
         $text = <<<'TEXT'
-            A & B <b>"quoted" 'single'</b> &amp;
-            TEXT;
+        A & B <b>"quoted" 'single'</b> &amp;
+        TEXT;
 
         $expected = <<<HTML
-            <div>
-            <label for="basicform-label">A &amp; B &lt;b&gt;"quoted" 'single'&lt;/b&gt; &amp;amp;{$control}</label>
-            </div>
-            HTML;
+        <div>
+        <label for="basicform-label">A &amp; B &lt;b&gt;"quoted" 'single'&lt;/b&gt; &amp;amp;{$control}</label>
+        </div>
+        HTML;
 
         $html = Field::tag()
             ->formModel(new BasicForm())
@@ -164,10 +167,10 @@ final class LabelEnclosureTest extends TestCase
         $copy = clone $enclosed;
 
         $expected = <<<HTML
-            <div>
-            <label for="custom-id">Override Id<input id="custom-id" name="ConfigForm[overrideId]" type="text"></label>
-            </div>
-            HTML;
+        <div>
+        <label for="custom-id">Override Id<input id="custom-id" name="ConfigForm[overrideId]" type="text"></label>
+        </div>
+        HTML;
 
         self::assertNotSame(
             $field,

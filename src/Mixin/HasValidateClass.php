@@ -21,11 +21,6 @@ trait HasValidateClass
     /**
      * Sets the CSS class added to the form control when the property has validation errors.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->invalidClass('is-invalid');
-     * ```
-     *
      * @param string $value CSS class marking the control as invalid.
      */
     public function invalidClass(string $value): static
@@ -38,11 +33,6 @@ trait HasValidateClass
 
     /**
      * Sets the CSS class added to the form control when the property is validated without errors.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->validClass('is-valid');
-     * ```
      *
      * @param string $value CSS class marking the control as valid.
      */

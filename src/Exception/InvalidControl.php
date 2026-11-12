@@ -8,11 +8,6 @@ use UnexpectedValueException;
 
 /**
  * Thrown when a registered factory definition does not create a form control.
- *
- * Usage example:
- * ```php
- * throw new \UIAwesome\Html\Field\Exception\InvalidControl('field.control.custom', 'stdClass');
- * ```
  */
 final class InvalidControl extends UnexpectedValueException
 {

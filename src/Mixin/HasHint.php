@@ -35,11 +35,6 @@ trait HasHint
     /**
      * Sets the hint tag attributes.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->hintAttributes(['data-role' => 'hint']);
-     * ```
-     *
      * @param mixed[] $values Attribute values indexed by attribute name.
      */
     public function hintAttributes(array $values): static
@@ -52,11 +47,6 @@ trait HasHint
 
     /**
      * Sets the hint tag `class` attribute.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->hintClass('form-text');
-     * ```
      *
      * @param string|Stringable|UnitEnum|null $value CSS class to add, or `null` to keep the current class list.
      * @param bool $override Whether to replace the current class list instead of appending.
@@ -73,11 +63,6 @@ trait HasHint
      * Sets the hint text.
      *
      * String values are HTML-encoded; renderable values are rendered as-is.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->hintContent('Choose a unique username.');
-     * ```
      *
      * @param RenderableInterface|string ...$values Hint text parts concatenated in order.
      */
@@ -100,11 +85,6 @@ trait HasHint
      * only when a hint element is emitted through `{hint}`. Explicit field attributes and final model config retain
      * precedence over the derived association.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->hintId('username-help');
-     * ```
-     *
      * @param string $value Identifier linking the hint to the control through `aria-describedby`.
      */
     public function hintId(string $value): static
@@ -119,11 +99,6 @@ trait HasHint
      * Sets the hint tag.
      *
      * Disabling the tag preserves the hint content but does not add an automatic `aria-describedby` reference.
-     *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->hintTag(\UIAwesome\Html\Interop\Inline::SPAN);
-     * ```
      *
      * @param false|UnitEnum $value Tag enclosing the hint content, or `false` to render the content without a tag.
      */

@@ -37,12 +37,6 @@ use function substr;
  *
  * Registered definitions are immutable. Pass replacements to the constructor or use {@see with()} to derive a new
  * factory without modifying the original instance.
- *
- * Usage example:
- * ```php
- * $controlFactory = new \UIAwesome\Html\Field\Factory\ControlFactory();
- * $control = $controlFactory->create(new \UIAwesome\Html\Core\Config\ComponentContext('field.control.email'));
- * ```
  */
 final readonly class ControlFactory implements ComponentFactoryInterface
 {
@@ -77,12 +71,6 @@ final readonly class ControlFactory implements ComponentFactoryInterface
     /**
      * Creates the form control represented by the supplied semantic context.
      *
-     * Usage example:
-     * ```php
-     * $controlFactory = new \UIAwesome\Html\Field\Factory\ControlFactory();
-     * $control = $controlFactory->create(new \UIAwesome\Html\Core\Config\ComponentContext('field.control.email'));
-     * ```
-     *
      * @param ComponentContext $context Semantic context identifying the `field.control.*` component to create.
      *
      * @throws ControlNotFound If the context does not identify a registered `field.control.*` component.
@@ -105,12 +93,6 @@ final readonly class ControlFactory implements ComponentFactoryInterface
 
     /**
      * Returns a new factory with a replaced or additional control definition.
-     *
-     * Usage example:
-     * ```php
-     * $factory = new \UIAwesome\Html\Field\Factory\ControlFactory();
-     * $factory = $factory->with('editor', \App\Html\EditorControl::class);
-     * ```
      *
      * @param string $type Semantic type without the `field.control.` prefix.
      * @param class-string<FormControlInterface>|Closure(ComponentContext): mixed $definition Control class or

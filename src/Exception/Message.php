@@ -67,13 +67,6 @@ enum Message: string
     /**
      * Returns the formatted message string for the error case.
      *
-     * Usage example:
-     * ```php
-     * throw new \InvalidArgumentException(
-     *     \UIAwesome\Html\Field\Exception\Message::CONTROL_NOT_FOUND->getMessage('field.control.unknown'),
-     * );
-     * ```
-     *
      * @param int|string ...$argument Values to insert into the message template.
      *
      * @return string Formatted error message with interpolated arguments.

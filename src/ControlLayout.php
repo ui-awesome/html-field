@@ -18,16 +18,6 @@ use function get_debug_type;
  * Theme recipes for the `field.label`, `field.input-container.<type>`, and `field.label.<type>` contexts are applied
  * to this carrier during rendering, never to the field. The merge methods layer the themed values under field-local
  * state, so fluent calls always override themed layout values regardless of call order.
- *
- * Usage example:
- * ```php
- * yield new \UIAwesome\Html\Core\Config\Recipe(
- *     'app.field.input-container.checkbox',
- *     new \UIAwesome\Html\Core\Config\Cookbook(
- *         new \UIAwesome\Html\Core\Config\Call('inputContainerClass', 'form-check'),
- *     ),
- * );
- * ```
  */
 final class ControlLayout
 {
@@ -38,12 +28,6 @@ final class ControlLayout
 
     /**
      * Returns the effective enclosure flag, preferring field-local state over the themed value.
-     *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * $enclosed = $layout->mergeEnclosedByLabel(false);
-     * ```
      *
      * @param bool|null $local Field-local enclosure flag, or `null` when not configured.
      *
@@ -57,12 +41,6 @@ final class ControlLayout
     /**
      * Returns the effective input container attributes, filling only keys the field does not set.
      *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * $attributes = $layout->mergeInputContainerAttributes(['class' => 'local-container']);
-     * ```
-     *
      * @param mixed[] $local Field-local input container attributes indexed by attribute name.
      *
      * @return mixed[] Effective attribute values indexed by attribute name.
@@ -74,12 +52,6 @@ final class ControlLayout
 
     /**
      * Returns the effective input container tag, preferring field-local state over the themed value.
-     *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * $tag = $layout->mergeInputContainerTag(false);
-     * ```
      *
      * @param false|UnitEnum|null $local Field-local tag, `false` for no container, or `null` when not configured.
      *
@@ -96,12 +68,6 @@ final class ControlLayout
      * A themed template outranks the template derived from the control type, which is returned when neither the
      * field nor a theme recipe configured one.
      *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * $inputTemplate = $layout->mergeInputTemplate("{label}\n{input}", false);
-     * ```
-     *
      * @param string $local Field-local input template, explicitly configured or derived from the control type.
      * @param bool $localConfigured Whether the field-local template was explicitly configured.
      *
@@ -115,12 +81,6 @@ final class ControlLayout
     /**
      * Returns the effective label text, preferring field-local state over the themed value.
      *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * $label = $layout->mergeLabel('Local label');
-     * ```
-     *
      * @param string $local Field-local label text, or an empty string when not configured.
      *
      * @return string Effective label text.
@@ -133,12 +93,6 @@ final class ControlLayout
     /**
      * Returns the effective label attributes, filling only keys the field does not set.
      *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * $attributes = $layout->mergeLabelAttributes(['class' => 'local-label']);
-     * ```
-     *
      * @param mixed[] $local Field-local label attributes indexed by attribute name.
      *
      * @return mixed[] Effective attribute values indexed by attribute name.
@@ -150,12 +104,6 @@ final class ControlLayout
 
     /**
      * Returns the effective label suppression flag, preferring field-local state over the themed value.
-     *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * $notLabel = $layout->mergeNotLabel(false);
-     * ```
      *
      * @param bool|null $local Field-local label suppression flag, or `null` when not configured.
      *
@@ -171,11 +119,6 @@ final class ControlLayout
      *
      * Applies the `field.label` recipe and, for semantic controls, the `field.input-container.<type>` and
      * `field.label.<type>` recipes to a fresh carrier. Slot contexts inherit every qualifier of the base context.
-     *
-     * Usage example:
-     * ```php
-     * $layout = \UIAwesome\Html\Field\ControlLayout::resolve($config, $context, 'checkbox');
-     * ```
      *
      * @param Config $config Application-scoped config service providing the theme recipes.
      * @param ComponentContext $context Base field context whose qualifiers are inherited by every layout slot.

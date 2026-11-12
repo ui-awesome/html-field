@@ -8,11 +8,6 @@ use InvalidArgumentException;
 
 /**
  * Thrown when no form control is registered for a semantic component context.
- *
- * Usage example:
- * ```php
- * throw new \UIAwesome\Html\Field\Exception\ControlNotFound('field.control.unknown');
- * ```
  */
 final class ControlNotFound extends InvalidArgumentException
 {

@@ -17,11 +17,6 @@ trait CanBeEnclosedByLabel
     /**
      * Sets whether the label encloses the form control.
      *
-     * Usage example:
-     * ```php
-     * $field = \UIAwesome\Html\Field\Field::tag()->enclosedByLabel();
-     * ```
-     *
      * @param bool $value Whether to render the form control inside the label.
      */
     public function enclosedByLabel(bool $value = true): static
