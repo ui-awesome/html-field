@@ -40,7 +40,8 @@
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.2",
         "phpstan/phpstan-strict-rules": "^2.0.3",
-        "phpunit/phpunit": "^12.5"
+        "phpunit/phpunit": "^12.5",
+        "ui-awesome/model": "^0.3@dev"
     },
     "autoload": {
         "psr-4": {
